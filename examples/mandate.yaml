@@ -1,0 +1,15 @@
+id: mandate-commercial-analysis
+kind: Mandate
+version: 1
+createdAt: "2026-10-17T08:00:00Z"
+actor: demo-user
+sourceReferences: []
+relationshipReferences: []
+businessArea: Commercial analysis
+owner: Commercial director
+scope: [renewal-prioritisation]
+tools: [draft.decision_note]
+dataAccess: [customer_health_summary]
+approvalRights: [reviewed_draft]
+authorityLevel: 1
+expiresAt: "2027-01-01T00:00:00Z"
