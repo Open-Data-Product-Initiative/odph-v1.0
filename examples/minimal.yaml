@@ -1,9 +1,9 @@
-schema: https://opendataproducts.org/gwp-v0.1/schema/gwp.yaml
+schema: https://opendataproducts.org/odph-v1.0/schema/odph.yaml
 version: "0.1-draft"
-kind: GovernedWorkPackage
+kind: OpenDataProductHarness
 package:
   metadata:
-    id: gwp-minimal-context-review
+    id: odph-minimal-context-review
     name:
       en: Minimal context review package
     description:

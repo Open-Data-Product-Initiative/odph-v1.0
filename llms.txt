@@ -1,18 +1,18 @@
-# Governed Work Package (GWP) 0.1 Draft
+# Open Data Product Harness (ODPH) 0.1 Draft
 
-GWP is non-ratified design material for a bounded, evidence-oriented interchange model for governed human and agent work. It is not a data-product descriptor, catalog, graph language, execution platform, or source of business authority.
+ODPH is non-ratified design material for a bounded, evidence-oriented interchange model for governed human and agent work. It is not a data-product descriptor, catalog, graph language, execution platform, or source of business authority.
 
-Base URL: https://opendataproducts.org/gwp-v0.1
+Base URL: https://opendataproducts.org/odph-v1.0
 
 Authoritative resources:
 - Human-readable specification: /
-- Canonical schema: /schema/gwp.yaml
-- Derived JSON Schema: /schema/gwp.json
+- Canonical schema: /schema/odph.yaml
+- Derived JSON Schema: /schema/odph.json
 - Object records: /objects.jsonl
 - Full synthetic example: /examples/full-retention-review.yaml
 - Minimal package: /examples/minimal.yaml
 
-Family boundary: use ODPS or another product model for a data product, ODPC for reusable portfolio objects, ODPG for graph relationships, and GWP for bounded context, planning, proposed actions, controls, and evidence.
+Family boundary: use ODPS or another product model for a data product, ODPC for reusable portfolio objects, ODPG for graph relationships, and ODPH for bounded context, planning, proposed actions, controls, and evidence.
 
 Safety boundary:
 - `allowed` means structurally in scope under supplied local objects. It is never permission to execute.
