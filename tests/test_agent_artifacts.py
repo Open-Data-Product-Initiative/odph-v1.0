@@ -9,13 +9,13 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source"
 
 
-class GwpArtifactsTest(unittest.TestCase):
+class OdphArtifactsTest(unittest.TestCase):
     def test_schema_declares_governed_work_package_root(self):
-        schema = yaml.safe_load((SOURCE / "schema" / "gwp.yaml").read_text(encoding="utf-8"))
-        json_schema = json.loads((SOURCE / "schema" / "gwp.json").read_text(encoding="utf-8"))
+        schema = yaml.safe_load((SOURCE / "schema" / "odph.yaml").read_text(encoding="utf-8"))
+        json_schema = json.loads((SOURCE / "schema" / "odph.json").read_text(encoding="utf-8"))
         self.assertEqual(schema, json_schema)
         self.assertEqual(schema["required"], ["schema", "version", "kind", "package"])
-        self.assertEqual(schema["properties"]["kind"]["const"], "GovernedWorkPackage")
+        self.assertEqual(schema["properties"]["kind"]["const"], "OpenDataProductHarness")
         self.assertIn("evidence", schema["properties"])
         self.assertIn("corrections", schema["properties"])
 
@@ -28,7 +28,7 @@ class GwpArtifactsTest(unittest.TestCase):
         }
         self.assertEqual({path.name for path in examples.glob("*.yaml")}, expected)
         full = yaml.safe_load((examples / "full-retention-review.yaml").read_text(encoding="utf-8"))
-        self.assertEqual(full["kind"], "GovernedWorkPackage")
+        self.assertEqual(full["kind"], "OpenDataProductHarness")
         self.assertEqual(full["package"]["metadata"]["conformanceProfile"], "kentaro-v0.1-local-only")
         self.assertEqual(
             {item["kind"] for item in full["package"]["objects"]},
@@ -37,14 +37,14 @@ class GwpArtifactsTest(unittest.TestCase):
         self.assertEqual(full["evidence"]["events"][0]["kind"], "EvidenceEvent")
         self.assertEqual(full["corrections"][0]["kind"], "Correction")
 
-    def test_object_records_and_guidance_are_gwp_aligned(self):
+    def test_object_records_and_guidance_are_odph_aligned(self):
         records = [json.loads(line) for line in (SOURCE / "objects.jsonl").read_text(encoding="utf-8").splitlines() if line]
         self.assertEqual(
             {record["id"] for record in records},
             {"ContextPackage", "Mandate", "WorkEnvelope", "ExecutionPackage", "ExecutionRequest", "RevocationPolicy", "EvidenceEvent", "Correction"},
         )
         guidance = (SOURCE / "llms.txt").read_text(encoding="utf-8")
-        self.assertIn("/schema/gwp.yaml", guidance)
+        self.assertIn("/schema/odph.yaml", guidance)
         self.assertIn("/objects.jsonl", guidance)
         self.assertIn("never permission to execute", guidance)
 

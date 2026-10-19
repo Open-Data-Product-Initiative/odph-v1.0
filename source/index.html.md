@@ -1,5 +1,5 @@
 ---
-title: Governed Work Package (GWP) 0.1 Draft | OpenDataProducts.org
+title: Open Data Product Harness (ODPH) 0.1 Draft | OpenDataProducts.org
 language_tabs:
 - yaml
 - json
@@ -12,16 +12,16 @@ search: true
 code_clipboard: true
 meta:
   - name: description
-    content: Governed Work Package (GWP) 0.1 Draft defines a bounded, evidence-oriented interchange model for governed human and agent work. It is non-ratified design material, not execution authority.
+    content: Open Data Product Harness (ODPH) 0.1 Draft defines a bounded, evidence-oriented interchange model for governed human and agent work. It is non-ratified design material, not execution authority.
   - name: spec-version
     content: "0.1-draft"
   - name: llms
     content: /llms.txt
   - name: ai-agent-guidance
-    content: Use /llms.txt and /schema/gwp.yaml before generating or validating a package.
+    content: Use /llms.txt and /schema/odph.yaml before generating or validating a package.
 ---
 
-# GOVERNED WORK PACKAGE
+# OPEN DATA PRODUCT HARNESS
 
 ## Version 0.1 Draft
 
@@ -31,24 +31,24 @@ The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL 
 
 | Topic | Link | Description |
 |---|---|---|
-| Version source | <a href="https://github.com/Open-Data-Product-Initiative/odph-v1.0">GWP draft on GitHub</a> | Proposed source repository for the draft |
+| Version source | <a href="https://github.com/Open-Data-Product-Initiative/odph-v1.0">ODPH draft on GitHub</a> | Proposed source repository for the draft |
 | Full example | [full-retention-review.yaml](examples/full-retention-review.yaml) | A synthetic local-only package |
-| Schema | [gwp.yaml](schema/gwp.yaml) | Canonical YAML serialization of JSON Schema |
+| Schema | [odph.yaml](schema/odph.yaml) | Canonical YAML serialization of JSON Schema |
 
 # Purpose and standards-family boundary
 
-GWP describes bounded work by which people and agents inspect sourced context, prepare a plan, propose actions, and retain attributable evidence. It is neither a data-product descriptor nor a catalog entry.
+ODPH describes bounded work by which people and agents inspect sourced context, prepare a plan, propose actions, and retain attributable evidence. It is neither a data-product descriptor nor a catalog entry.
 
 ```text
 ODPS / another product model  -> authoritative data-product definition
 ODPC                           -> reusable portfolio objects
 ODPG / another graph model     -> relationships between portfolio objects
-GWP (proposed)                 -> bounded governed work against such context
+ODPH (proposed)                 -> bounded governed work against such context
 ```
 
-A package MAY reference an ODPS product, an ODPC object, an ODPG graph node, a Maysano record, or another internal source. It MUST reference those sources rather than duplicate their complete metadata. This keeps GWP aligned with the standards family without making it ODPS-only.
+A package MAY reference an ODPS product, an ODPC object, an ODPG graph node, a Maysano record, or another internal source. It MUST reference those sources rather than duplicate their complete metadata. This keeps ODPH aligned with the standards family without making it ODPS-only.
 
-## What GWP does not do
+## What ODPH does not do
 
 A conforming implementation MUST distinguish a local planning and evidence artefact from an authoritative business-system record. A valid package does not by itself grant tool, connector, credential, or data access; make an approval real; execute a request; write a portfolio or graph record; suspend a live credential; or constitute immutable, retention-enforced, compliance-grade audit.
 
@@ -271,7 +271,7 @@ Every object uses a stable `id`, `kind`, positive instance `version`, `createdAt
 
 # Integrity rules
 
-The value of GWP is in its relationships rather than its field names. A conforming deterministic validator MUST apply these rules in addition to schema validation.
+The value of ODPH is in its relationships rather than its field names. A conforming deterministic validator MUST apply these rules in addition to schema validation.
 
 | Condition | Required result |
 |---|---|
@@ -308,12 +308,12 @@ Package metadata MUST declare a conformance profile. An implementation MUST disc
 The canonical schema is YAML serialization of JSON Schema. The published JSON schema is mechanically derived from it. Schema validation handles document shape and local object fields; deterministic validation handles cross-object references, subset rules, chain matching, freshness, and outcomes.
 
 ```yaml
-schema: https://opendataproducts.org/gwp-v0.1/schema/gwp.yaml
+schema: https://opendataproducts.org/odph-v1.0/schema/odph.yaml
 version: "0.1-draft"
-kind: GovernedWorkPackage
+kind: OpenDataProductHarness
 package:
   metadata:
-    id: gwp-retention-review-2026-10
+    id: odph-retention-review-2026-10
     conformanceProfile: kentaro-v0.1-local-only
   objects: [] # Objects are listed in full-retention-review.yaml
 ```

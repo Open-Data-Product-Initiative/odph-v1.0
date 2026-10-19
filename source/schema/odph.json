@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://opendataproducts.org/gwp-v0.1/schema/gwp.json",
-  "title": "Governed Work Package 0.1 Draft",
+  "$id": "https://opendataproducts.org/odph-v1.0/schema/odph.json",
+  "title": "Open Data Product Harness 0.1 Draft",
   "description": "Shape validation for a local planning-and-evidence interchange package. Cross-object references, subset checks, freshness, and policy outcomes require deterministic relationship validation in addition to this schema.",
   "type": "object",
   "required": [
@@ -14,15 +14,15 @@
     "schema": {
       "type": "string",
       "enum": [
-        "https://opendataproducts.org/gwp-v0.1/schema/gwp.yaml",
-        "https://opendataproducts.org/gwp-v0.1/schema/gwp.json"
+        "https://opendataproducts.org/odph-v1.0/schema/odph.yaml",
+        "https://opendataproducts.org/odph-v1.0/schema/odph.json"
       ]
     },
     "version": {
       "const": "0.1-draft"
     },
     "kind": {
-      "const": "GovernedWorkPackage"
+      "const": "OpenDataProductHarness"
     },
     "package": {
       "$ref": "#/$defs/Package"
@@ -231,7 +231,7 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "$ref": "#/$defs/GwpObject"
+            "$ref": "#/$defs/OdphObject"
           }
         }
       },
@@ -627,7 +627,7 @@
         }
       ]
     },
-    "GwpObject": {
+    "OdphObject": {
       "oneOf": [
         {
           "$ref": "#/$defs/ContextPackage"

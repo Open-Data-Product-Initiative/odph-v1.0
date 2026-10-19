@@ -4,7 +4,7 @@ import sys
 
 import yaml
 
-from gwp_paths import EXAMPLES_DIR, LLMS_TXT, OBJECTS_JSONL, SCHEMA_JSON, SCHEMA_YAML
+from odph_paths import EXAMPLES_DIR, LLMS_TXT, OBJECTS_JSONL, SCHEMA_JSON, SCHEMA_YAML
 
 
 EXPECTED_EXAMPLES = {
@@ -28,7 +28,7 @@ def check_schema():
     json_schema = json.loads(SCHEMA_JSON.read_text(encoding="utf-8"))
     assert schema["required"] == ["schema", "version", "kind", "package"]
     assert json_schema == schema
-    assert schema["properties"]["kind"]["const"] == "GovernedWorkPackage"
+    assert schema["properties"]["kind"]["const"] == "OpenDataProductHarness"
     assert schema["properties"]["package"]["$ref"] == "#/$defs/Package"
     assert set(schema["$defs"]) >= {"Reference", "ContextPackage", "Mandate", "WorkEnvelope", "ExecutionPackage", "ExecutionRequest", "RevocationPolicy", "EvidenceEvent", "Correction"}
 
@@ -37,7 +37,7 @@ def check_examples():
     actual = {path.name for path in EXAMPLES_DIR.glob("*.yaml")}
     assert actual == EXPECTED_EXAMPLES, f"Unexpected examples: {sorted(actual)}"
     minimal = load_yaml(EXAMPLES_DIR / "minimal.yaml")
-    assert minimal["kind"] == "GovernedWorkPackage"
+    assert minimal["kind"] == "OpenDataProductHarness"
     assert minimal["package"]["metadata"]["conformanceProfile"] == "local-only"
     full = load_yaml(EXAMPLES_DIR / "full-retention-review.yaml")
     assert full["package"]["metadata"]["conformanceProfile"] == "kentaro-v0.1-local-only"
@@ -52,7 +52,7 @@ def check_records_and_guidance():
     for record in records:
         assert all(record.get(field) for field in ["definition", "requiredFields", "doUseFor", "doNotUseFor", "exampleFile"])
     llms = LLMS_TXT.read_text(encoding="utf-8")
-    for path in ["/schema/gwp.yaml", "/schema/gwp.json", "/objects.jsonl", "/examples/full-retention-review.yaml"]:
+    for path in ["/schema/odph.yaml", "/schema/odph.json", "/objects.jsonl", "/examples/full-retention-review.yaml"]:
         assert path in llms
 
 
@@ -67,7 +67,7 @@ def main():
     if failures:
         print("\n".join(f"FAIL {failure}" for failure in failures), file=sys.stderr)
         return 1
-    print("OK: GWP agent artifacts are consistent.")
+    print("OK: ODPH agent artifacts are consistent.")
     return 0
 
 

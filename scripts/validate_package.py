@@ -6,7 +6,7 @@ from pathlib import Path
 
 import yaml
 
-from gwp_paths import SCHEMA_YAML
+from odph_paths import SCHEMA_YAML
 
 
 class NoDatesSafeLoader(yaml.SafeLoader):
@@ -25,9 +25,9 @@ def load_data(path):
 
 
 def main(argv=None):
-    parser = argparse.ArgumentParser(description="Validate a GWP YAML or JSON package against the GWP schema.")
-    parser.add_argument("package", help="Path to a GWP YAML or JSON package")
-    parser.add_argument("--schema", default=str(SCHEMA_YAML), help="Schema path; defaults to source/schema/gwp.yaml")
+    parser = argparse.ArgumentParser(description="Validate an ODPH YAML or JSON package against the ODPH schema.")
+    parser.add_argument("package", help="Path to an ODPH YAML or JSON package")
+    parser.add_argument("--schema", default=str(SCHEMA_YAML), help="Schema path; defaults to source/schema/odph.yaml")
     args = parser.parse_args(argv)
     try:
         import jsonschema
@@ -43,12 +43,12 @@ def main(argv=None):
         print(f"Validation setup failed: {exc}", file=sys.stderr)
         return 1
     if errors:
-        print(f"{args.package}: invalid GWP package", file=sys.stderr)
+        print(f"{args.package}: invalid ODPH package", file=sys.stderr)
         for error in errors:
             location = ".".join(str(part) for part in error.path) or "<root>"
             print(f"- {location}: {error.message}", file=sys.stderr)
         return 1
-    print(f"{args.package}: valid GWP package")
+    print(f"{args.package}: valid ODPH package")
     return 0
 
 
