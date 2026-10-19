@@ -1,0 +1,678 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opendataproducts.org/gwp-v0.1/schema/gwp.json",
+  "title": "Governed Work Package 0.1 Draft",
+  "description": "Shape validation for a local planning-and-evidence interchange package. Cross-object references, subset checks, freshness, and policy outcomes require deterministic relationship validation in addition to this schema.",
+  "type": "object",
+  "required": [
+    "schema",
+    "version",
+    "kind",
+    "package"
+  ],
+  "properties": {
+    "schema": {
+      "type": "string",
+      "enum": [
+        "https://opendataproducts.org/gwp-v0.1/schema/gwp.yaml",
+        "https://opendataproducts.org/gwp-v0.1/schema/gwp.json"
+      ]
+    },
+    "version": {
+      "const": "0.1-draft"
+    },
+    "kind": {
+      "const": "GovernedWorkPackage"
+    },
+    "package": {
+      "$ref": "#/$defs/Package"
+    },
+    "evidence": {
+      "$ref": "#/$defs/EvidenceBundle"
+    },
+    "corrections": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Correction"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "NonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "StringList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/NonEmptyString"
+      }
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "Reference": {
+      "type": "object",
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retrievedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "objectType": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CommonObject": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "version",
+        "createdAt",
+        "actor",
+        "sourceReferences",
+        "relationshipReferences"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "createdAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "actor": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "sourceReferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reference"
+          }
+        },
+        "relationshipReferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reference"
+          }
+        }
+      }
+    },
+    "Boundary": {
+      "type": "object",
+      "required": [
+        "scope",
+        "tools",
+        "dataAccess",
+        "approvalRights",
+        "authorityLevel"
+      ],
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/StringList"
+        },
+        "tools": {
+          "$ref": "#/$defs/StringList"
+        },
+        "dataAccess": {
+          "$ref": "#/$defs/StringList"
+        },
+        "approvalRights": {
+          "$ref": "#/$defs/StringList"
+        },
+        "authorityLevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        }
+      }
+    },
+    "PackageMetadata": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "status",
+        "createdAt",
+        "actor",
+        "conformanceProfile"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "name": {
+          "type": "object",
+          "required": [
+            "en"
+          ],
+          "properties": {
+            "en": {
+              "$ref": "#/$defs/NonEmptyString"
+            }
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "object",
+          "required": [
+            "en"
+          ],
+          "properties": {
+            "en": {
+              "$ref": "#/$defs/NonEmptyString"
+            }
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "proposed"
+          ]
+        },
+        "createdAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "actor": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "conformanceProfile": {
+          "enum": [
+            "kentaro-v0.1-local-only",
+            "local-only",
+            "platform-governed-read",
+            "platform-governed-execution"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "Package": {
+      "type": "object",
+      "required": [
+        "metadata",
+        "objects"
+      ],
+      "properties": {
+        "metadata": {
+          "$ref": "#/$defs/PackageMetadata"
+        },
+        "objects": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/GwpObject"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ContextPackage": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "retrievalScope",
+            "freshness",
+            "conflicts"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ContextPackage"
+            },
+            "retrievalScope": {
+              "type": "object"
+            },
+            "freshness": {
+              "enum": [
+                "fresh",
+                "stale",
+                "unknown"
+              ]
+            },
+            "conflicts": {
+              "type": "array"
+            }
+          }
+        }
+      ]
+    },
+    "Mandate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "$ref": "#/$defs/Boundary"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "businessArea",
+            "owner",
+            "expiresAt"
+          ],
+          "properties": {
+            "kind": {
+              "const": "Mandate"
+            },
+            "businessArea": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "owner": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "expiresAt": {
+              "$ref": "#/$defs/Timestamp"
+            }
+          }
+        }
+      ]
+    },
+    "WorkEnvelope": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "$ref": "#/$defs/Boundary"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "mandateReference",
+            "requestedResult",
+            "owner",
+            "expiresAt"
+          ],
+          "properties": {
+            "kind": {
+              "const": "WorkEnvelope"
+            },
+            "mandateReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "requestedResult": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "owner": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "expiresAt": {
+              "$ref": "#/$defs/Timestamp"
+            }
+          }
+        }
+      ]
+    },
+    "ExecutionPackage": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "$ref": "#/$defs/Boundary"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "workEnvelopeReference",
+            "plannedSteps",
+            "expectedOutputs",
+            "dependencies",
+            "timing",
+            "acceptanceCriteria"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ExecutionPackage"
+            },
+            "workEnvelopeReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "plannedSteps": {
+              "$ref": "#/$defs/StringList"
+            },
+            "expectedOutputs": {
+              "$ref": "#/$defs/StringList"
+            },
+            "dependencies": {
+              "$ref": "#/$defs/StringList"
+            },
+            "timing": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "acceptanceCriteria": {
+              "$ref": "#/$defs/StringList"
+            }
+          }
+        }
+      ]
+    },
+    "ExecutionRequest": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "executionPackageReference",
+            "revocationPolicyReference",
+            "action",
+            "tool",
+            "target",
+            "requestedAuthority",
+            "approvalRequired",
+            "approvalExpiresAt"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ExecutionRequest"
+            },
+            "executionPackageReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "revocationPolicyReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "action": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "tool": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "target": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "requestedAuthority": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "approvalRequired": {
+              "type": "boolean"
+            },
+            "approvalExpiresAt": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/Timestamp"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "redactedParameters": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    "RevocationPolicy": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "policyId",
+            "scope",
+            "authorityChain",
+            "accountableOwnerRole",
+            "suspensionTriggers",
+            "triggerThresholds",
+            "severity",
+            "immediateAction",
+            "evidenceRequirements",
+            "notificationTargets",
+            "restorationRequirements",
+            "expiryOrReviewDate",
+            "localStatus"
+          ],
+          "properties": {
+            "kind": {
+              "const": "RevocationPolicy"
+            },
+            "policyId": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "scope": {
+              "enum": [
+                "agent",
+                "capability",
+                "connector",
+                "workspace",
+                "mandate"
+              ]
+            },
+            "authorityChain": {
+              "type": "object",
+              "required": [
+                "mandateReference",
+                "workEnvelopeReference"
+              ],
+              "properties": {
+                "mandateReference": {
+                  "$ref": "#/$defs/Reference"
+                },
+                "workEnvelopeReference": {
+                  "$ref": "#/$defs/Reference"
+                }
+              }
+            },
+            "accountableOwnerRole": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "suspensionTriggers": {
+              "$ref": "#/$defs/StringList"
+            },
+            "triggerThresholds": {
+              "type": "object",
+              "required": [
+                "repeatedCorrectionRejectionOrSafetyFailureThreshold"
+              ],
+              "properties": {
+                "repeatedCorrectionRejectionOrSafetyFailureThreshold": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            "severity": {
+              "enum": [
+                "low",
+                "medium",
+                "high",
+                "critical"
+              ]
+            },
+            "immediateAction": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "evidenceRequirements": {
+              "$ref": "#/$defs/StringList"
+            },
+            "notificationTargets": {
+              "$ref": "#/$defs/StringList"
+            },
+            "restorationRequirements": {
+              "$ref": "#/$defs/StringList"
+            },
+            "expiryOrReviewDate": {
+              "$ref": "#/$defs/Timestamp"
+            },
+            "localStatus": {
+              "enum": [
+                "declared_active",
+                "simulated_suspended"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "EvidenceEvent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "occurredAt",
+            "workEnvelopeReference",
+            "eventType",
+            "payload"
+          ],
+          "properties": {
+            "kind": {
+              "const": "EvidenceEvent"
+            },
+            "occurredAt": {
+              "$ref": "#/$defs/Timestamp"
+            },
+            "workEnvelopeReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "eventType": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    "Correction": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "targetReference",
+            "correctionKind",
+            "destination",
+            "summary"
+          ],
+          "properties": {
+            "kind": {
+              "const": "Correction"
+            },
+            "targetReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "correctionKind": {
+              "enum": [
+                "output",
+                "context",
+                "mandate",
+                "policy",
+                "tool"
+              ]
+            },
+            "destination": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "summary": {
+              "$ref": "#/$defs/NonEmptyString"
+            }
+          }
+        }
+      ]
+    },
+    "GwpObject": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ContextPackage"
+        },
+        {
+          "$ref": "#/$defs/Mandate"
+        },
+        {
+          "$ref": "#/$defs/WorkEnvelope"
+        },
+        {
+          "$ref": "#/$defs/ExecutionPackage"
+        },
+        {
+          "$ref": "#/$defs/ExecutionRequest"
+        },
+        {
+          "$ref": "#/$defs/RevocationPolicy"
+        },
+        {
+          "$ref": "#/$defs/EvidenceEvent"
+        },
+        {
+          "$ref": "#/$defs/Correction"
+        }
+      ]
+    },
+    "EvidenceBundle": {
+      "type": "object",
+      "required": [
+        "bundleForWorkEnvelope",
+        "events"
+      ],
+      "properties": {
+        "bundleForWorkEnvelope": {
+          "$ref": "#/$defs/Reference"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EvidenceEvent"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

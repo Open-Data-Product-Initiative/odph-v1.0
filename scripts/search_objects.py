@@ -3,7 +3,7 @@ import argparse
 import json
 import sys
 
-from odpc_paths import OBJECTS_JSONL
+from gwp_paths import OBJECTS_JSONL
 
 
 def load_records(path=OBJECTS_JSONL):
@@ -48,7 +48,7 @@ def search(records, query=None, object_id=None):
 
 def render_text(records):
     if not records:
-        return "No matching ODPC objects found.\n"
+        return "No matching GWP objects found.\n"
 
     sections = []
     for record in records:
@@ -69,10 +69,10 @@ def render_text(records):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(
-        description="Search ODPC agent-friendly object records.",
+        description="Search GWP agent-friendly object records.",
     )
-    parser.add_argument("query", nargs="?", help="Keyword query, for example: demand")
-    parser.add_argument("--id", dest="object_id", help="Return one object by id, for example: ProductReference")
+    parser.add_argument("query", nargs="?", help="Keyword query, for example: evidence")
+    parser.add_argument("--id", dest="object_id", help="Return one object by id, for example: ExecutionRequest")
     parser.add_argument("--json", action="store_true", help="Emit JSON array output")
     args = parser.parse_args(argv)
 

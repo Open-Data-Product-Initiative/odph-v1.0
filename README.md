@@ -1,55 +1,25 @@
-# Open Data Product Catalogs (ODPC)
+# Governed Work Package (GWP) 0.1 Draft
 
-The Open Data Product Catalogs, ODPC, is a vendor-neutral, open-source, machine-readable model for cataloging data product portfolios.
+This repository contains non-ratified design material for a governed work package: a bounded, evidence-oriented interchange model for human and agent work.
 
-ODPC defines reusable portfolio objects around data products, including product references, use cases, business objectives, KPIs, signals, and catalog items.
+GWP references authoritative product, portfolio, graph, platform, or internal sources; it does not duplicate their authority or grant external execution permission. A local `allowed` result means only that an action is structurally within supplied local objects.
 
-It is designed to help organizations move from isolated data product descriptions to managed portfolios connected to business demand and measurable outcomes.
+## Repository structure
 
-# What ODPC Defines
+- `source/index.html.md`: human-readable specification in the existing three-column Slate layout.
+- `source/schema/gwp.yaml`: canonical YAML serialization of JSON Schema.
+- `source/schema/gwp.json`: generated JSON Schema.
+- `source/examples/`: minimal, full, and standalone synthetic examples.
+- `source/objects.jsonl`: one machine-readable object definition per line.
+- `source/llms.txt`: agent discovery, modelling, and safety guidance.
 
-ODPC defines the catalog layer around data products. The first version focuses on:
+## Local checks
 
-* ProductReference
-* UseCase
-* BusinessObjective
-* KPI
-* Signal
-* Catalog
-* CatalogItem
+```sh
+python scripts/generate_artifacts.py --check
+python scripts/check_agent_artifacts.py
+python -m unittest discover -s tests
+bundle exec middleman build
+```
 
-These objects create a shared structure for discovery, portfolio planning, prioritization, and AI-native automation.
-
-# ODPS-Native, Not ODPS-Only
-
-ODPC is designed to work naturally with the Open Data Product Specification, ODPS.
-
-ODPS remains the preferred model for defining one data product. ODPC adds the portfolio and catalog layer around it.
-
-ODPC also supports other product models through product references and mapping profiles. This allows organizations using DPDS, internal enterprise schemas, vendor catalogs, or marketplace definitions to participate without immediate migration.
-
-# Specification Aims
-
-* Catalog data products, use cases, business objectives, KPIs, and signals in a consistent way.
-* Support portfolio-level data product management.
-* Connect data products to business objectives and measurable value.
-* Enable interoperability between catalogs, platforms, marketplaces, and tools.
-* Support AI-assisted discovery, planning, and portfolio analysis.
-* Provide reusable objects for Open Data Product Graphs, ODPG.
-* Relationship to ODPS and ODPG
-
-ODPS defines one data product. ODPC defines reusable portfolio objects. ODPG defines the relationships between those objects.
-
-Each specification can be used separately. Used together, they create a machine-readable operating model for data product management.
-
-# Found a Bug?
-
-Found a bug, question, or improvement idea?
-
-Submit an issue or propose changes with a pull request.
-
-# Contributors
-
-Open Data Product Catalogs is part of the OpenDataProducts.org standards family under the Open Data Product Initiative.
-
-The project is developed as part of the broader work to expand OpenDataProducts.org from one specification into a modular family of standards for data product management.
+Schema validation checks document shape. Cross-object subset, authority-chain, freshness, and outcome rules need deterministic relationship evaluation in addition to JSON Schema.
