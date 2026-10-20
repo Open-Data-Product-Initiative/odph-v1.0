@@ -330,7 +330,22 @@
                     <a href="#a-thin-kentaro-change-control-layer" class="toc-h2 toc-link" data-title="A thin Kentaro change-control layer">A thin Kentaro change-control layer</a>
                   </li>
                   <li>
-                    <a href="#documentation" class="toc-h2 toc-link" data-title="Documentation">Documentation</a>
+                    <a href="#kentaroaction" class="toc-h2 toc-link" data-title="KentaroAction">KentaroAction</a>
+                  </li>
+                  <li>
+                    <a href="#kentarochangetask" class="toc-h2 toc-link" data-title="KentaroChangeTask">KentaroChangeTask</a>
+                  </li>
+                  <li>
+                    <a href="#guided-workflow-execution" class="toc-h2 toc-link" data-title="Guided workflow execution">Guided workflow execution</a>
+                  </li>
+                  <li>
+                    <a href="#change-task-execution" class="toc-h2 toc-link" data-title="Change Task execution">Change Task execution</a>
+                  </li>
+                  <li>
+                    <a href="#banking-mortgage-renewal-test-chain" class="toc-h2 toc-link" data-title="Banking mortgage-renewal test chain">Banking mortgage-renewal test chain</a>
+                  </li>
+                  <li>
+                    <a href="#supporting-documentation" class="toc-h2 toc-link" data-title="Supporting documentation">Supporting documentation</a>
                   </li>
                   <li>
                     <a href="#published-contract-and-examples" class="toc-h2 toc-link" data-title="Published contract and examples">Published contract and examples</a>
@@ -346,34 +361,20 @@
 <p>ODPH v0.2 controls proposed changes around versioned business specifications. It does not remodel objectives, use cases, data products, graph connections, or runtime execution objects.</p>
 
 <aside class="warning">This is pre-release material. Direct v0.2 workflows perform ordered, resource-level Maysano writes. They are not multi-action atomic and do not roll back automatically.</aside>
-
-<table><thead>
-<tr>
-<th>Document</th>
-<th>Use it for</th>
-<th>It contains</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><a href="kentaro-action.html"><code>KentaroAction</code></a></td>
-<td>One agreed direct Maysano API operation.</td>
-<td>One reference to one ODPC, ODPS, or ODPG YAML file.</td>
-</tr>
-<tr>
-<td><a href="kentaro-change-task.html"><code>KentaroChangeTask</code></a></td>
-<td>A later composite business change.</td>
-<td>References to existing action files and their dependencies.</td>
-</tr>
-</tbody></table>
-<h2 id='documentation'>Documentation</h2>
+<h2 id='kentaroaction'>KentaroAction</h2>
+<p>Use <a href="kentaro-action.html"><code>KentaroAction</code></a> for one agreed direct Maysano API operation. Each action references exactly one ODPC, ODPS, or ODPG YAML file.</p>
+<h2 id='kentarochangetask'>KentaroChangeTask</h2>
+<p>Use <a href="kentaro-change-task.html"><code>KentaroChangeTask</code></a> for a later composite business change. It references existing action files and their dependencies.</p>
+<h2 id='guided-workflow-execution'>Guided workflow execution</h2>
+<p>Follow the <a href="guided-workflow.html"><code>guided workflow</code></a> when an operator needs a controlled, ordered path through direct v0.2 actions.</p>
+<h2 id='change-task-execution'>Change Task execution</h2>
+<p>See <a href="change-task-execution.html"><code>Change Task execution</code></a> for the future composite-task execution model and its v0.2 boundary.</p>
+<h2 id='banking-mortgage-renewal-test-chain'>Banking mortgage-renewal test chain</h2>
+<p>Inspect the <a href="mortgage-renewal.html"><code>mortgage-renewal test chain</code></a> for the complete, individually validated action sequence and its composite task.</p>
+<h2 id='supporting-documentation'>Supporting documentation</h2>
 <ul>
 <li><a href="architecture.html">Architecture and responsibilities</a></li>
-<li><a href="kentaro-action.html">KentaroAction reference</a></li>
-<li><a href="kentaro-change-task.html">KentaroChangeTask reference</a></li>
 <li><a href="specification-artefacts.html">Specification artefacts: ODPC, ODPS, ODPG</a></li>
-<li><a href="guided-workflow.html">Guided workflow execution</a></li>
-<li><a href="change-task-execution.html">Change Task execution</a></li>
-<li><a href="mortgage-renewal.html">Banking mortgage-renewal test chain</a></li>
 <li><a href="schema-reference.html">Schema reference</a></li>
 <li><a href="validation.html">Validation and runtime checks</a></li>
 <li><a href="roadmap.html">Roadmap</a></li>
