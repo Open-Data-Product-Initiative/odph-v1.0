@@ -1,6 +1,6 @@
 # ODPH v0.2 Draft: ODPH Change Control
 
-ODPH v0.2 is a thin change-control layer around versioned ODPC, ODPS, and ODPG YAML specifications. It does not model business objects, graph connections, runtime execution, or an alternate record store.
+ODPH v0.2 packages eight peer top-level governed-work objects around versioned ODPC, ODPS, and ODPG YAML specifications: ContextPackage, Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, EvidenceEvent, ChangeAction, and ChangeTask. It does not replace business-object, graph, or Maysano record authority.
 
 Maysano is authoritative for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded context, creates and validates one specification file at a time, obtains business-owner agreement, submits that file to Maysano, and records evidence.
 
@@ -11,7 +11,7 @@ Maysano is authoritative for accepted specification versions, object identities,
 - `source/odph-v0.2/schema/change-control.json`: generated JSON representation.
 - `source/examples/change-chain/`: six linked change-chain test cases, actions, a composite Change Task, and referenced ODPC, ODPS, and ODPG files.
 - `scripts/validate_examples.py`: complete static and cross-file example validation.
-- `source/objects.jsonl`: machine-readable definitions for the two v0.2 document kinds.
+- `source/objects.jsonl`: machine-readable definitions for the eight v0.2 top-level object kinds.
 
 ## Local checks
 

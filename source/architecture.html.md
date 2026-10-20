@@ -14,6 +14,6 @@ Maysano is the authoritative record for accepted specification versions, object 
 | Accepted identity, version, approval, graph state, applied change | Maysano |
 | Generated file validation, proposal presentation, submission evidence | ODPH |
 
-ODPH v0.2 only names a file, its family, checksum, bounded Maysano context, review needs, and acceptance criteria. Object identity, business fields, domain semantics, and lifecycle state belong in the referenced ODPC, ODPS, or ODPG file.
+ODPH v0.2 packages eight peer top-level object kinds: ContextPackage, Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, EvidenceEvent, ChangeAction, and ChangeTask. Object identity, business fields, domain semantics, and lifecycle state still belong in the referenced ODPC, ODPS, or ODPG file.
 
-There are no generic object payloads, generic relationship payloads, raw relationship JSON, API request bodies, authority levels, tool lists, data-access grants, or runtime-cache details in this contract.
+There are no raw relationship JSON, API request bodies, or runtime-cache details in this contract. Boundary fields describe a local governed-work model; they do not issue real tools, data access, approval rights, or authority.

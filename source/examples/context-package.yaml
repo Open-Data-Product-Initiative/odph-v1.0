@@ -1,0 +1,11 @@
+id: context-service-change
+kind: ContextPackage
+version: 1
+createdAt: '2026-10-20T00:00:00Z'
+actor: change-team
+sourceReferences:
+  - {id: 'maysano:graph', version: 4, retrievedAt: '2026-10-20T00:00:00Z'}
+relationshipReferences: []
+retrievalScope: {graphRevision: 4, objectiveIds: [service-objective]}
+freshness: fresh
+conflicts: []

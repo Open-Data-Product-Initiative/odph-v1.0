@@ -3,6 +3,7 @@ import unittest
 from pathlib import Path
 
 import yaml
+from jsonschema import Draft202012Validator, FormatChecker
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -10,12 +11,17 @@ SOURCE = ROOT / "source"
 
 
 class OdphArtifactsTest(unittest.TestCase):
-    def test_schema_declares_the_two_v02_document_kinds(self):
+    def test_schema_declares_all_eight_top_level_object_kinds(self):
         schema = yaml.safe_load((SOURCE / "odph-v0.2/schema/change-control.yaml").read_text(encoding="utf-8"))
         json_schema = json.loads((SOURCE / "odph-v0.2/schema/change-control.json").read_text(encoding="utf-8"))
         self.assertEqual(schema, json_schema)
         self.assertEqual(schema["$id"], "https://opendataproducts.org/odph-v0.2/schema/change-control.yaml")
-        self.assertEqual(schema["oneOf"], [{"$ref": "#/$defs/ChangeAction"}, {"$ref": "#/$defs/ChangeTask"}])
+        self.assertEqual(schema["oneOf"], [{"$ref": f"#/$defs/{object_id}"} for object_id in [
+            "ContextPackage", "Mandate", "WorkEnvelope", "ExecutionPackage",
+            "ExecutionRequest", "EvidenceEvent", "ChangeAction", "ChangeTask",
+        ]])
+        for object_id in ["ContextPackage", "Mandate", "WorkEnvelope", "ExecutionPackage", "ExecutionRequest", "EvidenceEvent"]:
+            self.assertEqual(schema["$defs"][object_id]["allOf"][-1]["properties"]["kind"]["const"], object_id)
         self.assertEqual(schema["$defs"]["ChangeAction"]["properties"]["kind"]["const"], "ChangeAction")
         self.assertEqual(schema["$defs"]["ChangeTask"]["properties"]["kind"]["const"], "ChangeTask")
 
@@ -27,10 +33,34 @@ class OdphArtifactsTest(unittest.TestCase):
         task = yaml.safe_load((root / "change-tasks/change-chain.yaml").read_text(encoding="utf-8"))
         self.assertEqual(task["kind"], "ChangeTask")
         self.assertEqual(len(task["actions"]), 5)
+        for filename, object_kind in [
+            ("context-package.yaml", "ContextPackage"),
+            ("mandate.yaml", "Mandate"),
+            ("work-envelope.yaml", "WorkEnvelope"),
+            ("execution-package.yaml", "ExecutionPackage"),
+            ("execution-request.yaml", "ExecutionRequest"),
+            ("evidence-event.yaml", "EvidenceEvent"),
+        ]:
+            example = yaml.safe_load((SOURCE / "examples" / filename).read_text(encoding="utf-8"))
+            self.assertEqual(example["kind"], object_kind)
+
+    def test_schema_validates_each_standalone_governed_work_object(self):
+        schema = yaml.safe_load((SOURCE / "odph-v0.2/schema/change-control.yaml").read_text(encoding="utf-8"))
+        validator = Draft202012Validator(schema, format_checker=FormatChecker())
+        for filename in [
+            "context-package.yaml", "mandate.yaml", "work-envelope.yaml",
+            "execution-package.yaml", "execution-request.yaml", "evidence-event.yaml",
+        ]:
+            example = yaml.safe_load((SOURCE / "examples" / filename).read_text(encoding="utf-8"))
+            errors = sorted(validator.iter_errors(example), key=lambda error: list(error.path))
+            self.assertEqual(errors, [], f"{filename}: {errors}")
 
     def test_object_records_and_guidance_are_v02_aligned(self):
         records = [json.loads(line) for line in (SOURCE / "objects.jsonl").read_text(encoding="utf-8").splitlines() if line]
-        self.assertEqual({record["id"] for record in records}, {"ChangeAction", "ChangeTask"})
+        self.assertEqual({record["id"] for record in records}, {
+            "ContextPackage", "Mandate", "WorkEnvelope", "ExecutionPackage",
+            "ExecutionRequest", "EvidenceEvent", "ChangeAction", "ChangeTask",
+        })
         guidance = (SOURCE / "llms.txt").read_text(encoding="utf-8")
         self.assertIn("/odph-v0.2/schema/change-control.yaml", guidance)
         self.assertIn("/examples/change-chain/", guidance)

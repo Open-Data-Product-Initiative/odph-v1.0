@@ -1,9 +1,27 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://opendataproducts.org/odph-v0.2/schema/change-control.yaml",
-  "title": "ODPH Change Control 0.2 Draft",
-  "description": "A thin control schema for ODPH-created business changes. It does not remodel objectives, use cases, data products, or graph connections. Those artefacts live in separately validated ODPC, ODPS, and ODPG YAML files. ChangeAction controls one direct Maysano API operation. ChangeTask groups ordered action files for a later multi-action capability.",
+  "title": "ODPH Governed Change Objects 0.2 Draft",
+  "description": "Shape validation for six top-level ODPH governed-work objects: ContextPackage, Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, and EvidenceEvent. ChangeAction and ChangeTask are constrained execution-profile projections. Cross-object references, subset checks, freshness, approvals, revocation, and platform enforcement require deterministic relationship validation.",
   "oneOf": [
+    {
+      "$ref": "#/$defs/ContextPackage"
+    },
+    {
+      "$ref": "#/$defs/Mandate"
+    },
+    {
+      "$ref": "#/$defs/WorkEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ExecutionPackage"
+    },
+    {
+      "$ref": "#/$defs/ExecutionRequest"
+    },
+    {
+      "$ref": "#/$defs/EvidenceEvent"
+    },
     {
       "$ref": "#/$defs/ChangeAction"
     },
@@ -37,6 +55,110 @@
     "Timestamp": {
       "type": "string",
       "format": "date-time"
+    },
+    "StringList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/NonEmptyString"
+      }
+    },
+    "Reference": {
+      "type": "object",
+      "required": [
+        "id",
+        "version"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retrievedAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "objectType": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "uri": {
+          "type": "string",
+          "format": "uri-reference"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CommonObject": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "version",
+        "createdAt",
+        "actor",
+        "sourceReferences",
+        "relationshipReferences"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "createdAt": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "actor": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "sourceReferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reference"
+          }
+        },
+        "relationshipReferences": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Reference"
+          }
+        }
+      }
+    },
+    "Boundary": {
+      "type": "object",
+      "required": [
+        "scope",
+        "tools",
+        "dataAccess",
+        "approvalRights",
+        "authorityLevel"
+      ],
+      "properties": {
+        "scope": {
+          "$ref": "#/$defs/StringList"
+        },
+        "tools": {
+          "$ref": "#/$defs/StringList"
+        },
+        "dataAccess": {
+          "$ref": "#/$defs/StringList"
+        },
+        "approvalRights": {
+          "$ref": "#/$defs/StringList"
+        },
+        "authorityLevel": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3
+        }
+      }
     },
     "Sha256": {
       "type": "string",
@@ -251,6 +373,251 @@
         }
       },
       "additionalProperties": false
+    },
+    "ContextPackage": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "retrievalScope",
+            "freshness",
+            "conflicts"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ContextPackage"
+            },
+            "retrievalScope": {
+              "type": "object"
+            },
+            "freshness": {
+              "enum": [
+                "fresh",
+                "stale",
+                "unknown"
+              ]
+            },
+            "conflicts": {
+              "type": "array"
+            }
+          }
+        }
+      ]
+    },
+    "Mandate": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "$ref": "#/$defs/Boundary"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "businessArea",
+            "owner",
+            "expiresAt"
+          ],
+          "properties": {
+            "kind": {
+              "const": "Mandate"
+            },
+            "businessArea": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "owner": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "expiresAt": {
+              "$ref": "#/$defs/Timestamp"
+            }
+          }
+        }
+      ]
+    },
+    "WorkEnvelope": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "$ref": "#/$defs/Boundary"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "mandateReference",
+            "requestedResult",
+            "owner",
+            "expiresAt"
+          ],
+          "properties": {
+            "kind": {
+              "const": "WorkEnvelope"
+            },
+            "mandateReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "requestedResult": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "owner": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "expiresAt": {
+              "$ref": "#/$defs/Timestamp"
+            }
+          }
+        }
+      ]
+    },
+    "ExecutionPackage": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "$ref": "#/$defs/Boundary"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "workEnvelopeReference",
+            "plannedSteps",
+            "expectedOutputs",
+            "dependencies",
+            "timing",
+            "acceptanceCriteria"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ExecutionPackage"
+            },
+            "workEnvelopeReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "plannedSteps": {
+              "$ref": "#/$defs/StringList"
+            },
+            "expectedOutputs": {
+              "$ref": "#/$defs/StringList"
+            },
+            "dependencies": {
+              "$ref": "#/$defs/StringList"
+            },
+            "timing": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "acceptanceCriteria": {
+              "$ref": "#/$defs/StringList"
+            }
+          }
+        }
+      ]
+    },
+    "ExecutionRequest": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "executionPackageReference",
+            "revocationPolicyReference",
+            "action",
+            "tool",
+            "target",
+            "requestedAuthority",
+            "approvalRequired",
+            "approvalExpiresAt"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ExecutionRequest"
+            },
+            "executionPackageReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "revocationPolicyReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "action": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "tool": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "target": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "requestedAuthority": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "approvalRequired": {
+              "type": "boolean"
+            },
+            "approvalExpiresAt": {
+              "oneOf": [
+                {
+                  "$ref": "#/$defs/Timestamp"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "redactedParameters": {
+              "type": "object"
+            }
+          }
+        }
+      ]
+    },
+    "EvidenceEvent": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CommonObject"
+        },
+        {
+          "type": "object",
+          "required": [
+            "kind",
+            "occurredAt",
+            "workEnvelopeReference",
+            "eventType",
+            "payload"
+          ],
+          "properties": {
+            "kind": {
+              "const": "EvidenceEvent"
+            },
+            "occurredAt": {
+              "$ref": "#/$defs/Timestamp"
+            },
+            "workEnvelopeReference": {
+              "$ref": "#/$defs/Reference"
+            },
+            "eventType": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "payload": {
+              "type": "object"
+            }
+          }
+        }
+      ]
     },
     "ChangeAction": {
       "type": "object",

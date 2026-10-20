@@ -7,7 +7,16 @@ import yaml
 from odph_paths import EXAMPLES_DIR, LLMS_TXT, OBJECTS_JSONL, SCHEMA_JSON, SCHEMA_YAML
 
 
-EXPECTED_OBJECT_IDS = {"ChangeAction", "ChangeTask"}
+EXPECTED_OBJECT_IDS = {
+    "ContextPackage",
+    "Mandate",
+    "WorkEnvelope",
+    "ExecutionPackage",
+    "ExecutionRequest",
+    "EvidenceEvent",
+    "ChangeAction",
+    "ChangeTask",
+}
 
 
 def load_yaml(path):
@@ -20,8 +29,11 @@ def check_schema():
     json_schema = json.loads(SCHEMA_JSON.read_text(encoding="utf-8"))
     assert schema["$id"] == "https://opendataproducts.org/odph-v0.2/schema/change-control.yaml"
     assert json_schema == schema
-    assert schema["oneOf"] == [{"$ref": "#/$defs/ChangeAction"}, {"$ref": "#/$defs/ChangeTask"}]
-    assert set(schema["$defs"]) >= {"ChangeAction", "ChangeTask", "SpecificationChange", "ActionReference"}
+    assert schema["oneOf"] == [{"$ref": f"#/$defs/{object_id}"} for object_id in [
+        "ContextPackage", "Mandate", "WorkEnvelope", "ExecutionPackage",
+        "ExecutionRequest", "EvidenceEvent", "ChangeAction", "ChangeTask",
+    ]]
+    assert set(schema["$defs"]) >= EXPECTED_OBJECT_IDS | {"SpecificationChange", "ActionReference", "CommonObject"}
 
 
 def check_examples():
@@ -29,6 +41,8 @@ def check_examples():
     assert len(list((root / "actions").glob("*.yaml"))) == 16
     assert len(list((root / "change-tasks").glob("*.yaml"))) == 1
     assert len(list((root / "specifications").rglob("*.yaml"))) == 16
+    for filename in ["context-package.yaml", "mandate.yaml", "work-envelope.yaml", "execution-package.yaml", "execution-request.yaml", "evidence-event.yaml"]:
+        assert (EXAMPLES_DIR / filename).is_file()
 
 
 def check_records_and_guidance():
