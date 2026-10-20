@@ -17,24 +17,8 @@
     <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-86a2677d.png">
     <link rel="apple-touch-icon" sizes="512x512" href="images/favicon-86a2677d.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <meta
-            name="description"
-            content="Open Data Product Harness (ODPH) 0.1 Draft defines a bounded, evidence-oriented interchange model for governed human and agent work. It is non-ratified design material, not execution authority."
-        >
-        <meta
-            name="spec-version"
-            content="0.1-draft"
-        >
-        <meta
-            name="llms"
-            content="/llms.txt"
-        >
-        <meta
-            name="ai-agent-guidance"
-            content="Use /llms.txt and /schema/odph.yaml before generating or validating a package."
-        >
 
-    <title>Open Data Product Harness (ODPH) 0.1 Draft | OpenDataProducts.org</title>
+    <title>ODPH v0.2 Draft | Kentaro Change Control</title>
 
 
     <style media="screen">
@@ -314,11 +298,8 @@
     </style>
     <link href="stylesheets/screen-ff0103ef.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
-      <script src="javascripts/all-b12a2749.js"></script>
+      <script src="javascripts/all_nosearch-18c3ed8e.js"></script>
 
-    <script>
-      $(function() { setupCodeCopy(); });
-    </script>
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-2BRS2DSVKQ"></script>
@@ -332,7 +313,7 @@
 
   </head>
 
-  <body class="index" data-languages="[&quot;yaml&quot;,&quot;json&quot;]">
+  <body class="index" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -341,469 +322,69 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/odph-logo-1a3e8c65.png" class="logo" alt="ODPH — Open Data Product Harness" />
-        <div class="lang-selector">
-              <a href="#" data-language-name="yaml">yaml</a>
-              <a href="#" data-language-name="json">json</a>
-        </div>
-        <div class="search">
-          <input type="text" class="search" id="input-search" placeholder="Search">
-        </div>
-        <ul class="search-results"></ul>
       <ul id="toc" class="toc-list-h1">
           <li>
-            <a href="#open-data-product-harness" class="toc-h1 toc-link" data-title="OPEN DATA PRODUCT HARNESS">OPEN DATA PRODUCT HARNESS</a>
+            <a href="#odph-v0-2-draft" class="toc-h1 toc-link" data-title="ODPH v0.2 Draft">ODPH v0.2 Draft</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#version-0-1-draft" class="toc-h2 toc-link" data-title="Version 0.1 Draft">Version 0.1 Draft</a>
+                    <a href="#a-thin-kentaro-change-control-layer" class="toc-h2 toc-link" data-title="A thin Kentaro change-control layer">A thin Kentaro change-control layer</a>
+                  </li>
+                  <li>
+                    <a href="#documentation" class="toc-h2 toc-link" data-title="Documentation">Documentation</a>
+                  </li>
+                  <li>
+                    <a href="#published-contract-and-examples" class="toc-h2 toc-link" data-title="Published contract and examples">Published contract and examples</a>
                   </li>
               </ul>
-          </li>
-          <li>
-            <a href="#purpose-and-standards-family-boundary" class="toc-h1 toc-link" data-title="Purpose and standards-family boundary">Purpose and standards-family boundary</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#what-odph-does-not-do" class="toc-h2 toc-link" data-title="What ODPH does not do">What ODPH does not do</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
-            <a href="#conceptual-model" class="toc-h1 toc-link" data-title="Conceptual model">Conceptual model</a>
-          </li>
-          <li>
-            <a href="#object-vocabulary" class="toc-h1 toc-link" data-title="Object vocabulary">Object vocabulary</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#contextpackage" class="toc-h2 toc-link" data-title="ContextPackage">ContextPackage</a>
-                  </li>
-                  <li>
-                    <a href="#mandate" class="toc-h2 toc-link" data-title="Mandate">Mandate</a>
-                  </li>
-                  <li>
-                    <a href="#workenvelope" class="toc-h2 toc-link" data-title="WorkEnvelope">WorkEnvelope</a>
-                  </li>
-                  <li>
-                    <a href="#executionpackage" class="toc-h2 toc-link" data-title="ExecutionPackage">ExecutionPackage</a>
-                  </li>
-                  <li>
-                    <a href="#executionrequest" class="toc-h2 toc-link" data-title="ExecutionRequest">ExecutionRequest</a>
-                  </li>
-                  <li>
-                    <a href="#evidencebundle-and-evidenceevent" class="toc-h2 toc-link" data-title="EvidenceBundle and EvidenceEvent">EvidenceBundle and EvidenceEvent</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
-            <a href="#cross-cutting-controls" class="toc-h1 toc-link" data-title="Cross-cutting controls">Cross-cutting controls</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#revocationpolicy" class="toc-h2 toc-link" data-title="RevocationPolicy">RevocationPolicy</a>
-                  </li>
-                  <li>
-                    <a href="#correction" class="toc-h2 toc-link" data-title="Correction">Correction</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
-            <a href="#common-object-contract" class="toc-h1 toc-link" data-title="Common object contract">Common object contract</a>
-          </li>
-          <li>
-            <a href="#integrity-rules" class="toc-h1 toc-link" data-title="Integrity rules">Integrity rules</a>
-          </li>
-          <li>
-            <a href="#conformance-profiles" class="toc-h1 toc-link" data-title="Conformance profiles">Conformance profiles</a>
-          </li>
-          <li>
-            <a href="#schema-and-examples" class="toc-h1 toc-link" data-title="Schema and examples">Schema and examples</a>
-          </li>
-          <li>
-            <a href="#questions-before-ratification" class="toc-h1 toc-link" data-title="Questions before ratification">Questions before ratification</a>
-          </li>
-          <li>
-            <a href="#recommended-first-publication-scope" class="toc-h1 toc-link" data-title="Recommended first publication scope">Recommended first publication scope</a>
-          </li>
-          <li>
-            <a href="#source-basis" class="toc-h1 toc-link" data-title="Source basis">Source basis</a>
           </li>
       </ul>
-        <ul class="toc-footer">
-            <li>License <a href='https://www.apache.org/licenses/LICENSE-2.0'>Apache 2.0</a></li>
-            <li><br/><a href='https://opendataproducts.org'>Specification home</a></li>
-            <li><br/>OpenDataProducts.org</li>
-        </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='open-data-product-harness'>OPEN DATA PRODUCT HARNESS</h1><h2 id='version-0-1-draft'>Version 0.1 Draft</h2>
-<aside class="warning">This is non-ratified design material. It describes a local planning-and-evidence interchange model grounded in Kentaro's local governance core. It is not an ODPS, ODPC, ODPG, or Maysano specification, and it creates no new authority model.</aside>
+        <h1 id='odph-v0-2-draft'>ODPH v0.2 Draft</h1><h2 id='a-thin-kentaro-change-control-layer'>A thin Kentaro change-control layer</h2>
+<p>ODPH v0.2 controls proposed changes around versioned business specifications. It does not remodel objectives, use cases, data products, graph connections, or runtime execution objects.</p>
 
-<p>The key words “MUST”, “MUST NOT”, “REQUIRED”, “SHALL”, “SHALL NOT”, “SHOULD”, “SHOULD NOT”, “RECOMMENDED”, “NOT RECOMMENDED”, “MAY”, and “OPTIONAL” in this document are to be interpreted as described in BCP 14 (<a href="https://datatracker.ietf.org/doc/html/rfc2119">RFC 2119</a> and <a href="https://datatracker.ietf.org/doc/html/rfc8174">RFC 8174</a>) when, and only when, they appear in all capitals.</p>
-
-<table><thead>
-<tr>
-<th>Topic</th>
-<th>Link</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Version source</td>
-<td><a href="https://github.com/Open-Data-Product-Initiative/odph-v1.0">ODPH draft on GitHub</a></td>
-<td>Proposed source repository for the draft</td>
-</tr>
-<tr>
-<td>Full example</td>
-<td><a href="examples/full-retention-review.yaml">full-retention-review.yaml</a></td>
-<td>A synthetic local-only package</td>
-</tr>
-<tr>
-<td>Schema</td>
-<td><a href="schema/odph.yaml">odph.yaml</a></td>
-<td>Canonical YAML serialization of JSON Schema</td>
-</tr>
-</tbody></table>
-<h1 id='purpose-and-standards-family-boundary'>Purpose and standards-family boundary</h1>
-<p>ODPH describes bounded work by which people and agents inspect sourced context, prepare a plan, propose actions, and retain attributable evidence. It is neither a data-product descriptor nor a catalog entry.</p>
-<div class="highlight"><pre class="highlight plaintext"><code>ODPS / another product model  -&gt; authoritative data-product definition
-ODPC                           -&gt; reusable portfolio objects
-ODPG / another graph model     -&gt; relationships between portfolio objects
-ODPH (proposed)                 -&gt; bounded governed work against such context
-</code></pre></div>
-<p>A package MAY reference an ODPS product, an ODPC object, an ODPG graph node, a Maysano record, or another internal source. It MUST reference those sources rather than duplicate their complete metadata. This keeps ODPH aligned with the standards family without making it ODPS-only.</p>
-<h2 id='what-odph-does-not-do'>What ODPH does not do</h2>
-<p>A conforming implementation MUST distinguish a local planning and evidence artefact from an authoritative business-system record. A valid package does not by itself grant tool, connector, credential, or data access; make an approval real; execute a request; write a portfolio or graph record; suspend a live credential; or constitute immutable, retention-enforced, compliance-grade audit.</p>
-<div class="highlight"><pre class="highlight plaintext"><code>local policy result: allowed
-meaning: structurally in scope under supplied local objects
-not meaning: permission to execute in an external system
-</code></pre></div>
-<p>Kentaro v0.1 is deliberately read-only. A future execution profile requires an independently verified platform contract, narrow credentials, real approval semantics, and platform-side enforcement.</p>
-<h1 id='conceptual-model'>Conceptual model</h1>
-<p>The six parts are six conceptual concerns, not six peer fields in a planning document. <code>RevocationPolicy</code> and <code>Correction</code> are cross-cutting controls. <code>EvidenceBundle</code> is a logical/exported grouping; the durable local record is an <code>EvidenceEvent</code>.</p>
-<div class="highlight"><pre class="highlight plaintext"><code>                         sourced, bounded context
-                                  │
-                         ContextPackage
-                                  │
-Mandate ──narrows to──&gt; WorkEnvelope ──plans through──&gt; ExecutionPackage
-                                                              │
-                                                     proposes zero or more
-                                                              │
-                                                     ExecutionRequest(s)
-                                                              │
-                  RevocationPolicy ──guards each request─────┘
-
-Context + versions + evaluation + outputs + corrections ──&gt; EvidenceBundle
-Correction ──targets one object and names its destination───┘
-</code></pre></div>
-<p>The arrows are constraints, not workflow automation. A human MAY co-author, revise, reject, or terminate any local artefact. No arrow authorizes an agent to continue autonomously.</p>
+<aside class="warning">This is pre-release material. Direct v0.2 workflows perform ordered, resource-level Maysano writes. They are not multi-action atomic and do not roll back automatically.</aside>
 
 <table><thead>
 <tr>
-<th>Part</th>
-<th>Core question</th>
-<th>Stable meaning</th>
-<th>Human responsibility</th>
-<th>Machine responsibility</th>
+<th>Document</th>
+<th>Use it for</th>
+<th>It contains</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>ContextPackage</td>
-<td>What did we know?</td>
-<td>A bounded observation with provenance and freshness.</td>
-<td>Set scope; resolve material conflicts.</td>
-<td>Preserve IDs, versions, and times; report gaps.</td>
+<td><a href="kentaro-action.html"><code>KentaroAction</code></a></td>
+<td>One agreed direct Maysano API operation.</td>
+<td>One reference to one ODPC, ODPS, or ODPG YAML file.</td>
 </tr>
 <tr>
-<td>Mandate</td>
-<td>What could this area permit?</td>
-<td>Durable upper boundary for scope and authority.</td>
-<td>Own and review the boundary.</td>
-<td>Validate structure and expiry.</td>
-</tr>
-<tr>
-<td>WorkEnvelope</td>
-<td>What is permitted now?</td>
-<td>Assignment-specific subset of one Mandate.</td>
-<td>Set result, owner, exclusions, and expiry.</td>
-<td>Reject expansion; flag absent ownership.</td>
-</tr>
-<tr>
-<td>ExecutionPackage</td>
-<td>What is the plan?</td>
-<td>Non-authoritative plan under one envelope.</td>
-<td>Approve or revise the plan.</td>
-<td>Validate that it does not broaden the envelope.</td>
-</tr>
-<tr>
-<td>ExecutionRequest</td>
-<td>What action is proposed?</td>
-<td>One proposed action, never an implicit command.</td>
-<td>Decide whether a future action is acceptable.</td>
-<td>Evaluate deterministically; do not dispatch locally.</td>
-</tr>
-<tr>
-<td>EvidenceBundle</td>
-<td>What supports the work?</td>
-<td>Exportable grouping of attributable events.</td>
-<td>Review interpretations and corrections.</td>
-<td>Preserve references; redact; optionally hash-chain.</td>
+<td><a href="kentaro-change-task.html"><code>KentaroChangeTask</code></a></td>
+<td>A later composite business change.</td>
+<td>References to existing action files and their dependencies.</td>
 </tr>
 </tbody></table>
-<h1 id='object-vocabulary'>Object vocabulary</h1><h2 id='contextpackage'>ContextPackage</h2>
-<p>A <code>ContextPackage</code> is a snapshot of the authorized context seen for one assignment. It is evidence of observation, not a shadow portfolio. It MUST identify a retrieval scope, at least one source reference with ID, version, and retrieval time, a <code>freshness</code> state (<code>fresh</code>, <code>stale</code>, or <code>unknown</code>), and observed conflicts.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">context-retention-review</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">ContextPackage</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">retrievalScope</span><span class="pi">:</span>
-  <span class="na">objectiveIds</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">objective-retention</span><span class="pi">]</span>
-<span class="na">sourceReferences</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">demo:objective-retention</span>
-    <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-    <span class="na">retrievedAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-17T08:00:00Z"</span>
-<span class="na">freshness</span><span class="pi">:</span> <span class="s">fresh</span>
-<span class="na">conflicts</span><span class="pi">:</span> <span class="pi">[]</span>
-</code></pre></div>
-<p>An empty conflict list means none were observed in this snapshot; it is not a claim of universal consistency.</p>
-<h2 id='mandate'>Mandate</h2>
-<p>A <code>Mandate</code> is the durable outer boundary for a business area. It is about authority, not a task plan. The boundary axes are <code>scope</code>, <code>tools</code>, <code>dataAccess</code>, <code>approvalRights</code>, and <code>authorityLevel</code>, with an owner, business area, and expiry.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">mandate-commercial-analysis</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">Mandate</span>
-<span class="na">businessArea</span><span class="pi">:</span> <span class="s">Commercial analysis</span>
-<span class="na">owner</span><span class="pi">:</span> <span class="s">Commercial director</span>
-<span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">renewal-prioritisation</span><span class="pi">]</span>
-<span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">draft.decision_note</span><span class="pi">]</span>
-<span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">customer_health_summary</span><span class="pi">]</span>
-<span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed_draft</span><span class="pi">]</span>
-<span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span> <span class="c1"># Local ordinal; not a portable standard meaning</span>
-<span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2027-01-01T00:00:00Z"</span>
-</code></pre></div>
-<p>The current local profile validates an integer <code>authorityLevel</code> from 0 through 3 but does not assign portable meanings to those values. A future ratified standard MUST either define a normative enum and behaviour or make authority class profile-specific.</p>
-<h2 id='workenvelope'>WorkEnvelope</h2>
-<p>A <code>WorkEnvelope</code> turns one durable Mandate into one assignment. It MUST point to exactly one Mandate ID and version. Its requested result and shorter-lived review boundary MAY only narrow—not expand—the Mandate&#39;s boundary.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">work-retention-review</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">WorkEnvelope</span>
-<span class="na">mandateReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">mandate-commercial-analysis</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">requestedResult</span><span class="pi">:</span> <span class="s">Draft a renewal-prioritisation decision note</span>
-<span class="na">owner</span><span class="pi">:</span> <span class="s">Commercial director</span>
-<span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">renewal-prioritisation</span><span class="pi">]</span>
-<span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">draft.decision_note</span><span class="pi">]</span>
-<span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">customer_health_summary</span><span class="pi">]</span>
-<span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed_draft</span><span class="pi">]</span>
-<span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span>
-</code></pre></div><h2 id='executionpackage'>ExecutionPackage</h2>
-<p>An <code>ExecutionPackage</code> is the human-and-agent plan inside one WorkEnvelope. It has no independent authority. It MUST reference one envelope and remain within that envelope&#39;s boundary.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">package-retention-review</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionPackage</span>
-<span class="na">workEnvelopeReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">work-retention-review</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">plannedSteps</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s">Review the sourced customer-health summary.</span>
-  <span class="pi">-</span> <span class="s">Prepare a decision-note draft.</span>
-<span class="na">expectedOutputs</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Decision-note draft</span><span class="pi">]</span>
-<span class="na">dependencies</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Current customer-health summary</span><span class="pi">]</span>
-<span class="na">timing</span><span class="pi">:</span> <span class="s">Before the next commercial review</span>
-<span class="na">acceptanceCriteria</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s">Names source limits and unresolved assumptions.</span>
-</code></pre></div>
-<p>The current simple profile uses ordered strings. A future minor version SHOULD support structured plan steps with ID, purpose, inputs, outputs, dependencies, and acceptance criteria. A step MUST NOT smuggle in tool calls, credentials, or an autonomous runbook.</p>
-<h2 id='executionrequest'>ExecutionRequest</h2>
-<p>An <code>ExecutionRequest</code> names one proposed action and points to both its <code>ExecutionPackage</code> and applicable <code>RevocationPolicy</code>. The local profile requires <code>action</code>, <code>tool</code>, <code>target</code>, <code>requestedAuthority</code>, <code>approvalRequired</code>, and <code>approvalExpiresAt</code>.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">request-retention-note</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionRequest</span>
-<span class="na">executionPackageReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">package-retention-review</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">revocationPolicyReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">policy-retention-draft</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">action</span><span class="pi">:</span> <span class="s">prepare decision-note draft</span>
-<span class="na">tool</span><span class="pi">:</span> <span class="s">draft.decision_note</span>
-<span class="na">target</span><span class="pi">:</span> <span class="s">local draft</span>
-<span class="na">requestedAuthority</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">approvalRequired</span><span class="pi">:</span> <span class="no">false</span>
-<span class="na">approvalExpiresAt</span><span class="pi">:</span> <span class="no">null</span>
-<span class="na">redactedParameters</span><span class="pi">:</span>
-  <span class="na">customerHealthSummary</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">sourceReference</span><span class="pi">:</span> <span class="nv">demo</span><span class="pi">:</span><span class="nv">objective-retention</span><span class="pi">}</span>
-</code></pre></div>
-<table><thead>
-<tr>
-<th>Outcome</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>allowed</code></td>
-<td>Structurally in supplied local boundaries; never execution permission.</td>
-</tr>
-<tr>
-<td><code>approval_required</code></td>
-<td>A future boundary requires approval; the package does not obtain it.</td>
-</tr>
-<tr>
-<td><code>denied</code></td>
-<td>The request is outside a declared boundary.</td>
-</tr>
-<tr>
-<td><code>escalated</code></td>
-<td>Context, ownership, consistency, expiry, or authority is ambiguous.</td>
-</tr>
-</tbody></table>
+<h2 id='documentation'>Documentation</h2>
+<ul>
+<li><a href="architecture.html">Architecture and responsibilities</a></li>
+<li><a href="kentaro-action.html">KentaroAction reference</a></li>
+<li><a href="kentaro-change-task.html">KentaroChangeTask reference</a></li>
+<li><a href="specification-artefacts.html">Specification artefacts: ODPC, ODPS, ODPG</a></li>
+<li><a href="guided-workflow.html">Guided workflow execution</a></li>
+<li><a href="change-task-execution.html">Change Task execution</a></li>
+<li><a href="mortgage-renewal.html">Banking mortgage-renewal test chain</a></li>
+<li><a href="schema-reference.html">Schema reference</a></li>
+<li><a href="validation.html">Validation and runtime checks</a></li>
+<li><a href="roadmap.html">Roadmap</a></li>
+</ul>
+<h2 id='published-contract-and-examples'>Published contract and examples</h2>
+<p>The canonical YAML schema is <a href="odph-v0.2/schema/kentaro-change.yaml"><code>kentaro-change.yaml</code></a>; the mechanically derived JSON representation is <a href="odph-v0.2/schema/kentaro-change.json"><code>kentaro-change.json</code></a>. Both use the v0.2 schema identifier <code>https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml</code>.</p>
 
-<p><code>redactedParameters</code> MUST NOT contain raw secrets. A platform execution profile SHOULD accept secret references supplied by the platform rather than secret values in a package.</p>
-<h2 id='evidencebundle-and-evidenceevent'>EvidenceBundle and EvidenceEvent</h2>
-<p><code>EvidenceBundle</code> is the package-level export: context, object versions, policy classifications, output references, corrections, actors, and timestamps for one work envelope. <code>EvidenceEvent</code> is the durable atomic record.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">event-context-retrieved</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">EvidenceEvent</span>
-<span class="na">occurredAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-17T08:00:00Z"</span>
-<span class="na">workEnvelopeReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">work-retention-review</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">eventType</span><span class="pi">:</span> <span class="s">context_retrieved</span>
-<span class="na">payload</span><span class="pi">:</span>
-  <span class="na">contextPackageReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">context-retention-review</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-</code></pre></div>
-<p>An event MUST point to one WorkEnvelope, include at least one source reference, name an extensible <code>eventType</code>, record <code>occurredAt</code>, and carry an object payload. An export MAY include <code>previousHash</code> and <code>recordHash</code>; that detects alteration of the exported sequence only. It does not establish immutable storage, retention guarantees, or platform audit.</p>
-<h1 id='cross-cutting-controls'>Cross-cutting controls</h1><h2 id='revocationpolicy'>RevocationPolicy</h2>
-<p>A future execution-capable profile MUST bind every request to an active <code>RevocationPolicy</code> matching the same Mandate and WorkEnvelope chain. The policy describes how a future platform would suspend, narrow, or restore authority; it does not mean Kentaro can perform those operations today.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">policy-retention-draft</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">RevocationPolicy</span>
-<span class="na">policyId</span><span class="pi">:</span> <span class="s">policy-retention-draft</span>
-<span class="na">scope</span><span class="pi">:</span> <span class="s">capability</span>
-<span class="na">authorityChain</span><span class="pi">:</span>
-  <span class="na">mandateReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">mandate-commercial-analysis</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-  <span class="na">workEnvelopeReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">work-retention-review</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">accountableOwnerRole</span><span class="pi">:</span> <span class="s">Service Owner</span>
-<span class="na">suspensionTriggers</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="s">outside_work_envelope_or_mandate</span>
-  <span class="pi">-</span> <span class="s">source_evidence_missing_stale_or_contradictory</span>
-  <span class="pi">-</span> <span class="s">deterministic_validation_or_policy_control_failed</span>
-<span class="na">expiryOrReviewDate</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span>
-<span class="na">localStatus</span><span class="pi">:</span> <span class="s">declared_active</span>
-</code></pre></div>
-<p>A policy needs a single identity (<code>policyId</code> equal to its object <code>id</code>), a scope, authority-chain references, suspend/restore/narrow/emergency roles, accountable ownership, minimum suspension triggers, a positive repeated-failure threshold, action and notification requirements, expiry/review, and local status (<code>declared_active</code> or <code>simulated_suspended</code>). A cross-organization standard SHOULD use portable role identifiers rather than local organisation titles.</p>
-<h2 id='correction'>Correction</h2>
-<p>A <code>Correction</code> is structured human or system feedback. It MUST name a target object version, a kind (<code>output</code>, <code>context</code>, <code>mandate</code>, <code>policy</code>, or <code>tool</code>), a destination, and a summary. It records a reason to improve something; it MUST NOT silently rewrite the target.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">correction-retention-wording</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">Correction</span>
-<span class="na">targetReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">package-retention-review</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">correctionKind</span><span class="pi">:</span> <span class="s">output</span>
-<span class="na">destination</span><span class="pi">:</span> <span class="s">local package revision</span>
-<span class="na">summary</span><span class="pi">:</span> <span class="s">Use the agreed renewal terminology.</span>
-</code></pre></div><h1 id='common-object-contract'>Common object contract</h1>
-<p>Every object uses a stable <code>id</code>, <code>kind</code>, positive instance <code>version</code>, <code>createdAt</code>, declared <code>actor</code>, <code>sourceReferences</code>, and <code>relationshipReferences</code>. <code>actor</code> is attribution, not authentication proof. A <code>Reference</code> always includes an ID and version; a source observation also includes <code>retrievedAt</code>.</p>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"work-retention-review"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"WorkEnvelope"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-17T08:00:00Z"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"actor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"demo-user"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"sourceReferences"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"demo:objective-retention"</span><span class="p">,</span><span class="w"> </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="nl">"retrievedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2026-10-17T08:00:00Z"</span><span class="p">}],</span><span class="w">
-  </span><span class="nl">"relationshipReferences"</span><span class="p">:</span><span class="w"> </span><span class="p">[{</span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mandate-commercial-analysis"</span><span class="p">,</span><span class="w"> </span><span class="nl">"version"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">}]</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre></div><h1 id='integrity-rules'>Integrity rules</h1>
-<p>The value of ODPH is in its relationships rather than its field names. A conforming deterministic validator MUST apply these rules in addition to schema validation.</p>
-
-<table><thead>
-<tr>
-<th>Condition</th>
-<th>Required result</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>WorkEnvelope points to a missing or wrong Mandate version</td>
-<td>invalid / denied</td>
-</tr>
-<tr>
-<td>Envelope boundary is not a Mandate subset</td>
-<td>invalid / denied</td>
-</tr>
-<tr>
-<td>ExecutionPackage has no WorkEnvelope or broadens it</td>
-<td>invalid / denied</td>
-</tr>
-<tr>
-<td>Request has no matching RevocationPolicy chain</td>
-<td>invalid / denied</td>
-</tr>
-<tr>
-<td>Request tool or authority exceeds its envelope</td>
-<td>denied</td>
-</tr>
-<tr>
-<td>Owner is absent; a source is stale or conflicting; policy is expired</td>
-<td>escalated</td>
-</tr>
-<tr>
-<td>Request declares an approval requirement</td>
-<td>approval_required</td>
-</tr>
-<tr>
-<td>Revocation status is simulated suspended</td>
-<td>denied; no dispatch</td>
-</tr>
-<tr>
-<td>Evidence lacks source ID, version, or retrieval time</td>
-<td>invalid</td>
-</tr>
-</tbody></table>
-<div class="highlight"><pre class="highlight plaintext"><code>Schema validation: is the document well shaped?
-Relationship validation: do references, subsets, freshness, and authority chains hold?
-Platform enforcement: may a real external action happen now?
-</code></pre></div>
-<p>Passing the first two checks MUST NOT alter an external system.</p>
-<h1 id='conformance-profiles'>Conformance profiles</h1>
-<p>Package metadata MUST declare a conformance profile. An implementation MUST disclose its profile in output and MUST NOT claim a stronger profile merely because it rendered a plan, screenshot, or evidence file.</p>
-
-<table><thead>
-<tr>
-<th>Profile</th>
-<th>Permitted claim</th>
-<th>Prohibited claim</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>local-only</code></td>
-<td>Local validation, deterministic evaluation, draft/report generation, redacted evidence export.</td>
-<td>Live access, real approval, live suspension, external action.</td>
-</tr>
-<tr>
-<td><code>platform-governed-read</code></td>
-<td>Read from a verified platform contract with provenance.</td>
-<td>Writing or approval processing unless separately declared.</td>
-</tr>
-<tr>
-<td><code>platform-governed-execution</code></td>
-<td>A platform may execute after its own scope, approval, identity, revocation, and audit checks.</td>
-<td>Treating local <code>allowed</code> as permission.</td>
-</tr>
-</tbody></table>
-<h1 id='schema-and-examples'>Schema and examples</h1>
-<p>The canonical schema is YAML serialization of JSON Schema. The published JSON schema is mechanically derived from it. Schema validation handles document shape and local object fields; deterministic validation handles cross-object references, subset rules, chain matching, freshness, and outcomes.</p>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/odph-v1.0/schema/odph.yaml</span>
-<span class="na">version</span><span class="pi">:</span> <span class="s2">"</span><span class="s">0.1-draft"</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">OpenDataProductHarness</span>
-<span class="na">package</span><span class="pi">:</span>
-  <span class="na">metadata</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">odph-retention-review-2026-10</span>
-    <span class="na">conformanceProfile</span><span class="pi">:</span> <span class="s">kentaro-v0.1-local-only</span>
-  <span class="na">objects</span><span class="pi">:</span> <span class="pi">[]</span> <span class="c1"># Objects are listed in full-retention-review.yaml</span>
-</code></pre></div>
-<p>Use the full example for an end-to-end synthetic package and standalone examples when authoring or testing one object kind. Do not present a loose YAML template as a &quot;YAML Schema&quot;.</p>
-<h1 id='questions-before-ratification'>Questions before ratification</h1>
-<ol>
-<li>What is the formal name and standards-family home: package, work contract, governance profile, or operating-framework component?</li>
-<li>Is the top-level format one self-contained package, a folder of standalone fragments, or both?</li>
-<li>Can authority levels receive portable meanings, or must they be profile-specific?</li>
-<li>Which role vocabulary and data-classification taxonomy can be portable?</li>
-<li>What output-reference, identity, approval, revocation, idempotency, receipt, retention, and audit contracts are required for a true execution profile?</li>
-<li>Which relationships should be represented as ODPG relationships rather than embedded references?</li>
-</ol>
-<h1 id='recommended-first-publication-scope'>Recommended first publication scope</h1>
-<p>Publish <code>0.1-draft</code> as a local planning-and-evidence interchange model: the six conceptual parts and two controls; JSON Schema and its YAML serialization; full/minimal/standalone examples; JSONL object records; deterministic validation; and agent guidance. Defer live execution, approval semantics, credentials, tenant controls, retention, and audit claims until a verified platform contract exists.</p>
-<div class="highlight"><pre class="highlight plaintext"><code>Useful now: clear, validated, reviewable work packages.
-Deferred: business authority and external execution.
-</code></pre></div><h1 id='source-basis'>Source basis</h1>
-<p>This material is grounded in Kentaro&#39;s local schema validator, deterministic policy evaluator, evidence exporter, and synthetic governance example. The ODPC v1.0 presentation pattern informed the document structure: human-readable specification, schema, JSONL records, standalone and full examples, validator, and agent guidance.</p>
+<p>The linked mortgage-renewal example bundle is under <a href="examples/mortgage-renewal/"><code>examples/mortgage-renewal/</code></a>. It contains sixteen individually validated <code>KentaroAction</code> files, one later composite <code>KentaroChangeTask</code>, and the referenced ODPC, ODPS, and ODPG files.</p>
 
       </div>
       <div class="dark-box">
-          <div class="lang-selector">
-                <a href="#" data-language-name="yaml">yaml</a>
-                <a href="#" data-language-name="json">json</a>
-          </div>
       </div>
     </div>
     <!-- Twitter universal website tag code -->

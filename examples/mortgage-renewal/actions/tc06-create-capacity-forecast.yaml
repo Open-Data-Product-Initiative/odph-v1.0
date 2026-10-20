@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc06-create-capacity-forecast, title: Create Mortgage Outreach Capacity Forecast, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-06, parentChangeTask: mortgage-renewal-planning-change}
+graphContext: {source: maysano, baseGraphRevision: 4, requiredObjects: [{id: mortgage-renewal-customer-profile, expectedVersion: 1, specificationFamily: ODPS}]}
+intent: {businessOwner: Head of Mortgage Lending, reason: Forecast reviewed outreach capacity needs, expectedOutcome: An accepted data-product identity and version, policyProfile: mortgage-change-control}
+specification: {operation: create, family: ODPS, file: specifications/odps/tc06-outreach-capacity-forecast-v1.yaml, sha256: 143fe102887807dadc2d7a0247f7e0b9d62320e84352dbaec6c80142077fddde}
+review: {requiredRoles: [business-owner, data-product-owner]}
+acceptanceCriteria: [Maysano accepts Mortgage Outreach Capacity Forecast version 1.]

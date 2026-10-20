@@ -1,0 +1,32 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroChangeTask
+metadata:
+  id: mortgage-renewal-planning-change
+  title: Mortgage renewal planning change
+  requestedBy: Mortgage Lending
+  createdAt: '2026-10-20T00:00:00Z'
+  parentTestCase: test-case-06
+graphContext:
+  source: maysano
+  baseGraphRevision: 4
+  requiredObjects:
+    - {id: mortgage-renewal-customer-profile, expectedVersion: 1, specificationFamily: ODPS}
+    - {id: mortgage-renewal-graph, expectedVersion: 4, specificationFamily: ODPG}
+intent:
+  businessOwner: Head of Mortgage Lending
+  reason: Create the reviewed objective, use case, two new products, and their graph connections while reusing the customer profile.
+  expectedOutcome: A reviewed, dependency-ordered composite change ready for individual Maysano resource writes.
+  policyProfile: mortgage-change-control
+actions:
+  - {id: tc06-create-outreach-objective, actionFile: actions/tc06-create-outreach-objective.yaml}
+  - {id: tc06-create-outreach-use-case, actionFile: actions/tc06-create-outreach-use-case.yaml, dependsOn: [tc06-create-outreach-objective]}
+  - {id: tc06-create-offer-eligibility, actionFile: actions/tc06-create-offer-eligibility.yaml, dependsOn: [tc06-create-outreach-use-case]}
+  - {id: tc06-create-capacity-forecast, actionFile: actions/tc06-create-capacity-forecast.yaml, dependsOn: [tc06-create-outreach-use-case]}
+  - {id: tc06-update-graph, actionFile: actions/tc06-update-graph.yaml, dependsOn: [tc06-create-outreach-objective, tc06-create-outreach-use-case, tc06-create-offer-eligibility, tc06-create-capacity-forecast]}
+review:
+  requiredRoles: [business-owner, data-product-owner, graph-steward]
+acceptanceCriteria:
+  - Every referenced action validates and has an agreed approval.
+  - Maysano accepts each individual resource write in dependency order.
+  - Evidence records the submitted files and resulting identities, versions, outcomes, and any reconciliation work.

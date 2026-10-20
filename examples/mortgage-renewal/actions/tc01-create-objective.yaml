@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc01-create-objective, title: Create mortgage renewal objective, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-01}
+graphContext: {source: maysano, baseGraphRevision: 0}
+intent: {businessOwner: Head of Mortgage Lending, reason: Establish the agreed mortgage renewal objective, expectedOutcome: An accepted objective identity and version, policyProfile: mortgage-change-control}
+specification: {operation: create, family: ODPC, file: specifications/odpc/tc01-objective-v1.yaml, sha256: c6abfe1c3944e591b44391156b137d3d7c41d5a1760170dcc64ae5c303b24fdc}
+review: {requiredRoles: [business-owner]}
+acceptanceCriteria: [Maysano accepts the objective specification and returns its identity and version.]

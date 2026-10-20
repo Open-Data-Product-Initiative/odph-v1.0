@@ -1,0 +1,12 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: '4.2'
+product:
+  details:
+    en:
+      productID: mortgage-renewal-customer-profile
+      name: Mortgage Renewal Customer Profile
+      productVersion: v1
+      visibility: organisation
+      status: draft
+      type: derived data
+      description: Provides a reviewed customer profile for mortgage renewal planning.

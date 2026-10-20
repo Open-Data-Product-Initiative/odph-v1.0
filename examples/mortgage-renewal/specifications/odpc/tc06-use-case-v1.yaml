@@ -1,0 +1,16 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: mortgage-outreach-planning-use-case-catalog
+    name: {en: Mortgage outreach capacity planning use case}
+    description: {en: Version 1 of the mortgage outreach capacity planning use case.}
+  useCases:
+    - id: plan-mortgage-outreach-capacity
+      name: {en: Plan mortgage outreach capacity}
+      description: {en: Plan contact-centre capacity for customers who are likely to need a renewal offer.}
+      decision: {en: Decide how many outreach slots to reserve by renewal week.}
+      expectedOutcome: {en: The contact centre has a reviewed capacity forecast for upcoming renewal demand.}
+      status: active
+      priority: high

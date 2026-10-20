@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc06-create-outreach-objective, title: Create mortgage outreach objective, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-06, parentChangeTask: mortgage-renewal-planning-change}
+graphContext: {source: maysano, baseGraphRevision: 4}
+intent: {businessOwner: Head of Mortgage Lending, reason: Establish the reviewed outreach capacity objective, expectedOutcome: An accepted objective identity and version, policyProfile: mortgage-change-control}
+specification: {operation: create, family: ODPC, file: specifications/odpc/tc06-objective-v1.yaml, sha256: e3e13a331f83e1fa3ad2cb6a2168191fa0e1dbe3573672324724829d3cacb05e}
+review: {requiredRoles: [business-owner]}
+acceptanceCriteria: [Maysano accepts the outreach objective version 1.]
