@@ -1,4 +1,3 @@
-import json
 import subprocess
 import sys
 import unittest
@@ -16,23 +15,26 @@ class OdphScriptsTest(unittest.TestCase):
     def test_artifact_check_passes(self):
         result = run_script("scripts/check_agent_artifacts.py")
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        self.assertIn("ODPH", result.stdout)
+        self.assertIn("ODPH v0.2", result.stdout)
 
     def test_generated_schema_is_current(self):
         result = run_script("scripts/generate_artifacts.py", "--check")
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
         self.assertIn("up to date", result.stdout)
 
-    def test_validator_accepts_full_and_minimal_packages(self):
-        for example in ["minimal.yaml", "full-retention-review.yaml"]:
-            result = run_script("scripts/validate_package.py", f"source/examples/{example}")
+    def test_validator_accepts_action_and_change_task(self):
+        for document in [
+            "source/examples/mortgage-renewal/actions/tc01-create-objective.yaml",
+            "source/examples/mortgage-renewal/change-tasks/mortgage-renewal-planning-change.yaml",
+        ]:
+            result = run_script("scripts/validate_package.py", document)
             self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-            self.assertIn("valid ODPH package", result.stdout)
+            self.assertIn("valid Kentaro change-control document", result.stdout)
 
-    def test_object_search_returns_evidence_object(self):
-        result = run_script("scripts/search_objects.py", "evidence", "--json")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("EvidenceEvent", {record["id"] for record in json.loads(result.stdout)})
+    def test_complete_example_validator_passes(self):
+        result = run_script("scripts/validate_examples.py")
+        self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
+        self.assertIn("16 KentaroActions", result.stdout)
 
 
 if __name__ == "__main__":

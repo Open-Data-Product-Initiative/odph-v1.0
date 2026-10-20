@@ -1,44 +1,28 @@
-# Open Data Product Harness (ODPH) 0.1 Draft
+# ODPH v0.2 Draft: Kentaro Change Control
 
-ODPH is non-ratified design material for a bounded, evidence-oriented interchange model for governed human and agent work. It is not a data-product descriptor, catalog, graph language, execution platform, or source of business authority.
+ODPH v0.2 is a thin Kentaro change-control layer around separately validated ODPC, ODPS, and ODPG YAML specifications. Maysano is authoritative for accepted versions, identities, graph state, approvals, applied changes, and audit evidence. Kentaro creates, validates, presents, submits, and records evidence; it is not a record store.
 
-Base URL: https://opendataproducts.org/odph-v1.0
+## Canonical resources
 
-Authoritative resources:
-- Human-readable specification: /
-- Canonical schema: /schema/odph.yaml
-- Derived JSON Schema: /schema/odph.json
-- Object records: /objects.jsonl
-- Full synthetic example: /examples/full-retention-review.yaml
-- Minimal package: /examples/minimal.yaml
+- Human-readable overview: /
+- Canonical schema: /odph-v0.2/schema/kentaro-change.yaml
+- Derived JSON schema: /odph-v0.2/schema/kentaro-change.json
+- Complete field reference: /schema-reference.html
+- Validation guidance: /validation.html
+- Mortgage-renewal examples: /examples/mortgage-renewal/
+- Machine-readable document kinds: /objects.jsonl
 
-Family boundary: use ODPS or another product model for a data product, ODPC for reusable portfolio objects, ODPG for graph relationships, and ODPH for bounded context, planning, proposed actions, controls, and evidence.
+## Document kinds
 
-Safety boundary:
-- `allowed` means structurally in scope under supplied local objects. It is never permission to execute.
-- A package does not grant tool, connector, credential, data, or platform-write access; create approval; suspend a live credential; or provide compliance-grade audit.
-- Never serialise raw secrets. Use redacted descriptions or platform-supplied secret references.
-- Do not infer a favourable result from stale, unknown, conflicting, missing, or expired context; escalate for refresh or review.
+- `KentaroAction`: one agreed direct Maysano resource operation, referencing exactly one ODPC, ODPS, or ODPG YAML specification file. Its operation is only `create` or `update`.
+- `KentaroChangeTask`: later v0.2 composite change that references existing action files and declares dependencies. It does not copy or embed business specifications.
 
-Core object selection:
-- ContextPackage: bounded observation with provenance, freshness, and conflicts.
-- Mandate: durable upper boundary for an area of work.
-- WorkEnvelope: assignment-specific subset of exactly one Mandate.
-- ExecutionPackage: non-authoritative plan under one WorkEnvelope.
-- ExecutionRequest: one proposed action under a package and RevocationPolicy.
-- EvidenceEvent: durable, attributable event in a logical EvidenceBundle.
-- RevocationPolicy: cross-cutting future suspension/narrowing control.
-- Correction: feedback naming a target and destination; never silently rewrites the target.
+## Authoring and validation
 
-Required workflow:
-1. Read this file and the human-readable specification.
-2. Select object kinds from /objects.jsonl.
-3. Use /examples/full-retention-review.yaml or a standalone example as the shape source.
-4. Validate shape with `python scripts/validate_package.py <package.yaml>`.
-5. Run `python scripts/check_agent_artifacts.py` when changing public artifacts.
-6. Apply deterministic relationship evaluation separately for Mandate/Envelope/Package subsets, authority chains, freshness, and policy outcomes.
+1. Retrieve bounded Maysano context and obtain business-owner agreement.
+2. Create one ODPC, ODPS, or ODPG specification file; do not duplicate its fields in a Kentaro file.
+3. Create an action with a contained relative YAML path and a SHA-256 checksum of that specification.
+4. Validate the Kentaro document and the referenced standard-family file.
+5. Submit one agreed action through Maysano resource APIs and record returned identity, version, outcome, and reconciliation state.
 
-Conformance profiles:
-- local-only: local validation, deterministic evaluation, drafts/reports, and redacted evidence export only.
-- platform-governed-read: verified platform read with provenance; no write or approval unless separately declared.
-- platform-governed-execution: a platform may execute only after its own scope, approval, identity, revocation, and audit checks.
+Run `python scripts/validate_examples.py` for the complete checked example chain. Direct workflows are ordered writes, never automatic rollback or all-or-nothing execution. MCP is planned only for v0.3 and does not replace Maysano APIs.

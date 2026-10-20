@@ -17,6 +17,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -41,3 +44,10 @@ jobs:
         bundle install --jobs 4 --retry 3
 
     - run: bundle exec middleman build
+    - name: Validate v0.2 schemas and examples
+      run: |
+        python -m pip install -r scripts/requirements-agent.txt
+        python scripts/generate_artifacts.py --check
+        python scripts/check_agent_artifacts.py
+        python scripts/validate_examples.py
+        python -m unittest discover -s tests

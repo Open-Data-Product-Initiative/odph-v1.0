@@ -72,7 +72,7 @@ def main(argv=None):
         description="Search ODPH agent-friendly object records.",
     )
     parser.add_argument("query", nargs="?", help="Keyword query, for example: evidence")
-    parser.add_argument("--id", dest="object_id", help="Return one object by id, for example: ExecutionRequest")
+    parser.add_argument("--id", dest="object_id", help="Return one object by id, for example: KentaroAction")
     parser.add_argument("--json", action="store_true", help="Emit JSON array output")
     args = parser.parse_args(argv)
 

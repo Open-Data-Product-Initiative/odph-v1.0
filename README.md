@@ -1,25 +1,27 @@
-# Open Data Product Harness (ODPH) 0.1 Draft
+# ODPH v0.2 Draft: Kentaro Change Control
 
-This repository contains non-ratified design material for an Open Data Product Harness: a bounded, evidence-oriented interchange model for human and agent work.
+ODPH v0.2 is a thin Kentaro change-control layer around versioned ODPC, ODPS, and ODPG YAML specifications. It does not model business objects, graph connections, runtime execution, or an alternate record store.
 
-ODPH references authoritative product, portfolio, graph, platform, or internal sources; it does not duplicate their authority or grant external execution permission. A local `allowed` result means only that an action is structurally within supplied local objects.
+Maysano is authoritative for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. Kentaro retrieves bounded context, creates and validates one specification file at a time, obtains business-owner agreement, submits that file to Maysano, and records evidence.
 
 ## Repository structure
 
-- `source/index.html.md`: human-readable specification in the existing three-column Slate layout.
-- `source/schema/odph.yaml`: canonical YAML serialization of JSON Schema.
-- `source/schema/odph.json`: generated JSON Schema.
-- `source/examples/`: minimal, full, and standalone synthetic examples.
-- `source/objects.jsonl`: one machine-readable object definition per line.
-- `source/llms.txt`: agent discovery, modelling, and safety guidance.
+- `source/index.html.md`: v0.2 overview and links to the published documentation set.
+- `source/odph-v0.2/schema/kentaro-change.yaml`: canonical KentaroAction/KentaroChangeTask schema published at `/odph-v0.2/schema/kentaro-change.yaml`.
+- `source/odph-v0.2/schema/kentaro-change.json`: generated JSON representation.
+- `source/examples/mortgage-renewal/`: six linked mortgage-renewal test cases, actions, a composite Change Task, and referenced ODPC, ODPS, and ODPG files.
+- `scripts/validate_examples.py`: complete static and cross-file example validation.
+- `source/objects.jsonl`: machine-readable definitions for the two v0.2 document kinds.
 
 ## Local checks
 
 ```sh
+python -m pip install -r scripts/requirements-agent.txt
 python scripts/generate_artifacts.py --check
 python scripts/check_agent_artifacts.py
+python scripts/validate_examples.py
 python -m unittest discover -s tests
 bundle exec middleman build
 ```
 
-Schema validation checks document shape. Cross-object subset, authority-chain, freshness, and outcome rules need deterministic relationship evaluation in addition to JSON Schema.
+Direct workflows are ordered Maysano resource writes. They do not claim multi-action atomicity or automatic rollback. MCP is planned only for v0.3; it does not replace Maysano APIs or Maysano’s system-of-record role.

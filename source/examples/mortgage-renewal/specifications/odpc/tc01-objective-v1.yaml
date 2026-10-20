@@ -1,0 +1,14 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: mortgage-renewal-objective-catalog
+    name: {en: Mortgage renewal objective}
+    description: {en: Version 1 of the mortgage-renewal business objective.}
+  businessObjectives:
+    - id: mortgage-renewal-retention
+      name: {en: Improve mortgage renewal retention}
+      description: {en: "Improve timely, suitable renewal offers for eligible mortgage customers."}
+      expectedOutcomes:
+        - {en: More eligible customers receive a renewal offer before their current term ends.}
