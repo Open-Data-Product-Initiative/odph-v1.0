@@ -1,6 +1,6 @@
 # ODPH v0.2 Draft: ODPH Change Control
 
-ODPH v0.2 is a thin change-control layer around separately validated ODPC, ODPS, and ODPG YAML specifications. Maysano is authoritative for accepted versions, identities, graph state, approvals, applied changes, and audit evidence. ODPH creates, validates, presents, submits, and records evidence; it is not a record store.
+ODPH v0.2 packages eight independently addressable top-level object kinds: ContextPackage, Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, EvidenceEvent, ChangeAction, and ChangeTask. Maysano is authoritative for accepted versions, identities, graph state, approvals, applied changes, and audit evidence. ODPH creates, validates, presents, submits, and records evidence; it is not a record store.
 
 ## Canonical resources
 
@@ -14,15 +14,21 @@ ODPH v0.2 is a thin change-control layer around separately validated ODPC, ODPS,
 
 ## Document kinds
 
+- `ContextPackage`: a bounded observation of versioned source context, its freshness, and observed conflicts.
+- `Mandate`: a durable business boundary with scope, owner, local boundary fields, and expiry.
+- `WorkEnvelope`: one assignment-specific subset of a Mandate.
+- `ExecutionPackage`: a reviewable plan under a WorkEnvelope.
+- `ExecutionRequest`: one explicit proposed action under an ExecutionPackage and revocation policy.
+- `EvidenceEvent`: one attributable record of context, validation, review, submission, outcome, or reconciliation evidence.
 - `ChangeAction`: one agreed direct Maysano resource operation, referencing exactly one ODPC, ODPS, or ODPG YAML specification file. Its operation is only `create` or `update`.
-- `ChangeTask`: later v0.2 composite change that references existing action files and declares dependencies. It does not copy or embed business specifications.
+- `ChangeTask`: composite change that references existing action files and declares dependencies. It does not copy or embed business specifications.
 
 ## Authoring and validation
 
-1. Retrieve bounded Maysano context and obtain business-owner agreement.
-2. Create one ODPC, ODPS, or ODPG specification file; do not duplicate its fields in an ODPH change-control document.
-3. Create an action with a contained relative YAML path and a SHA-256 checksum of that specification.
-4. Validate the ODPH document and the referenced standard-family file.
-5. Submit one agreed action through Maysano resource APIs and record returned identity, version, outcome, and reconciliation state.
+1. Package bounded context, a mandate, a work envelope, an execution package, an execution request, and evidence events as independently addressable top-level objects.
+2. Create one ODPC, ODPS, or ODPG specification file; do not duplicate its fields in a ChangeAction.
+3. Create actions with contained relative YAML paths and SHA-256 checksums, and use a ChangeTask for dependency-ordered composite work.
+4. Validate every ODPH object, their references and boundary subsets, and the referenced standard-family file.
+5. Submit only agreed actions through Maysano resource APIs and record returned identity, version, outcome, and reconciliation state as EvidenceEvents.
 
 Run `python scripts/validate_examples.py` for the complete checked example chain. Direct workflows are ordered writes, never automatic rollback or all-or-nothing execution. MCP is planned only for v0.3 and does not replace Maysano APIs.

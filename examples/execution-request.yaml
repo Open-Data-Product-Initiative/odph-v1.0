@@ -1,0 +1,16 @@
+id: request-service-change
+kind: ExecutionRequest
+version: 1
+createdAt: '2026-10-20T00:00:00Z'
+actor: change-team
+sourceReferences: []
+relationshipReferences: [{id: package-service-change, version: 1}]
+executionPackageReference: {id: package-service-change, version: 1}
+revocationPolicyReference: {id: policy-service-change, version: 1}
+action: submit reviewed service specification
+tool: maysano.change-proposal
+target: service planning graph
+requestedAuthority: 1
+approvalRequired: true
+approvalExpiresAt: '2026-12-01T00:00:00Z'
+redactedParameters: {contextReference: context-service-change}

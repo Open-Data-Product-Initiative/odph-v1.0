@@ -1,0 +1,18 @@
+id: package-service-change
+kind: ExecutionPackage
+version: 1
+createdAt: '2026-10-20T00:00:00Z'
+actor: change-team
+sourceReferences: []
+relationshipReferences: [{id: envelope-service-change, version: 1}]
+workEnvelopeReference: {id: envelope-service-change, version: 1}
+scope: [service-change]
+tools: [maysano.change-proposal]
+dataAccess: [service-planning-context]
+approvalRights: [reviewed-change-proposal]
+authorityLevel: 1
+plannedSteps: [Validate context, Prepare the proposed specification, Request review]
+expectedOutputs: [Reviewed service change proposal]
+dependencies: [Current Maysano graph]
+timing: Before the service review
+acceptanceCriteria: [Names version expectations and unresolved conflicts]

@@ -332,7 +332,7 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='changeaction-reference'>ChangeAction reference</h1>
-<p>A <code>ChangeAction</code> is one agreed direct Maysano API operation. It references exactly one generated specification file and ODPH validates that file against the declared ODPC, ODPS, or ODPG schema before submitting it.</p>
+<p>A <code>ChangeAction</code> is a peer top-level object for one agreed direct Maysano API operation. It references exactly one generated specification file and ODPH validates that file against the declared ODPC, ODPS, or ODPG schema before submitting it. It can be packaged with an <code>ExecutionRequest</code>, but it does not replace that request&#39;s plan, revocation, or approval chain.</p>
 
 <p><code>operation</code> is only <code>create</code> or <code>update</code>. An <code>update</code> requires <code>expectedVersion</code>. A connection change is an ODPG file update. A deprecation is a new ODPC or ODPS file version with its lifecycle state changed. A business-object update is a new ODPC or ODPS file version. <code>link</code>, <code>unlink</code>, and <code>deprecate</code> are not ChangeAction operations.</p>
 

@@ -1,0 +1,16 @@
+id: envelope-service-change
+kind: WorkEnvelope
+version: 1
+createdAt: '2026-10-20T00:00:00Z'
+actor: service-owner
+sourceReferences: []
+relationshipReferences: [{id: mandate-service-change, version: 1}]
+mandateReference: {id: mandate-service-change, version: 1}
+requestedResult: Reviewed service change proposal
+owner: Head of Service
+scope: [service-change]
+tools: [maysano.change-proposal]
+dataAccess: [service-planning-context]
+approvalRights: [reviewed-change-proposal]
+authorityLevel: 1
+expiresAt: '2026-12-01T00:00:00Z'
