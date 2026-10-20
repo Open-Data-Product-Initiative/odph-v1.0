@@ -1,0 +1,12 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: '4.2'
+product:
+  details:
+    en:
+      productID: capacity-data-product
+      name: Capacity Data Product
+      productVersion: v1
+      visibility: organisation
+      status: draft
+      type: analytic view
+      description: Forecasts reviewed outcome change secondary demand by period.

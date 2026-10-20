@@ -25,7 +25,7 @@ def check_schema():
 
 
 def check_examples():
-    root = EXAMPLES_DIR / "mortgage-renewal"
+    root = EXAMPLES_DIR / "change-chain"
     assert len(list((root / "actions").glob("*.yaml"))) == 16
     assert len(list((root / "change-tasks").glob("*.yaml"))) == 1
     assert len(list((root / "specifications").rglob("*.yaml"))) == 16
@@ -37,7 +37,7 @@ def check_records_and_guidance():
     for record in records:
         assert all(record.get(field) for field in ["definition", "requiredFields", "doUseFor", "doNotUseFor", "exampleFile"])
     llms = LLMS_TXT.read_text(encoding="utf-8")
-    for path in ["/odph-v0.2/schema/kentaro-change.yaml", "/odph-v0.2/schema/kentaro-change.json", "/objects.jsonl", "/examples/mortgage-renewal/"]:
+    for path in ["/odph-v0.2/schema/kentaro-change.yaml", "/odph-v0.2/schema/kentaro-change.json", "/objects.jsonl", "/examples/change-chain/"]:
         assert path in llms
 
 

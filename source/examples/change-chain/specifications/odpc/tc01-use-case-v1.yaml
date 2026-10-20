@@ -1,0 +1,16 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: example-use-case-catalog
+    name: {en: Example change planning use case}
+    description: {en: Version 1 of the first service-change use case.}
+  useCases:
+    - id: plan-service-delivery
+      name: {en: Plan outcome changes}
+      description: {en: Prioritise eligible customers for change planning.}
+      decision: {en: Decide which eligible customers need a change offer review.}
+      expectedOutcome: {en: Example planning starts before customer service terms expire.}
+      status: active
+      priority: high

@@ -8,4 +8,4 @@ A `KentaroChangeTask` is a later v0.2 composite business change. It groups multi
 
 It records the bounded Maysano graph revision, action-file references, dependencies, required reviewers, acceptance criteria, execution status, and resulting evidence. Static validation rejects a task with fewer than two actions or unknown fields. Runtime validation rejects missing action files, duplicate action IDs, missing dependencies, and dependency cycles.
 
-The [mortgage-renewal planning Change Task](examples/mortgage-renewal/change-tasks/mortgage-renewal-planning-change.yaml) is the composite example.
+The [example Change Task](examples/change-chain/change-tasks/change-chain.yaml) is the composite example.

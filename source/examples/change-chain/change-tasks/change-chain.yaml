@@ -1,0 +1,32 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroChangeTask
+metadata:
+  id: example-change-chain
+  title: Example change planning change
+  requestedBy: Change Team
+  createdAt: '2026-10-20T00:00:00Z'
+  parentTestCase: test-case-06
+graphContext:
+  source: maysano
+  baseGraphRevision: 4
+  requiredObjects:
+    - {id: context-data-product, expectedVersion: 1, specificationFamily: ODPS}
+    - {id: example-change-graph, expectedVersion: 4, specificationFamily: ODPG}
+intent:
+  businessOwner: Head of Change Team
+  reason: Create the reviewed objective, use case, two new products, and their graph connections while reusing the context data product.
+  expectedOutcome: A reviewed, dependency-ordered composite change ready for individual Maysano resource writes.
+  policyProfile: example-change-control
+actions:
+  - {id: tc06-create-secondary-objective, actionFile: actions/tc06-create-secondary-objective.yaml}
+  - {id: tc06-create-secondary-use-case, actionFile: actions/tc06-create-secondary-use-case.yaml, dependsOn: [tc06-create-secondary-objective]}
+  - {id: tc06-create-additional-data-product, actionFile: actions/tc06-create-additional-data-product.yaml, dependsOn: [tc06-create-secondary-use-case]}
+  - {id: tc06-create-capacity-data-product, actionFile: actions/tc06-create-capacity-data-product.yaml, dependsOn: [tc06-create-secondary-use-case]}
+  - {id: tc06-update-graph, actionFile: actions/tc06-update-graph.yaml, dependsOn: [tc06-create-secondary-objective, tc06-create-secondary-use-case, tc06-create-additional-data-product, tc06-create-capacity-data-product]}
+review:
+  requiredRoles: [business-owner, data-product-owner, graph-steward]
+acceptanceCriteria:
+  - Every referenced action validates and has an agreed approval.
+  - Maysano accepts each individual resource write in dependency order.
+  - Evidence records the submitted files and resulting identities, versions, outcomes, and any reconciliation work.

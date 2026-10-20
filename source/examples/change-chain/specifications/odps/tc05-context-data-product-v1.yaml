@@ -1,0 +1,12 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: '4.2'
+product:
+  details:
+    en:
+      productID: context-data-product
+      name: Context Data Product
+      productVersion: v1
+      visibility: organisation
+      status: draft
+      type: derived data
+      description: Provides a reviewed context data product for outcome change planning.

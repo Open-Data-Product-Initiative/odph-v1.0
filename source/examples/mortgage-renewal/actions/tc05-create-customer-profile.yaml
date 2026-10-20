@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
-version: 0.2-draft
-kind: KentaroAction
-metadata: {id: tc05-create-customer-profile, title: Create Mortgage Renewal Customer Profile, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-05}
-graphContext: {source: maysano, baseGraphRevision: 3}
-intent: {businessOwner: Head of Mortgage Lending, reason: Provide a reviewed customer profile for renewal planning, expectedOutcome: An accepted data-product identity and version, policyProfile: mortgage-change-control}
-specification: {operation: create, family: ODPS, file: specifications/odps/tc05-customer-profile-v1.yaml, sha256: 07e1fed95828995a06825aff5d88922f0f8a30a36efde7e417c89fa9dab12efd}
-review: {requiredRoles: [business-owner, data-product-owner]}
-acceptanceCriteria: [Maysano accepts Mortgage Renewal Customer Profile version 1.]

@@ -47,7 +47,7 @@ A `KentaroChangeTask` is a later v0.2 composite business change. It groups multi
 
 It records the bounded Maysano graph revision, action-file references, dependencies, required reviewers, acceptance criteria, execution status, and resulting evidence. Static validation rejects a task with fewer than two actions or unknown fields. Runtime validation rejects missing action files, duplicate action IDs, missing dependencies, and dependency cycles.
 
-The [mortgage-renewal planning Change Task](examples/mortgage-renewal/change-tasks/mortgage-renewal-planning-change.yaml) is the composite example.
+The [example Change Task](examples/change-chain/change-tasks/change-chain.yaml) is the composite example.
 
 # Specification artefacts
 
@@ -61,7 +61,7 @@ The [mortgage-renewal planning Change Task](examples/mortgage-renewal/change-tas
 | `ODPS` | Data-product definition, lifecycle, SLA, and data-quality terms. | ODPS schema |
 | `ODPG` | Nodes and connections between objectives, use cases, and data products. | ODPG graph schema |
 
-ODPG is the declared connection artefact. Connections are not raw relationship JSON. The mortgage-renewal graph versions show the progression from the first objective/use-case connection to the later outreach planning graph.
+ODPG is the declared connection artefact. Connections are not raw relationship JSON. The example graph versions show the progression from an initial objective/use-case connection to a later composite change.
 
 Every referenced file must be a contained relative `.yaml` or `.yml` path and must match the SHA-256 checksum in its action. The [validation guide](#validation-and-runtime-checks) describes the static and runtime checks.
 
@@ -71,7 +71,7 @@ Every referenced file must be a contained relative `.yaml` or `.yml` path and mu
 
 Phase 1 v0.2 creates and submits one validated specification file at a time through Maysano resource APIs.
 
-For the first mortgage-renewal test case the direct flow is:
+For the first generic change-chain test case the direct flow is:
 
 1. Kentaro retrieves bounded Maysano graph context.
 2. The business owner agrees the objective draft.
@@ -93,22 +93,22 @@ Direct workflows use ordered resource-level writes. There is no multi-action ato
 
 Phase 2 later v0.2 validates a complete Change Task before execution. The initial implementation still sends individual Maysano API calls in declared dependency order; the task does not grant server-side atomic execution.
 
-The composite mortgage-renewal planning example creates one objective, one use case, two data products, reuses the existing Mortgage Renewal Customer Profile, and updates one ODPG graph specification that expresses the new connections. Before each write Kentaro verifies the agreed approvals, applicable object versions, and current graph revision. It records each submitted file identifier, Maysano identity and version, validation outcome, and reconciliation state.
+The composite example creates one objective, one use case, two data products, reuses an existing context data product, and updates one ODPG graph specification that expresses the new connections. Before each write Kentaro verifies the agreed approvals, applicable object versions, and current graph revision. It records each submitted file identifier, Maysano identity and version, validation outcome, and reconciliation state.
 
-# Banking mortgage-renewal test chain
+# Generic change-chain example
 
 ## Validated example bundle
 
-The principal v0.2 examples are linked source files in [`examples/mortgage-renewal/`](examples/mortgage-renewal/). The actions refer to their specification files from the bundle root so every reference remains contained.
+The principal v0.2 examples are linked source files in [`examples/change-chain/`](examples/change-chain/). The actions refer to their specification files from the bundle root so every reference remains contained.
 
 | Test case | Expected specification artefacts |
 | --- | --- |
 | 01 | ODPC objective v1; ODPC use case v1; ODPG graph v1 |
-| 02 | ODPS Mortgage Renewal Eligibility v1; ODPG graph v2 |
-| 03 | ODPS Mortgage Renewal Eligibility v2 with revised SLA and DQ terms |
+| 02 | ODPS Primary Data Product v1; ODPG graph v2 |
+| 03 | ODPS Primary Data Product v2 with revised SLA and DQ terms |
 | 04 | ODPC second use case v1; ODPG graph v3 |
-| 05 | ODPS Mortgage Renewal Customer Profile v1; ODPS Mortgage Renewal Eligibility v3, deprecated; ODPG graph v4 |
-| 06 | ODPC new objective v1; ODPC new use case v1; ODPS Mortgage Renewal Offer Eligibility v1; ODPS Mortgage Outreach Capacity Forecast v1; ODPG graph v5 |
+| 05 | ODPS Context Data Product v1; ODPS Primary Data Product v3, deprecated; ODPG graph v4 |
+| 06 | ODPC secondary objective v1; ODPC secondary use case v1; ODPS Additional Data Product v1; ODPS Capacity Data Product v1; ODPG graph v5 |
 
 Test cases 01–05 demonstrate direct actions. Test case 06 also provides the later composite `KentaroChangeTask`, which references its five separately valid action files and uses dependencies to order the individual resource writes.
 
@@ -209,4 +209,4 @@ Record submitted file identifiers, resulting Maysano identities and versions, va
 
 The canonical YAML schema is [`kentaro-change.yaml`](odph-v0.2/schema/kentaro-change.yaml); the mechanically derived JSON representation is [`kentaro-change.json`](odph-v0.2/schema/kentaro-change.json). Both use the v0.2 schema identifier `https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml`.
 
-The linked mortgage-renewal example bundle is under [`examples/mortgage-renewal/`](examples/mortgage-renewal/). It contains sixteen individually validated `KentaroAction` files, one later composite `KentaroChangeTask`, and the referenced ODPC, ODPS, and ODPG files.
+The linked change-chain example bundle is under [`examples/change-chain/`](examples/change-chain/). It contains sixteen individually validated `KentaroAction` files, one later composite `KentaroChangeTask`, and the referenced ODPC, ODPS, and ODPG files.

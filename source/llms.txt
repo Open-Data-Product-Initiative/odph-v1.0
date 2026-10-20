@@ -9,7 +9,7 @@ ODPH v0.2 is a thin Kentaro change-control layer around separately validated ODP
 - Derived JSON schema: /odph-v0.2/schema/kentaro-change.json
 - Complete field reference: /schema-reference.html
 - Validation guidance: /validation.html
-- Mortgage-renewal examples: /examples/mortgage-renewal/
+- Change-chain examples: /examples/change-chain/
 - Machine-readable document kinds: /objects.jsonl
 
 ## Document kinds

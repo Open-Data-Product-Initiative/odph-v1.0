@@ -19,12 +19,12 @@ class OdphArtifactsTest(unittest.TestCase):
         self.assertEqual(schema["$defs"]["KentaroAction"]["properties"]["kind"]["const"], "KentaroAction")
         self.assertEqual(schema["$defs"]["KentaroChangeTask"]["properties"]["kind"]["const"], "KentaroChangeTask")
 
-    def test_examples_cover_the_six_case_mortgage_renewal_chain(self):
-        root = SOURCE / "examples/mortgage-renewal"
+    def test_examples_cover_the_six_case_generic_change_chain(self):
+        root = SOURCE / "examples/change-chain"
         self.assertEqual(len(list((root / "actions").glob("*.yaml"))), 16)
         self.assertEqual(len(list((root / "change-tasks").glob("*.yaml"))), 1)
         self.assertEqual(len(list((root / "specifications").rglob("*.yaml"))), 16)
-        task = yaml.safe_load((root / "change-tasks/mortgage-renewal-planning-change.yaml").read_text(encoding="utf-8"))
+        task = yaml.safe_load((root / "change-tasks/change-chain.yaml").read_text(encoding="utf-8"))
         self.assertEqual(task["kind"], "KentaroChangeTask")
         self.assertEqual(len(task["actions"]), 5)
 
@@ -33,7 +33,7 @@ class OdphArtifactsTest(unittest.TestCase):
         self.assertEqual({record["id"] for record in records}, {"KentaroAction", "KentaroChangeTask"})
         guidance = (SOURCE / "llms.txt").read_text(encoding="utf-8")
         self.assertIn("/odph-v0.2/schema/kentaro-change.yaml", guidance)
-        self.assertIn("/examples/mortgage-renewal/", guidance)
+        self.assertIn("/examples/change-chain/", guidance)
         self.assertIn("MCP is planned only for v0.3", guidance)
 
 

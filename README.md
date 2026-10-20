@@ -9,7 +9,7 @@ Maysano is authoritative for accepted specification versions, object identities,
 - `source/index.html.md`: v0.2 overview and links to the published documentation set.
 - `source/odph-v0.2/schema/kentaro-change.yaml`: canonical KentaroAction/KentaroChangeTask schema published at `/odph-v0.2/schema/kentaro-change.yaml`.
 - `source/odph-v0.2/schema/kentaro-change.json`: generated JSON representation.
-- `source/examples/mortgage-renewal/`: six linked mortgage-renewal test cases, actions, a composite Change Task, and referenced ODPC, ODPS, and ODPG files.
+- `source/examples/change-chain/`: six linked change-chain test cases, actions, a composite Change Task, and referenced ODPC, ODPS, and ODPG files.
 - `scripts/validate_examples.py`: complete static and cross-file example validation.
 - `source/objects.jsonl`: machine-readable definitions for the two v0.2 document kinds.
 

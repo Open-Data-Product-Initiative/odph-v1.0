@@ -1,0 +1,14 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: secondary-objective-catalog
+    name: {en: Secondary service objective}
+    description: {en: Version 1 of the service-secondary objective.}
+  businessObjectives:
+    - id: service-capacity-objective
+      name: {en: Improve outcome change secondary capacity}
+      description: {en: Match outcome change secondary capacity to eligible customer demand.}
+      expectedOutcomes:
+        - {en: Teams can plan customer secondary before change windows narrow.}

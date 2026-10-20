@@ -24,8 +24,8 @@ class OdphScriptsTest(unittest.TestCase):
 
     def test_validator_accepts_action_and_change_task(self):
         for document in [
-            "source/examples/mortgage-renewal/actions/tc01-create-objective.yaml",
-            "source/examples/mortgage-renewal/change-tasks/mortgage-renewal-planning-change.yaml",
+            "source/examples/change-chain/actions/tc01-create-objective.yaml",
+            "source/examples/change-chain/change-tasks/change-chain.yaml",
         ]:
             result = run_script("scripts/validate_package.py", document)
             self.assertEqual(result.returncode, 0, result.stderr + result.stdout)

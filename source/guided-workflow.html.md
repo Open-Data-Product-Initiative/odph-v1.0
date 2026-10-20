@@ -6,7 +6,7 @@ title: Guided workflow execution | ODPH v0.2
 
 Phase 1 v0.2 creates and submits one validated specification file at a time through Maysano resource APIs.
 
-For the first mortgage-renewal test case the direct flow is:
+For the first change-chain test case the direct flow is:
 
 1. Kentaro retrieves bounded Maysano graph context.
 2. The business owner agrees the objective draft.

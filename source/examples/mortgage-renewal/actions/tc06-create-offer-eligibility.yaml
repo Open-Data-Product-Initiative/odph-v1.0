@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
-version: 0.2-draft
-kind: KentaroAction
-metadata: {id: tc06-create-offer-eligibility, title: Create Mortgage Renewal Offer Eligibility, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-06, parentChangeTask: mortgage-renewal-planning-change}
-graphContext: {source: maysano, baseGraphRevision: 4}
-intent: {businessOwner: Head of Mortgage Lending, reason: Provide reviewed renewal-offer eligibility information, expectedOutcome: An accepted data-product identity and version, policyProfile: mortgage-change-control}
-specification: {operation: create, family: ODPS, file: specifications/odps/tc06-offer-eligibility-v1.yaml, sha256: 9fd2c89e9fba904fea55cd8892b8a79773125c8d6b351abdd048e2ca38473878}
-review: {requiredRoles: [business-owner, data-product-owner]}
-acceptanceCriteria: [Maysano accepts Mortgage Renewal Offer Eligibility version 1.]

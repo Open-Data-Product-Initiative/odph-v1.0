@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
-version: 0.2-draft
-kind: KentaroAction
-metadata: {id: tc01-create-use-case, title: Create mortgage renewal use case, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-01}
-graphContext: {source: maysano, baseGraphRevision: 0}
-intent: {businessOwner: Head of Mortgage Lending, reason: Record the agreed renewal planning use case, expectedOutcome: An accepted use-case identity and version, policyProfile: mortgage-change-control}
-specification: {operation: create, family: ODPC, file: specifications/odpc/tc01-use-case-v1.yaml, sha256: bcfe89f6b79a8ec5abc73c02474a5b032970990ee1884f3e8c37d820ec3b5ca0}
-review: {requiredRoles: [business-owner]}
-acceptanceCriteria: [Maysano accepts the use-case specification and returns its identity and version.]

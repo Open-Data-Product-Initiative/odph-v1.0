@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Validate the complete v0.2 mortgage-renewal example chain."""
+"""Validate the complete v0.2 change-chain example chain."""
 import hashlib
 import sys
 from pathlib import Path
@@ -85,7 +85,7 @@ def has_cycle(actions):
 def main():
     schema = load_yaml(SCHEMA_YAML)
     validator = Draft202012Validator(schema, format_checker=FormatChecker())
-    root = EXAMPLES_DIR / "mortgage-renewal"
+    root = EXAMPLES_DIR / "change-chain"
     actions = sorted((root / "actions").glob("*.yaml"))
     tasks = sorted((root / "change-tasks").glob("*.yaml"))
     if len(actions) != 16 or len(tasks) != 1:

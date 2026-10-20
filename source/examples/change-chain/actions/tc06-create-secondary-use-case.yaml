@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc06-create-secondary-use-case, title: Create secondary service capacity use case, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-06, parentChangeTask: example-change-chain}
+graphContext: {source: maysano, baseGraphRevision: 4}
+intent: {businessOwner: Head of Change Team, reason: Record the reviewed secondary capacity planning use case, expectedOutcome: An accepted use-case identity and version, policyProfile: example-change-control}
+specification: {operation: create, family: ODPC, file: specifications/odpc/tc06-use-case-v1.yaml, sha256: 845c8a269b03b8a50de200afcd2fffec8e01b4932bfac16c82f0e26ad2bcc84e}
+review: {requiredRoles: [business-owner]}
+acceptanceCriteria: [Maysano accepts the secondary capacity planning use case version 1.]
