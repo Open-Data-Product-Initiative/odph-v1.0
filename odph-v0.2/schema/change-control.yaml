@@ -1,6 +1,6 @@
 $schema: https://json-schema.org/draft/2020-12/schema
 $id: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
-title: ODPH Governed Change Objects 0.2 Draft
+title: Business Harness Model
 description: >-
   Shape validation for six top-level ODPH governed-work objects: ContextPackage,
   Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, and EvidenceEvent.
@@ -44,6 +44,11 @@ $defs:
     type: array
     items: { $ref: '#/$defs/NonEmptyString' }
 
+  MultilingualText:
+    type: object
+    minProperties: 1
+    additionalProperties: { $ref: '#/$defs/NonEmptyString' }
+
   Reference:
     type: object
     required: [id, version]
@@ -61,9 +66,11 @@ $defs:
 
   ObjectMetadata:
     type: object
-    required: [id, version, createdAt, actor]
+    required: [id, name, description, version, createdAt, actor]
     properties:
       id: { $ref: '#/$defs/NonEmptyString' }
+      name: { $ref: '#/$defs/MultilingualText' }
+      description: { $ref: '#/$defs/MultilingualText' }
       version:
         type: integer
         minimum: 1

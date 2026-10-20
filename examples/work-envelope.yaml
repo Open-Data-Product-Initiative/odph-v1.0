@@ -1,20 +1,32 @@
 kind: WorkEnvelope
 metadata:
   id: envelope-service-change
+  name:
+    en: Reviewed service-change assignment
+  description:
+    en: Bounded assignment to prepare and review the service change.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
   actor: service-owner
 provenance:
   sourceReferences: []
-  relationshipReferences: [{id: mandate-service-change, version: 1}]
+  relationshipReferences:
+    - id: mandate-service-change
+      version: 1
 assignment:
-  mandateReference: {id: mandate-service-change, version: 1}
+  mandateReference:
+    id: mandate-service-change
+    version: 1
   requestedResult: Reviewed service change proposal
   owner: Head of Service
   expiresAt: '2026-12-01T00:00:00Z'
 boundary:
-  scope: [service-change]
-  tools: [maysano.change-proposal]
-  dataAccess: [service-planning-context]
-  approvalRights: [reviewed-change-proposal]
+  scope:
+    - service-change
+  tools:
+    - maysano.change-proposal
+  dataAccess:
+    - service-planning-context
+  approvalRights:
+    - reviewed-change-proposal
   authorityLevel: 1

@@ -1,23 +1,41 @@
 kind: ExecutionPackage
 metadata:
   id: package-service-change
+  name:
+    en: Service-change execution plan
+  description:
+    en: Planned work required to prepare the reviewed service change.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
   actor: change-team
 provenance:
   sourceReferences: []
-  relationshipReferences: [{id: envelope-service-change, version: 1}]
+  relationshipReferences:
+    - id: envelope-service-change
+      version: 1
 execution:
-  workEnvelopeReference: {id: envelope-service-change, version: 1}
+  workEnvelopeReference:
+    id: envelope-service-change
+    version: 1
 boundary:
-  scope: [service-change]
-  tools: [maysano.change-proposal]
-  dataAccess: [service-planning-context]
-  approvalRights: [reviewed-change-proposal]
+  scope:
+    - service-change
+  tools:
+    - maysano.change-proposal
+  dataAccess:
+    - service-planning-context
+  approvalRights:
+    - reviewed-change-proposal
   authorityLevel: 1
 plan:
-  plannedSteps: [Validate context, Prepare the proposed specification, Request review]
-  expectedOutputs: [Reviewed service change proposal]
-  dependencies: [Current Maysano graph]
+  plannedSteps:
+    - Validate context
+    - Prepare the proposed specification
+    - Request review
+  expectedOutputs:
+    - Reviewed service change proposal
+  dependencies:
+    - Current Maysano graph
   timing: Before the service review
-  acceptanceCriteria: [Names version expectations and unresolved conflicts]
+  acceptanceCriteria:
+    - Names version expectations and unresolved conflicts
