@@ -347,6 +347,15 @@
             <a href="#business-level-harness" class="toc-h1 toc-link" data-title="Business-level harness">Business-level harness</a>
               <ul class="toc-list-h2">
                   <li>
+                    <a href="#common-object-contract" class="toc-h2 toc-link" data-title="Common object contract">Common object contract</a>
+                  </li>
+                  <li>
+                    <a href="#reference" class="toc-h2 toc-link" data-title="Reference">Reference</a>
+                  </li>
+                  <li>
+                    <a href="#boundary" class="toc-h2 toc-link" data-title="Boundary">Boundary</a>
+                  </li>
+                  <li>
                     <a href="#contextpackage" class="toc-h2 toc-link" data-title="ContextPackage">ContextPackage</a>
                   </li>
                   <li>
@@ -417,9 +426,6 @@
                     <a href="#validation-and-runtime-checks" class="toc-h2 toc-link" data-title="Validation and runtime checks">Validation and runtime checks</a>
                   </li>
                   <li>
-                    <a href="#roadmap" class="toc-h2 toc-link" data-title="Roadmap">Roadmap</a>
-                  </li>
-                  <li>
                     <a href="#published-contract-and-examples" class="toc-h2 toc-link" data-title="Published contract and examples">Published contract and examples</a>
                   </li>
               </ul>
@@ -488,320 +494,423 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 </tbody></table>
 
 <p>The six aspects have a strict direction: context informs the boundary; the mandate limits the assignment; the assignment limits the plan; the plan limits each proposed write; and evidence records the result. A task that lacks any of those links is incomplete even if its YAML is structurally valid.</p>
-<h1 id='business-level-harness'>Business-level harness</h1><h2 id='contextpackage'>ContextPackage</h2>
+<h1 id='business-level-harness'>Business-level harness</h1><h3 id='common-object-contract'>Common object contract</h3>
+<p>The six governed-work objects—<code>ContextPackage</code>, <code>Mandate</code>, <code>WorkEnvelope</code>, <code>ExecutionPackage</code>, <code>ExecutionRequest</code>, and <code>EvidenceEvent</code>—are composed with the <code>CommonObject</code> definition. Identity and provenance are grouped rather than flattened into every object.</p>
+
+<table><thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constrained by object definition</td>
+<td>Discriminator for the top-level object kind. Each object table names its permitted constant value.</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups object identity and attribution: <code>id</code>, <code>version</code>, <code>createdAt</code>, and <code>actor</code>.</td>
+</tr>
+<tr>
+<td><code>metadata.id</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Stable identifier of this object version. The schema does not impose a global identifier pattern.</td>
+</tr>
+<tr>
+<td><code>metadata.version</code></td>
+<td>integer</td>
+<td>Required; minimum <code>1</code></td>
+<td>Positive version of this ODPH object, used by all object references.</td>
+</tr>
+<tr>
+<td><code>metadata.createdAt</code></td>
+<td>string</td>
+<td>Required; RFC 3339 <code>date-time</code></td>
+<td>Time at which this object version was created.</td>
+</tr>
+<tr>
+<td><code>metadata.actor</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Attributed creator or producing actor. It is attribution, not authentication proof.</td>
+</tr>
+<tr>
+<td><code>provenance</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups source observations and relationships without embedding their contents.</td>
+</tr>
+<tr>
+<td><code>provenance.sourceReferences</code></td>
+<td>array of <code>Reference</code></td>
+<td>Required; may be empty</td>
+<td>Versioned source observations or records used when producing the object.</td>
+</tr>
+<tr>
+<td><code>provenance.relationshipReferences</code></td>
+<td>array of <code>Reference</code></td>
+<td>Required; may be empty</td>
+<td>Versioned links to related ODPH objects or governed records.</td>
+</tr>
+</tbody></table>
+<h3 id='reference'>Reference</h3>
+<table><thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>id</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Identifier of the referenced object or source.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>integer</td>
+<td>Required; minimum <code>1</code></td>
+<td>Exact referenced version.</td>
+</tr>
+<tr>
+<td><code>retrievedAt</code></td>
+<td>string</td>
+<td>Optional; RFC 3339 <code>date-time</code></td>
+<td>Retrieval time for an observed source reference.</td>
+</tr>
+<tr>
+<td><code>objectType</code></td>
+<td>string</td>
+<td>Optional</td>
+<td>Source-specific or ODPH object-type label.</td>
+</tr>
+<tr>
+<td><code>uri</code></td>
+<td>string</td>
+<td>Optional; <code>uri-reference</code> format</td>
+<td>Relative or absolute locator for the reference.</td>
+</tr>
+</tbody></table>
+<h3 id='boundary'>Boundary</h3>
+<p><code>Mandate</code>, <code>WorkEnvelope</code>, and <code>ExecutionPackage</code> additionally compose the <code>Boundary</code> definition under their <code>boundary</code> element.</p>
+
+<table><thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td><code>scope</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Declared business scope. A relationship validator must ensure a child boundary does not broaden its parent.</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Named local tool or capability boundary. This declaration does not grant access.</td>
+</tr>
+<tr>
+<td><code>dataAccess</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Named local data-access boundary. This declaration does not grant data access.</td>
+</tr>
+<tr>
+<td><code>approvalRights</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Named local approval boundary. This declaration does not confer approval rights.</td>
+</tr>
+<tr>
+<td><code>authorityLevel</code></td>
+<td>integer</td>
+<td>Required; <code>0</code>–<code>3</code></td>
+<td>Local ordinal used for deterministic comparison only; values have no portable cross-organisation meaning.</td>
+</tr>
+</tbody></table>
+<h2 id='contextpackage'>ContextPackage</h2>
 <p>A <code>ContextPackage</code> is a bounded observation, not a copied catalog. It identifies the retrieval scope, source IDs and versions, retrieval time, freshness, and observed conflicts. Every source observation is attributable to a version and retrieval time; stale or contradictory input must be made visible for human resolution.</p>
 
 <table><thead>
 <tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td><code>id</code>, <code>kind</code>, <code>version</code>, <code>createdAt</code>, <code>actor</code></td>
-<td>Common object identity and attribution. <code>kind</code> is <code>ContextPackage</code>.</td>
-<td>Makes this particular observation addressable and attributable.</td>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>ContextPackage</code></td>
+<td>Discriminator for a bounded, attributable context observation. All <code>CommonObject</code> elements are also required.</td>
 </tr>
 <tr>
-<td><code>sourceReferences</code></td>
-<td>Array of <code>{id, version, retrievedAt}</code> references.</td>
-<td>Identifies the bounded evidence consulted.</td>
+<td><code>context</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the scope, freshness, and conflict statement for this observation.</td>
 </tr>
 <tr>
-<td><code>relationshipReferences</code></td>
-<td>Array of <code>{id, version}</code> references.</td>
-<td>Links the context to related governed objects without copying them.</td>
+<td><code>context.retrievalScope</code></td>
+<td>object</td>
+<td>Required; open structure</td>
+<td>Source-specific description of the retrieved objectives, use cases, data products, graph revision, or other bounded slice.</td>
 </tr>
 <tr>
-<td><code>retrievalScope</code></td>
-<td>Object describing the retrieved objectives, use cases, data products, graph, or other source slice.</td>
-<td>Declares what was looked at.</td>
+<td><code>context.freshness</code></td>
+<td>string</td>
+<td>Required; <code>fresh</code>, <code>stale</code>, or <code>unknown</code></td>
+<td>Declared freshness state of this observation. It does not assert a universal source-consistency guarantee.</td>
 </tr>
 <tr>
-<td><code>freshness</code></td>
-<td><code>fresh</code>, <code>stale</code>, or <code>unknown</code>.</td>
-<td>Prevents unqualified reuse of old context.</td>
-</tr>
-<tr>
-<td><code>conflicts</code></td>
-<td>Array of observed conflicts or an empty array.</td>
-<td>Records what must be resolved; empty means none observed in this snapshot.</td>
+<td><code>context.conflicts</code></td>
+<td>array</td>
+<td>Required; may be empty</td>
+<td>Observed conflicts that need resolution. An empty array means no conflict was observed in this snapshot.</td>
 </tr>
 </tbody></table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">context-service-change</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">ContextPackage</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-<span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
-<span class="na">sourceReferences</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">maysano</span><span class="pi">:</span><span class="nv">graph</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">4</span><span class="pi">,</span> <span class="nv">retrievedAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">}</span>
-<span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[]</span>
-<span class="na">retrievalScope</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">graphRevision</span><span class="pi">:</span> <span class="nv">4</span><span class="pi">,</span> <span class="nv">objectiveIds</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-objective</span><span class="pi">]}</span>
-<span class="na">freshness</span><span class="pi">:</span> <span class="s">fresh</span>
-<span class="na">conflicts</span><span class="pi">:</span> <span class="pi">[]</span>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">ContextPackage</span>
+<span class="na">metadata</span><span class="pi">:</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">context-service-change</span>
+  <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
+  <span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
+<span class="na">provenance</span><span class="pi">:</span>
+  <span class="na">sourceReferences</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">maysano</span><span class="pi">:</span><span class="nv">graph</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">4</span><span class="pi">,</span> <span class="nv">retrievedAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">}</span>
+  <span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[]</span>
+<span class="na">context</span><span class="pi">:</span>
+  <span class="na">retrievalScope</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">graphRevision</span><span class="pi">:</span> <span class="nv">4</span><span class="pi">,</span> <span class="nv">objectiveIds</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-objective</span><span class="pi">]}</span>
+  <span class="na">freshness</span><span class="pi">:</span> <span class="s">fresh</span>
+  <span class="na">conflicts</span><span class="pi">:</span> <span class="pi">[]</span>
 </code></pre></div><h2 id='mandate'>Mandate</h2>
 <p>A <code>Mandate</code> is the durable business boundary for an area of work. It names the accountable owner, permitted scope, tools, data access, review rights, authority level, and expiry. ODPH does not mint authority: a local policy match never grants connector, credential, data-access, or external-write rights.</p>
 
 <table><thead>
 <tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>Common identity and references</td>
-<td><code>id</code>, <code>kind: Mandate</code>, <code>version</code>, <code>createdAt</code>, <code>actor</code>, <code>sourceReferences</code>, <code>relationshipReferences</code>.</td>
-<td>Stable attribution and links.</td>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>Mandate</code></td>
+<td>Discriminator for a durable business boundary. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
 </tr>
 <tr>
-<td><code>businessArea</code>, <code>owner</code></td>
-<td>Non-empty strings.</td>
-<td>Names the durable area and accountable person or role.</td>
+<td><code>mandate</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the durable business boundary&#39;s area, owner, and review expiry.</td>
 </tr>
 <tr>
-<td><code>scope</code>, <code>tools</code>, <code>dataAccess</code>, <code>approvalRights</code></td>
-<td>Arrays of non-empty strings.</td>
-<td>Defines the outer permitted boundary.</td>
+<td><code>mandate.businessArea</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Business area governed by this mandate.</td>
 </tr>
 <tr>
-<td><code>authorityLevel</code></td>
-<td>Local integer <code>0</code>–<code>3</code>; it has no portable cross-organisation meaning.</td>
-<td>Supports local comparison only.</td>
+<td><code>mandate.owner</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Accountable owner of the durable boundary.</td>
 </tr>
 <tr>
-<td><code>expiresAt</code></td>
-<td>RFC 3339 timestamp.</td>
-<td>Makes the boundary reviewable and finite.</td>
+<td><code>mandate.expiresAt</code></td>
+<td>string</td>
+<td>Required; RFC 3339 <code>date-time</code></td>
+<td>Time after which the mandate must be reviewed or replaced.</td>
+</tr>
+<tr>
+<td><code>boundary</code></td>
+<td><code>Boundary</code> object</td>
+<td>Required</td>
+<td>Local scope, tool, data-access, approval, and authority constraints.</td>
 </tr>
 </tbody></table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">mandate-service-change</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">Mandate</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-<span class="na">actor</span><span class="pi">:</span> <span class="s">service-owner</span>
-<span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
-<span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[]</span>
-<span class="na">businessArea</span><span class="pi">:</span> <span class="s">Service planning</span>
-<span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Service</span>
-<span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-change</span><span class="pi">]</span>
-<span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">maysano.change-proposal</span><span class="pi">]</span>
-<span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-planning-context</span><span class="pi">]</span>
-<span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed-change-proposal</span><span class="pi">]</span>
-<span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2027-01-01T00:00:00Z"</span>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">Mandate</span>
+<span class="na">metadata</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">mandate-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">,</span> <span class="nv">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">,</span> <span class="nv">actor</span><span class="pi">:</span> <span class="nv">service-owner</span><span class="pi">}</span>
+<span class="na">provenance</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">sourceReferences</span><span class="pi">:</span> <span class="pi">[],</span> <span class="nv">relationshipReferences</span><span class="pi">:</span> <span class="pi">[]}</span>
+<span class="na">mandate</span><span class="pi">:</span>
+  <span class="na">businessArea</span><span class="pi">:</span> <span class="s">Service planning</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Service</span>
+  <span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2027-01-01T00:00:00Z"</span>
+<span class="na">boundary</span><span class="pi">:</span>
+  <span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-change</span><span class="pi">]</span>
+  <span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">maysano.change-proposal</span><span class="pi">]</span>
+  <span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-planning-context</span><span class="pi">]</span>
+  <span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed-change-proposal</span><span class="pi">]</span>
+  <span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
 </code></pre></div><h2 id='workenvelope'>WorkEnvelope</h2>
 <p>A <code>WorkEnvelope</code> narrows one mandate into one assignment. It states the requested result, accountable owner, allowed subset, and expiry. It may narrow a mandate but must never broaden it; relationship validation must reject a missing mandate version or an expanded boundary.</p>
 
 <table><thead>
 <tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
 </tr>
 </thead><tbody>
 <tr>
-<td>Common identity and references</td>
-<td><code>id</code>, <code>kind: WorkEnvelope</code>, <code>version</code>, <code>createdAt</code>, <code>actor</code>, <code>sourceReferences</code>, <code>relationshipReferences</code>.</td>
-<td>Stable attribution and links.</td>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>WorkEnvelope</code></td>
+<td>Discriminator for an assignment-specific boundary. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
 </tr>
 <tr>
-<td><code>mandateReference</code></td>
-<td><code>{id, version}</code> reference to exactly one <code>Mandate</code>.</td>
-<td>Establishes the durable boundary being narrowed.</td>
+<td><code>assignment</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the assignment&#39;s parent mandate, result, owner, and expiry.</td>
 </tr>
 <tr>
-<td><code>requestedResult</code>, <code>owner</code></td>
-<td>Non-empty strings.</td>
-<td>States the expected assignment result and accountable owner.</td>
+<td><code>assignment.mandateReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the <code>Mandate</code> being narrowed. Relationship validation rejects a missing or broadened parent boundary.</td>
 </tr>
 <tr>
-<td>Boundary fields</td>
-<td><code>scope</code>, <code>tools</code>, <code>dataAccess</code>, <code>approvalRights</code>, <code>authorityLevel</code>.</td>
-<td>Must be a subset of the referenced mandate.</td>
+<td><code>assignment.requestedResult</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Business result requested for this assignment.</td>
 </tr>
 <tr>
-<td><code>expiresAt</code></td>
-<td>RFC 3339 timestamp.</td>
-<td>Defines the assignment review horizon.</td>
+<td><code>assignment.owner</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Accountable owner of this assignment.</td>
+</tr>
+<tr>
+<td><code>assignment.expiresAt</code></td>
+<td>string</td>
+<td>Required; RFC 3339 <code>date-time</code></td>
+<td>Time after which the assignment boundary is no longer valid.</td>
+</tr>
+<tr>
+<td><code>boundary</code></td>
+<td><code>Boundary</code> object</td>
+<td>Required</td>
+<td>Local scope, tool, data-access, approval, and authority constraints.</td>
 </tr>
 </tbody></table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">WorkEnvelope</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-<span class="na">actor</span><span class="pi">:</span> <span class="s">service-owner</span>
-<span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
-<span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">mandate-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]</span>
-<span class="na">mandateReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">mandate-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">requestedResult</span><span class="pi">:</span> <span class="s">Reviewed service change proposal</span>
-<span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Service</span>
-<span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-change</span><span class="pi">]</span>
-<span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">maysano.change-proposal</span><span class="pi">]</span>
-<span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-planning-context</span><span class="pi">]</span>
-<span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed-change-proposal</span><span class="pi">]</span>
-<span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">WorkEnvelope</span>
+<span class="na">metadata</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">,</span> <span class="nv">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">,</span> <span class="nv">actor</span><span class="pi">:</span> <span class="nv">service-owner</span><span class="pi">}</span>
+<span class="na">provenance</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">sourceReferences</span><span class="pi">:</span> <span class="pi">[],</span> <span class="nv">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">mandate-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]}</span>
+<span class="na">assignment</span><span class="pi">:</span>
+  <span class="na">mandateReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">mandate-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
+  <span class="na">requestedResult</span><span class="pi">:</span> <span class="s">Reviewed service change proposal</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Service</span>
+  <span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span>
+<span class="na">boundary</span><span class="pi">:</span>
+  <span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-change</span><span class="pi">]</span>
+  <span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">maysano.change-proposal</span><span class="pi">]</span>
+  <span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-planning-context</span><span class="pi">]</span>
+  <span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed-change-proposal</span><span class="pi">]</span>
+  <span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
 </code></pre></div><h1 id='execution'>Execution</h1><h2 id='executionpackage'>ExecutionPackage</h2>
 <p>An <code>ExecutionPackage</code> is the non-authoritative plan under one work envelope. It describes steps, dependencies, expected outputs, timing, and acceptance criteria. It can be associated with a <code>ChangeTask</code>, but neither object replaces the other: the package governs plan scope; the task governs a composite change.</p>
 
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Common identity and references</td>
-<td><code>id</code>, <code>kind: ExecutionPackage</code>, <code>version</code>, <code>createdAt</code>, <code>actor</code>, <code>sourceReferences</code>, <code>relationshipReferences</code>.</td>
-<td>Stable attribution and links.</td>
-</tr>
-<tr>
-<td><code>workEnvelopeReference</code></td>
-<td><code>{id, version}</code> reference to exactly one <code>WorkEnvelope</code>.</td>
-<td>Binds the plan to its assignment.</td>
-</tr>
-<tr>
-<td>Boundary fields</td>
-<td><code>scope</code>, <code>tools</code>, <code>dataAccess</code>, <code>approvalRights</code>, <code>authorityLevel</code>.</td>
-<td>Must not exceed the envelope.</td>
-</tr>
-<tr>
-<td><code>plannedSteps</code>, <code>dependencies</code></td>
-<td>Ordered / unordered arrays of non-empty strings.</td>
-<td>Makes the plan and its prerequisites reviewable.</td>
-</tr>
-<tr>
-<td><code>expectedOutputs</code>, <code>timing</code>, <code>acceptanceCriteria</code></td>
-<td>Output list, non-empty timing string, and criteria list.</td>
-<td>States what good completion looks like.</td>
-</tr>
-</tbody></table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">package-service-change</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionPackage</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-<span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
-<span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
-<span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]</span>
-<span class="na">workEnvelopeReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-change</span><span class="pi">]</span>
-<span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">maysano.change-proposal</span><span class="pi">]</span>
-<span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-planning-context</span><span class="pi">]</span>
-<span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed-change-proposal</span><span class="pi">]</span>
-<span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">plannedSteps</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Validate context</span><span class="pi">,</span> <span class="nv">Prepare the proposed specification</span><span class="pi">,</span> <span class="nv">Request review</span><span class="pi">]</span>
-<span class="na">expectedOutputs</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Reviewed service change proposal</span><span class="pi">]</span>
-<span class="na">dependencies</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Current Maysano graph</span><span class="pi">]</span>
-<span class="na">timing</span><span class="pi">:</span> <span class="s">Before the service review</span>
-<span class="na">acceptanceCriteria</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Names version expectations and unresolved conflicts</span><span class="pi">]</span>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>kind</code> | string | Required; constant <code>ExecutionPackage</code> | Discriminator for a non-authoritative plan. All <code>CommonObject</code> and <code>Boundary</code> elements are also required. |
+| <code>execution</code> | object | Required; closed structure | Groups the envelope reference that bounds this execution package. |
+| <code>execution.workEnvelopeReference</code> | <code>Reference</code> object | Required | Exact ID and version of the <code>WorkEnvelope</code> that bounds this plan. |
+| <code>boundary</code> | <code>Boundary</code> object | Required | Local scope, tool, data-access, approval, and authority constraints. |
+| <code>plan</code> | object | Required; closed structure | Groups steps, outputs, dependencies, timing, and criteria. |
+| <code>plan.plannedSteps</code> | array of string | Required; items have minimum length 1 | Ordered plan steps. The schema permits an empty array; a profile may impose a stronger minimum. |
+| <code>plan.expectedOutputs</code> | array of string | Required; items have minimum length 1 | Outputs expected from the planned work. The schema permits an empty array. |
+| <code>plan.dependencies</code> | array of string | Required; items have minimum length 1 | Named prerequisites or external dependencies. The schema permits an empty array. |
+| <code>plan.timing</code> | string | Required; minimum length 1 | Human-readable timing constraint for the plan. |
+| <code>plan.acceptanceCriteria</code> | array of string | Required; items have minimum length 1 | Conditions used to evaluate the planned result. The schema permits an empty array. |</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionPackage</span>
+<span class="na">metadata</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">package-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">,</span> <span class="nv">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">,</span> <span class="nv">actor</span><span class="pi">:</span> <span class="nv">change-team</span><span class="pi">}</span>
+<span class="na">provenance</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">sourceReferences</span><span class="pi">:</span> <span class="pi">[],</span> <span class="nv">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]}</span>
+<span class="na">execution</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">workEnvelopeReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}}</span>
+<span class="na">boundary</span><span class="pi">:</span>
+  <span class="na">scope</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-change</span><span class="pi">]</span>
+  <span class="na">tools</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">maysano.change-proposal</span><span class="pi">]</span>
+  <span class="na">dataAccess</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">service-planning-context</span><span class="pi">]</span>
+  <span class="na">approvalRights</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">reviewed-change-proposal</span><span class="pi">]</span>
+  <span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
+<span class="na">plan</span><span class="pi">:</span>
+  <span class="na">plannedSteps</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Validate context</span><span class="pi">,</span> <span class="nv">Prepare the proposed specification</span><span class="pi">,</span> <span class="nv">Request review</span><span class="pi">]</span>
+  <span class="na">expectedOutputs</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Reviewed service change proposal</span><span class="pi">]</span>
+  <span class="na">dependencies</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Current Maysano graph</span><span class="pi">]</span>
+  <span class="na">timing</span><span class="pi">:</span> <span class="s">Before the service review</span>
+  <span class="na">acceptanceCriteria</span><span class="pi">:</span> <span class="pi">[</span><span class="nv">Names version expectations and unresolved conflicts</span><span class="pi">]</span>
 </code></pre></div><h2 id='executionrequest'>ExecutionRequest</h2>
 <p>An <code>ExecutionRequest</code> is one explicit proposed external action, never an implicit command. It points to its plan and the revocation policy that protects its authority chain. It can be packaged with a <code>ChangeAction</code> for one Maysano resource write. Passing local validation is not permission to dispatch automatically.</p>
 
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Common identity and references</td>
-<td><code>id</code>, <code>kind: ExecutionRequest</code>, <code>version</code>, <code>createdAt</code>, <code>actor</code>, <code>sourceReferences</code>, <code>relationshipReferences</code>.</td>
-<td>Stable attribution and links.</td>
-</tr>
-<tr>
-<td><code>executionPackageReference</code></td>
-<td><code>{id, version}</code> reference.</td>
-<td>Binds the request to an approved plan.</td>
-</tr>
-<tr>
-<td><code>revocationPolicyReference</code></td>
-<td><code>{id, version}</code> reference.</td>
-<td>Binds a future executable request to its suspension and restoration path.</td>
-</tr>
-<tr>
-<td><code>action</code>, <code>tool</code>, <code>target</code></td>
-<td>Non-empty strings.</td>
-<td>Declares exactly what is proposed.</td>
-</tr>
-<tr>
-<td><code>requestedAuthority</code>, <code>approvalRequired</code>, <code>approvalExpiresAt</code></td>
-<td>Local authority level, boolean approval gate, timestamp or <code>null</code>.</td>
-<td>Makes authority and time limits explicit.</td>
-</tr>
-<tr>
-<td><code>redactedParameters</code></td>
-<td>Object; never raw secrets.</td>
-<td>Carries only safe, referential request context.</td>
-</tr>
-</tbody></table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">request-service-change</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionRequest</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-<span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
-<span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
-<span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">package-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]</span>
-<span class="na">executionPackageReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">package-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">revocationPolicyReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">policy-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">action</span><span class="pi">:</span> <span class="s">submit reviewed service specification</span>
-<span class="na">tool</span><span class="pi">:</span> <span class="s">maysano.change-proposal</span>
-<span class="na">target</span><span class="pi">:</span> <span class="s">service planning graph</span>
-<span class="na">requestedAuthority</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">approvalRequired</span><span class="pi">:</span> <span class="no">true</span>
-<span class="na">approvalExpiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span>
-<span class="na">redactedParameters</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">contextReference</span><span class="pi">:</span> <span class="nv">context-service-change</span><span class="pi">}</span>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>kind</code> | string | Required; constant <code>ExecutionRequest</code> | Discriminator for one explicit proposed action. All <code>CommonObject</code> elements are also required. |
+| <code>execution</code> | object | Required; closed structure | Groups the plan and revocation-policy references for this request. |
+| <code>execution.executionPackageReference</code> | <code>Reference</code> object | Required | Exact ID and version of the <code>ExecutionPackage</code> that contains the request. |
+| <code>execution.revocationPolicyReference</code> | <code>Reference</code> object | Required | Exact ID and version of the policy governing suspension or restoration of this request authority chain. |
+| <code>request</code> | object | Required; closed structure | Groups the action proposal, requested authority, approval, and non-secret parameters. |
+| <code>request.action</code> | string | Required; minimum length 1 | Human-readable proposed action. It is not an implicit dispatch instruction. |
+| <code>request.tool</code> | string | Required; minimum length 1 | Named tool or capability requested by the action. |
+| <code>request.target</code> | string | Required; minimum length 1 | Intended target of the action. |
+| <code>request.requestedAuthority</code> | integer | Required; <code>0</code>–<code>3</code> | Requested local authority ordinal. It must be compared to the enclosing boundary by relationship validation. |
+| <code>request.approval</code> | object | Required; closed structure | Groups the approval requirement and its expiry. |
+| <code>request.approval.required</code> | boolean | Required | Whether a platform approval decision is required before execution. |
+| <code>request.approval.expiresAt</code> | string or null | Required; RFC 3339 <code>date-time</code> or <code>null</code> | Expiry of the applicable approval when present. |
+| <code>request.redactedParameters</code> | object | Optional; open structure | Non-secret request context. Raw secrets must not be included. |</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionRequest</span>
+<span class="na">metadata</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">request-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">,</span> <span class="nv">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">,</span> <span class="nv">actor</span><span class="pi">:</span> <span class="nv">change-team</span><span class="pi">}</span>
+<span class="na">provenance</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">sourceReferences</span><span class="pi">:</span> <span class="pi">[],</span> <span class="nv">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">package-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]}</span>
+<span class="na">execution</span><span class="pi">:</span>
+  <span class="na">executionPackageReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">package-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
+  <span class="na">revocationPolicyReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">policy-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
+<span class="na">request</span><span class="pi">:</span>
+  <span class="na">action</span><span class="pi">:</span> <span class="s">submit reviewed service specification</span>
+  <span class="na">tool</span><span class="pi">:</span> <span class="s">maysano.change-proposal</span>
+  <span class="na">target</span><span class="pi">:</span> <span class="s">service planning graph</span>
+  <span class="na">requestedAuthority</span><span class="pi">:</span> <span class="m">1</span>
+  <span class="na">approval</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">required</span><span class="pi">:</span> <span class="nv">true</span><span class="pi">,</span> <span class="nv">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span><span class="pi">}</span>
+  <span class="na">redactedParameters</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">contextReference</span><span class="pi">:</span> <span class="nv">context-service-change</span><span class="pi">}</span>
 </code></pre></div><h1 id='evidence-and-assurance'>Evidence and assurance</h1><h2 id='evidenceevent'>EvidenceEvent</h2>
 <p>An <code>EvidenceEvent</code> is the durable atomic record; an <code>EvidenceBundle</code> is an exportable grouping of its events. The event links a work envelope to attributable proof of context retrieval, validation, review, submission, returned state, failure, correction, or reconciliation. A local export is not a claim of immutable platform retention.</p>
 
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Common identity and references</td>
-<td><code>id</code>, <code>kind: EvidenceEvent</code>, <code>version</code>, <code>createdAt</code>, <code>actor</code>, <code>sourceReferences</code>, <code>relationshipReferences</code>.</td>
-<td>Stable attribution and source provenance.</td>
-</tr>
-<tr>
-<td><code>occurredAt</code></td>
-<td>RFC 3339 timestamp.</td>
-<td>Records when the event happened.</td>
-</tr>
-<tr>
-<td><code>workEnvelopeReference</code></td>
-<td><code>{id, version}</code> reference.</td>
-<td>Associates proof with one bounded assignment.</td>
-</tr>
-<tr>
-<td><code>eventType</code></td>
-<td>Extensible non-empty string.</td>
-<td>Names the event, such as <code>context_retrieved</code> or <code>validation_completed</code>.</td>
-</tr>
-<tr>
-<td><code>payload</code></td>
-<td>Object.</td>
-<td>Carries structured, non-secret event details and authoritative receipt references.</td>
-</tr>
-</tbody></table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">id</span><span class="pi">:</span> <span class="s">evidence-context-retrieved</span>
-<span class="na">kind</span><span class="pi">:</span> <span class="s">EvidenceEvent</span>
-<span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-<span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-<span class="na">occurredAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-<span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
-<span class="na">sourceReferences</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">maysano</span><span class="pi">:</span><span class="nv">graph</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">4</span><span class="pi">,</span> <span class="nv">retrievedAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">}</span>
-<span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]</span>
-<span class="na">workEnvelopeReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
-<span class="na">eventType</span><span class="pi">:</span> <span class="s">context_retrieved</span>
-<span class="na">payload</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">contextPackageReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">context-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}}</span>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>kind</code> | string | Required; constant <code>EvidenceEvent</code> | Discriminator for one durable, attributable event. All <code>CommonObject</code> elements are also required. |
+| <code>evidence</code> | object | Required; closed structure | Groups the time, assignment, type, and payload of this event. |
+| <code>evidence.occurredAt</code> | string | Required; RFC 3339 <code>date-time</code> | Time at which the recorded event occurred. |
+| <code>evidence.workEnvelopeReference</code> | <code>Reference</code> object | Required | Exact ID and version of the <code>WorkEnvelope</code> to which the evidence belongs. |
+| <code>evidence.eventType</code> | string | Required; minimum length 1 | Extensible event label, such as <code>context_retrieved</code> or <code>validation_completed</code>. |
+| <code>evidence.payload</code> | object | Required; open structure | Structured, non-secret event details and authoritative receipt references. |</p>
+<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">EvidenceEvent</span>
+<span class="na">metadata</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">evidence-context-retrieved</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">,</span> <span class="nv">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">,</span> <span class="nv">actor</span><span class="pi">:</span> <span class="nv">change-team</span><span class="pi">}</span>
+<span class="na">provenance</span><span class="pi">:</span>
+  <span class="na">sourceReferences</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">maysano</span><span class="pi">:</span><span class="nv">graph</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">4</span><span class="pi">,</span> <span class="nv">retrievedAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span><span class="pi">}</span>
+  <span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}]</span>
+<span class="na">evidence</span><span class="pi">:</span>
+  <span class="na">occurredAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
+  <span class="na">workEnvelopeReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">envelope-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}</span>
+  <span class="na">eventType</span><span class="pi">:</span> <span class="s">context_retrieved</span>
+  <span class="na">payload</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">contextPackageReference</span><span class="pi">:</span> <span class="pi">{</span><span class="nv">id</span><span class="pi">:</span> <span class="nv">context-service-change</span><span class="pi">,</span> <span class="nv">version</span><span class="pi">:</span> <span class="nv">1</span><span class="pi">}}</span>
 </code></pre></div><h1 id='system-boundaries'>System boundaries</h1><h2 id='architecture-and-responsibilities'>Architecture and responsibilities</h2>
 <p>Maysano is the authoritative record for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded Maysano context; creates and validates specification files; presents a proposed change to the business owner; submits agreed files to Maysano; and records evidence. ODPH is not a second record store.</p>
 
@@ -841,44 +950,17 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 
 <p><code>operation</code> is only <code>create</code> or <code>update</code>. An <code>update</code> requires <code>expectedVersion</code>. A connection change is an ODPG file update. A deprecation is a new ODPC or ODPS file version with its lifecycle state changed. A business-object update is a new ODPC or ODPS file version. <code>link</code>, <code>unlink</code>, and <code>deprecate</code> are not ChangeAction operations.</p>
 
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>schema</code>, <code>version</code>, <code>kind</code></td>
-<td>v0.2 schema identifier, <code>0.2-draft</code>, and <code>ChangeAction</code>.</td>
-<td>Identifies the action contract.</td>
-</tr>
-<tr>
-<td><code>metadata</code></td>
-<td><code>id</code>, title, requester, creation time, and optional parent identifiers.</td>
-<td>Stable action identity and provenance.</td>
-</tr>
-<tr>
-<td><code>graphContext</code></td>
-<td>Maysano graph revision plus optional required object versions.</td>
-<td>Pins the context against which the write is safe.</td>
-</tr>
-<tr>
-<td><code>intent</code></td>
-<td>Business owner, reason, expected outcome, and policy profile.</td>
-<td>Links the write to a business purpose.</td>
-</tr>
-<tr>
-<td><code>specification</code></td>
-<td><code>create</code> or <code>update</code>, family, contained YAML file, SHA-256, and update version where relevant.</td>
-<td>Names exactly one separately validated standard-family artefact.</td>
-</tr>
-<tr>
-<td><code>review</code>, <code>acceptanceCriteria</code></td>
-<td>Required roles, optional approval expiry, and one or more criteria.</td>
-<td>Makes the human review gate explicit.</td>
-</tr>
-</tbody></table>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>schema</code> | string | Required; canonical YAML or JSON schema URL | Identifies the v0.2 change-control schema used to validate this document. |
+| <code>version</code> | string | Required; constant <code>0.2-draft</code> | Version of the ChangeAction contract. |
+| <code>kind</code> | string | Required; constant <code>ChangeAction</code> | Discriminator for a single direct Maysano resource operation. |
+| <code>metadata</code> | object | Required; closed structure | Contains <code>id</code>, <code>title</code>, <code>requestedBy</code>, and <code>createdAt</code>; optional <code>parentTestCase</code> and <code>parentChangeTask</code> use the identifier pattern <code>^[a-z0-9][a-z0-9-]*$</code>. |
+| <code>graphContext</code> | object | Required; closed structure | Contains <code>source: maysano</code>, <code>baseGraphRevision</code>, and optional versioned <code>requiredObjects</code>. |
+| <code>intent</code> | object | Required; closed structure | Contains <code>businessOwner</code>, <code>reason</code>, <code>expectedOutcome</code>, and an identifier-form <code>policyProfile</code>. |
+| <code>specification</code> | object | Required; closed structure | Contains <code>operation</code>, <code>family</code>, contained YAML <code>file</code>, 64-character hexadecimal <code>sha256</code>, and <code>expectedVersion</code> when <code>operation</code> is <code>update</code>. |
+| <code>review</code> | object | Required; closed structure | Contains a non-empty, unique <code>requiredRoles</code> array and optional <code>approvalExpiresAt</code>. |
+| <code>acceptanceCriteria</code> | array of string | Required; at least 1 item | Non-empty criteria used to determine whether the requested change is acceptable. |</p>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/odph-v0.2/schema/change-control.yaml</span>
 <span class="na">version</span><span class="pi">:</span> <span class="s">0.2-draft</span>
 <span class="na">kind</span><span class="pi">:</span> <span class="s">ChangeAction</span>
@@ -895,34 +977,17 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 
 <p>It records the bounded Maysano graph revision, action-file references, dependencies, required reviewers, acceptance criteria, execution status, and resulting evidence. Static validation rejects a task with fewer than two actions or unknown fields. Runtime validation rejects missing action files, duplicate action IDs, missing dependencies, and dependency cycles.</p>
 
-<table><thead>
-<tr>
-<th>Attribute</th>
-<th>Structure</th>
-<th>Purpose</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>schema</code>, <code>version</code>, <code>kind</code></td>
-<td>v0.2 schema identifier, <code>0.2-draft</code>, and <code>ChangeTask</code>.</td>
-<td>Identifies the task contract.</td>
-</tr>
-<tr>
-<td><code>metadata</code>, <code>graphContext</code>, <code>intent</code></td>
-<td>Same structures as <code>ChangeAction</code>.</td>
-<td>Establishes provenance, bounded context, and business purpose.</td>
-</tr>
-<tr>
-<td><code>actions</code></td>
-<td>At least two <code>{id, actionFile, dependsOn?}</code> references.</td>
-<td>Packages independently valid actions and their declared order.</td>
-</tr>
-<tr>
-<td><code>review</code>, <code>acceptanceCriteria</code></td>
-<td>Required roles, optional approval expiry, and one or more criteria.</td>
-<td>Holds the composite review gate.</td>
-</tr>
-</tbody></table>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>schema</code> | string | Required; canonical YAML or JSON schema URL | Identifies the v0.2 change-control schema used to validate this document. |
+| <code>version</code> | string | Required; constant <code>0.2-draft</code> | Version of the ChangeTask contract. |
+| <code>kind</code> | string | Required; constant <code>ChangeTask</code> | Discriminator for a composite, dependency-ordered change. |
+| <code>metadata</code> | object | Required; closed structure | Contains <code>id</code>, <code>title</code>, <code>requestedBy</code>, and <code>createdAt</code>; optional parent identifiers use the identifier pattern. |
+| <code>graphContext</code> | object | Required; closed structure | Contains <code>source: maysano</code>, <code>baseGraphRevision</code>, and optional versioned <code>requiredObjects</code>. |
+| <code>intent</code> | object | Required; closed structure | Contains <code>businessOwner</code>, <code>reason</code>, <code>expectedOutcome</code>, and identifier-form <code>policyProfile</code>. |
+| <code>actions</code> | array of <code>ActionReference</code> | Required; at least 2 items | Each item contains action <code>id</code>, contained YAML <code>actionFile</code>, and optional unique <code>dependsOn</code> action IDs. Runtime validation rejects missing references and dependency cycles. |
+| <code>review</code> | object | Required; closed structure | Contains a non-empty, unique <code>requiredRoles</code> array and optional <code>approvalExpiresAt</code>. |
+| <code>acceptanceCriteria</code> | array of string | Required; at least 1 item | Non-empty criteria used to determine whether the complete change is acceptable. |</p>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/odph-v0.2/schema/change-control.yaml</span>
 <span class="na">version</span><span class="pi">:</span> <span class="s">0.2-draft</span>
 <span class="na">kind</span><span class="pi">:</span> <span class="s">ChangeTask</span>
@@ -1027,58 +1092,20 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 
 <p>Test cases 01–05 demonstrate direct actions. Test case 06 also provides the later composite <code>ChangeTask</code>, which references its five separately valid action files and uses dependencies to order the individual resource writes.</p>
 <h1 id='reference-and-delivery'>Reference and delivery</h1><h2 id='schema-reference'>Schema reference</h2><h3 id='common-fields'>Common fields</h3>
-<p>The canonical v0.2 contract is <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>. <code>additionalProperties: false</code> is intentional at every ODPH document object: unknown top-level or nested fields fail validation.</p>
+<p>The canonical v0.2 contract is <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>. <code>ChangeAction</code> and <code>ChangeTask</code> use closed nested structures. The governed-work object definitions deliberately retain open structures where the model carries source-specific scope, conflict, or evidence payload content.</p>
 
 <p>Both document kinds require <code>schema</code>, <code>version</code>, <code>kind</code>, <code>metadata</code>, <code>graphContext</code>, <code>intent</code>, <code>review</code>, and <code>acceptanceCriteria</code>.</p>
 
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Type and allowed values</th>
-<th>Requirement</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>schema</code></td>
-<td>String. <code>https://opendataproducts.org/odph-v0.2/schema/change-control.yaml</code> or <code>.json</code>.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>version</code></td>
-<td>Exact string <code>0.2-draft</code>.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>kind</code></td>
-<td><code>ChangeAction</code> or <code>ChangeTask</code>.</td>
-<td>Required; selects the document kind.</td>
-</tr>
-<tr>
-<td><code>metadata</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>graphContext</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>intent</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>review</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>acceptanceCriteria</code></td>
-<td>Array of one or more non-empty strings.</td>
-<td>Required.</td>
-</tr>
-</tbody></table>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>schema</code> | string | Required; canonical YAML or JSON URL | Schema identifier for the change-control document. |
+| <code>version</code> | string | Required; constant <code>0.2-draft</code> | Version of the change-control contract. |
+| <code>kind</code> | string | Required; <code>ChangeAction</code> or <code>ChangeTask</code> | Selects the change-control object definition. |
+| <code>metadata</code> | object | Required; closed structure | Stable document identity and provenance. |
+| <code>graphContext</code> | object | Required; closed structure | Bounded Maysano source and graph revision. |
+| <code>intent</code> | object | Required; closed structure | Accountable business owner, reason, outcome, and policy profile. |
+| <code>review</code> | object | Required; closed structure | Required reviewer roles and optional approval expiry. |
+| <code>acceptanceCriteria</code> | array of string | Required; at least 1 item | Criteria used to judge the requested change. |</p>
 <h4 id='metadata'><code>metadata</code></h4>
 <p>Required: <code>id</code>, <code>title</code>, <code>requestedBy</code>, <code>createdAt</code>. <code>id</code> is a string of 3–128 characters matching <code>^[a-z0-9][a-z0-9-]*$</code>. <code>title</code> and <code>requestedBy</code> are non-empty strings; <code>createdAt</code> is an RFC 3339 date-time string. Optional <code>parentTestCase</code> and <code>parentChangeTask</code> use the same identifier rule.</p>
 <h4 id='graphcontext'><code>graphContext</code></h4>
@@ -1088,39 +1115,13 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 <h3 id='changeaction-specification'><code>ChangeAction.specification</code></h3>
 <p><code>ChangeAction</code> additionally requires <code>specification</code>.</p>
 
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Type and allowed values</th>
-<th>Requirement</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>operation</code></td>
-<td><code>create</code> or <code>update</code>.</td>
-<td>Required. <code>update</code> requires <code>expectedVersion</code>.</td>
-</tr>
-<tr>
-<td><code>family</code></td>
-<td><code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code>.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>file</code></td>
-<td>Relative YAML filename ending <code>.yaml</code> or <code>.yml</code>; it cannot start with <code>/</code> or contain <code>..</code> traversal.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>sha256</code></td>
-<td>Exactly 64 hexadecimal characters.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>expectedVersion</code></td>
-<td>Non-negative integer or non-empty string.</td>
-<td>Required only for <code>update</code>.</td>
-</tr>
-</tbody></table>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>operation</code> | string | Required; <code>create</code> or <code>update</code> | Requested direct Maysano resource operation. <code>update</code> requires <code>expectedVersion</code>. |
+| <code>family</code> | string | Required; <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code> | Standard-family schema against which the referenced file is validated. |
+| <code>file</code> | string | Required; contained relative <code>.yaml</code> or <code>.yml</code> path | File location; it cannot start with <code>/</code> or contain <code>..</code> path traversal. |
+| <code>sha256</code> | string | Required; exactly 64 hexadecimal characters | SHA-256 checksum of the referenced file bytes. |
+| <code>expectedVersion</code> | integer or string | Required for <code>update</code>; integer is at least <code>0</code>, string has minimum length 1 | Version expected by Maysano before an update is accepted. |</p>
 
 <p>The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.</p>
 <h3 id='changetask-actions'><code>ChangeTask.actions</code></h3>
@@ -1147,30 +1148,6 @@ bundle <span class="nb">exec </span>middleman build
 <p>Before a Maysano write, resolve every referenced specification file; verify the checksum; verify action references; reject duplicate action IDs and dependency cycles; verify required Maysano object versions and the current graph revision; and verify ODPC, ODPS, and ODPG files are mutually consistent. Verify approvals before every write.</p>
 
 <p>Record submitted file identifiers, resulting Maysano identities and versions, validation outcomes, and reconciliation state. Maysano is authoritative for returned state; these checks do not turn ODPH into a record store.</p>
-<h2 id='roadmap'>Roadmap</h2><h3 id='delivery-direction'>Delivery direction</h3>
-<table><thead>
-<tr>
-<th>Phase</th>
-<th>Direction</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>v0.2 Phase 1</td>
-<td>Guided, object-level workflows using one <code>ChangeAction</code> and one validated specification file per Maysano resource write.</td>
-</tr>
-<tr>
-<td>v0.2 Phase 2</td>
-<td>Validated <code>ChangeTask</code> orchestration that still executes through individual Maysano API calls.</td>
-</tr>
-<tr>
-<td>v0.3</td>
-<td>Planned MCP interface to ODPH capabilities: <code>odph.create_change_task</code>, <code>odph.validate_change_task</code>, <code>odph.submit_change_task</code>, and <code>odph.get_change_task_status</code>. MCP does not replace Maysano APIs or become the record store.</td>
-</tr>
-<tr>
-<td>Future</td>
-<td>Maysano-native composite execution may add server-side validation, locking, atomic execution, and grouped audit. This is not required for v0.2.</td>
-</tr>
-</tbody></table>
 <h2 id='published-contract-and-examples'>Published contract and examples</h2><h3 id='machine-readable-sources'>Machine-readable sources</h3>
 <p>The canonical YAML schema is <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>; the mechanically derived JSON representation is <a href="odph-v0.2/schema/change-control.json"><code>change-control.json</code></a>. Both use the v0.2 schema identifier <code>https://opendataproducts.org/odph-v0.2/schema/change-control.yaml</code>.</p>
 

@@ -31,4 +31,4 @@ ODPH v0.2 packages eight independently addressable top-level object kinds: Conte
 4. Validate every ODPH object, their references and boundary subsets, and the referenced standard-family file.
 5. Submit only agreed actions through Maysano resource APIs and record returned identity, version, outcome, and reconciliation state as EvidenceEvents.
 
-Run `python scripts/validate_examples.py` for the complete checked example chain. Direct workflows are ordered writes, never automatic rollback or all-or-nothing execution. MCP is planned only for v0.3 and does not replace Maysano APIs.
+Run `python scripts/validate_examples.py` for the complete checked example chain. Direct workflows are ordered writes, never automatic rollback or all-or-nothing execution. They do not replace Maysano APIs.

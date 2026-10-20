@@ -403,58 +403,20 @@
 </tr>
 </tbody></table>
 <h2 id='common-governed-work-fields'>Common governed-work fields</h2>
-<p><code>ContextPackage</code>, <code>Mandate</code>, <code>WorkEnvelope</code>, <code>ExecutionPackage</code>, <code>ExecutionRequest</code>, and <code>EvidenceEvent</code> require <code>id</code>, <code>kind</code>, positive integer <code>version</code>, <code>createdAt</code>, <code>actor</code>, <code>sourceReferences</code>, and <code>relationshipReferences</code>. A source reference has <code>id</code> and <code>version</code>, with <code>retrievedAt</code> when it is an observation; relationship references link other ODPH objects by ID and version.</p>
+<p><code>ContextPackage</code>, <code>Mandate</code>, <code>WorkEnvelope</code>, <code>ExecutionPackage</code>, <code>ExecutionRequest</code>, and <code>EvidenceEvent</code> require <code>kind</code>, <code>metadata</code>, and <code>provenance</code>. <code>metadata</code> groups <code>id</code>, positive integer <code>version</code>, <code>createdAt</code>, and <code>actor</code>; <code>provenance</code> groups <code>sourceReferences</code> and <code>relationshipReferences</code>. A source reference has <code>id</code> and <code>version</code>, with <code>retrievedAt</code> when it is an observation; relationship references link other ODPH objects by ID and version.</p>
 <h2 id='changeaction-and-changetask-fields'>ChangeAction and ChangeTask fields</h2>
 <p>Both document kinds require <code>schema</code>, <code>version</code>, <code>kind</code>, <code>metadata</code>, <code>graphContext</code>, <code>intent</code>, <code>review</code>, and <code>acceptanceCriteria</code>.</p>
 
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Type and allowed values</th>
-<th>Requirement</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>schema</code></td>
-<td>String. <code>https://opendataproducts.org/odph-v0.2/schema/change-control.yaml</code> or <code>.json</code>.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>version</code></td>
-<td>Exact string <code>0.2-draft</code>.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>kind</code></td>
-<td><code>ChangeAction</code> or <code>ChangeTask</code>.</td>
-<td>Required; selects the document kind.</td>
-</tr>
-<tr>
-<td><code>metadata</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>graphContext</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>intent</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>review</code></td>
-<td>Object.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>acceptanceCriteria</code></td>
-<td>Array of one or more non-empty strings.</td>
-<td>Required.</td>
-</tr>
-</tbody></table>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>schema</code> | string | Required; canonical YAML or JSON URL | Schema identifier for the change-control document. |
+| <code>version</code> | string | Required; constant <code>0.2-draft</code> | Version of the change-control contract. |
+| <code>kind</code> | string | Required; <code>ChangeAction</code> or <code>ChangeTask</code> | Selects the change-control object definition. |
+| <code>metadata</code> | object | Required; closed structure | Stable document identity and provenance. |
+| <code>graphContext</code> | object | Required; closed structure | Bounded Maysano source and graph revision. |
+| <code>intent</code> | object | Required; closed structure | Accountable business owner, reason, outcome, and policy profile. |
+| <code>review</code> | object | Required; closed structure | Required reviewer roles and optional approval expiry. |
+| <code>acceptanceCriteria</code> | array of string | Required; at least 1 item | Criteria used to judge the requested change. |</p>
 <h3 id='metadata'><code>metadata</code></h3>
 <p>Required: <code>id</code>, <code>title</code>, <code>requestedBy</code>, <code>createdAt</code>. <code>id</code> is a string of 3–128 characters matching <code>^[a-z0-9][a-z0-9-]*$</code>. <code>title</code> and <code>requestedBy</code> are non-empty strings; <code>createdAt</code> is an RFC 3339 date-time string. Optional <code>parentTestCase</code> and <code>parentChangeTask</code> use the same identifier rule.</p>
 <h3 id='graphcontext'><code>graphContext</code></h3>
@@ -464,39 +426,13 @@
 <h2 id='changeaction-specification'><code>ChangeAction.specification</code></h2>
 <p><code>ChangeAction</code> additionally requires <code>specification</code>.</p>
 
-<table><thead>
-<tr>
-<th>Field</th>
-<th>Type and allowed values</th>
-<th>Requirement</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>operation</code></td>
-<td><code>create</code> or <code>update</code>.</td>
-<td>Required. <code>update</code> requires <code>expectedVersion</code>.</td>
-</tr>
-<tr>
-<td><code>family</code></td>
-<td><code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code>.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>file</code></td>
-<td>Relative YAML filename ending <code>.yaml</code> or <code>.yml</code>; it cannot start with <code>/</code> or contain <code>..</code> traversal.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>sha256</code></td>
-<td>Exactly 64 hexadecimal characters.</td>
-<td>Required.</td>
-</tr>
-<tr>
-<td><code>expectedVersion</code></td>
-<td>Non-negative integer or non-empty string.</td>
-<td>Required only for <code>update</code>.</td>
-</tr>
-</tbody></table>
+<p>| Element name | Type | Options | Description |
+| --- | --- | --- |
+| <code>operation</code> | string | Required; <code>create</code> or <code>update</code> | Requested direct Maysano resource operation. <code>update</code> requires <code>expectedVersion</code>. |
+| <code>family</code> | string | Required; <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code> | Standard-family schema against which the referenced file is validated. |
+| <code>file</code> | string | Required; contained relative <code>.yaml</code> or <code>.yml</code> path | File location; it cannot start with <code>/</code> or contain <code>..</code> path traversal. |
+| <code>sha256</code> | string | Required; exactly 64 hexadecimal characters | SHA-256 checksum of the referenced file bytes. |
+| <code>expectedVersion</code> | integer or string | Required for <code>update</code>; integer is at least <code>0</code>, string has minimum length 1 | Version expected by Maysano before an update is accepted. |</p>
 
 <p>The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.</p>
 <h2 id='changetask-actions'><code>ChangeTask.actions</code></h2>
