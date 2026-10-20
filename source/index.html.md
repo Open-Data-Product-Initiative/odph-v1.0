@@ -10,20 +10,30 @@ ODPH v0.2 controls proposed changes around versioned business specifications. It
 
 <aside class="warning">This is pre-release material. Direct v0.2 workflows perform ordered, resource-level Maysano writes. They are not multi-action atomic and do not roll back automatically.</aside>
 
-| Document | Use it for | It contains |
-| --- | --- | --- |
-| [`KentaroAction`](kentaro-action.html) | One agreed direct Maysano API operation. | One reference to one ODPC, ODPS, or ODPG YAML file. |
-| [`KentaroChangeTask`](kentaro-change-task.html) | A later composite business change. | References to existing action files and their dependencies. |
+## KentaroAction
 
-## Documentation
+Use [`KentaroAction`](kentaro-action.html) for one agreed direct Maysano API operation. Each action references exactly one ODPC, ODPS, or ODPG YAML file.
+
+## KentaroChangeTask
+
+Use [`KentaroChangeTask`](kentaro-change-task.html) for a later composite business change. It references existing action files and their dependencies.
+
+## Guided workflow execution
+
+Follow the [`guided workflow`](guided-workflow.html) when an operator needs a controlled, ordered path through direct v0.2 actions.
+
+## Change Task execution
+
+See [`Change Task execution`](change-task-execution.html) for the future composite-task execution model and its v0.2 boundary.
+
+## Banking mortgage-renewal test chain
+
+Inspect the [`mortgage-renewal test chain`](mortgage-renewal.html) for the complete, individually validated action sequence and its composite task.
+
+## Supporting documentation
 
 - [Architecture and responsibilities](architecture.html)
-- [KentaroAction reference](kentaro-action.html)
-- [KentaroChangeTask reference](kentaro-change-task.html)
 - [Specification artefacts: ODPC, ODPS, ODPG](specification-artefacts.html)
-- [Guided workflow execution](guided-workflow.html)
-- [Change Task execution](change-task-execution.html)
-- [Banking mortgage-renewal test chain](mortgage-renewal.html)
 - [Schema reference](schema-reference.html)
 - [Validation and runtime checks](validation.html)
 - [Roadmap](roadmap.html)
