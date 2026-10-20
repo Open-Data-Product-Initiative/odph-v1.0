@@ -352,7 +352,7 @@
               </ul>
           </li>
           <li>
-            <a href="#business-level-harness" class="toc-h1 toc-link" data-title="Business-level harness">Business-level harness</a>
+            <a href="#business-need" class="toc-h1 toc-link" data-title="Business Need">Business Need</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#common-object-contract" class="toc-h2 toc-link" data-title="Common object contract">Common object contract</a>
@@ -375,10 +375,10 @@
               </ul>
           </li>
           <li>
-            <a href="#execution" class="toc-h1 toc-link" data-title="Execution">Execution</a>
+            <a href="#actions" class="toc-h1 toc-link" data-title="Actions">Actions</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#executionpackage" class="toc-h2 toc-link" data-title="ExecutionPackage">ExecutionPackage</a>
+                    <a href="#executionpackage-optional" class="toc-h2 toc-link" data-title="ExecutionPackage (optional)">ExecutionPackage (optional)</a>
                   </li>
                   <li>
                     <a href="#executionrequest" class="toc-h2 toc-link" data-title="ExecutionRequest">ExecutionRequest</a>
@@ -386,7 +386,7 @@
               </ul>
           </li>
           <li>
-            <a href="#evidence-and-assurance" class="toc-h1 toc-link" data-title="Evidence and assurance">Evidence and assurance</a>
+            <a href="#evidence" class="toc-h1 toc-link" data-title="Evidence">Evidence</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#evidenceevent" class="toc-h2 toc-link" data-title="EvidenceEvent">EvidenceEvent</a>
@@ -448,187 +448,119 @@
 
 <aside class="warning">This is pre-release material. Direct v0.2 workflows perform ordered, resource-level Maysano writes. They are not multi-action atomic and do not roll back automatically.</aside>
 <h1 id='harness-package-skeleton'>Harness package skeleton</h1><h2 id='how-the-top-level-objects-are-combined'>How the top-level objects are combined</h2>
-<p>A Business Harness package is a reviewed delivery bundle of independently valid top-level ODPH objects. The skeleton below is intentionally incomplete: it shows the composition and reference chain before the specification defines each object in detail. <code>package</code> is an authoring and delivery view, not a ninth schema kind; each object remains a separately validated top-level YAML document. Examples use block-style YAML so every semantic group, reference, and list has a visible indentation level.</p>
+<p>A Business Harness package is a reader view of one governed business change. It groups collections of independently valid peer top-level objects by the question they answer: <strong>why</strong>, <strong>how</strong>, or <strong>what proves the result</strong>. The group-level <code>metadata</code> explains the group; it does not create a ninth schema kind, grant authority, or replace the contained objects.</p>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">package</span><span class="pi">:</span>
-  <span class="na">metadata</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">service-change-harness</span>
-    <span class="na">name</span><span class="pi">:</span>
-      <span class="na">en</span><span class="pi">:</span> <span class="s">Reviewed service change</span>
-    <span class="na">description</span><span class="pi">:</span>
-      <span class="na">en</span><span class="pi">:</span> <span class="s">Business Harness package for the reviewed service change.</span>
+  <span class="na">businessNeed</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">answers</span><span class="pi">:</span> <span class="s">Why is this change needed, permitted, and bounded?</span>
+      <span class="na">decision</span><span class="pi">:</span> <span class="s">Reserve contact-centre capacity before eligible customers reach their service-term end date.</span>
+      <span class="na">desiredOutcome</span><span class="pi">:</span> <span class="s">A reviewed capacity plan and the supporting data products are accepted for use in weekly planning.</span>
+    <span class="na">contextPackages</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">ContextPackage</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">Current graph revision, forecast demand, capacity data quality, and unresolved planning assumptions.</span>
+    <span class="na">mandates</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">Mandate</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">Durable authority for customer-service capacity planning; excludes customer contact and operational dispatch.</span>
+    <span class="na">workEnvelopes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">WorkEnvelope</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">A reviewed weekly capacity plan with demand assumptions, review slots, owner, expiry, and acceptance criteria.</span>
 
-  <span class="na">businessHarness</span><span class="pi">:</span>
-    <span class="na">contextPackage</span><span class="pi">:</span>
-      <span class="na">kind</span><span class="pi">:</span> <span class="s">ContextPackage</span>
-      <span class="na">metadata</span><span class="pi">:</span>
-        <span class="na">id</span><span class="pi">:</span> <span class="s">context-service-change</span>
-        <span class="na">name</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Current service-change context</span>
-        <span class="na">description</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Bounded change context</span>
-        <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-      <span class="na">context</span><span class="pi">:</span>
-        <span class="na">retrievalScope</span><span class="pi">:</span> <span class="c1"># bounded source-specific context</span>
-        <span class="na">freshness</span><span class="pi">:</span> <span class="s">fresh</span>
-        <span class="na">conflicts</span><span class="pi">:</span> <span class="pi">[]</span>
-
-    <span class="na">mandate</span><span class="pi">:</span>
-      <span class="na">kind</span><span class="pi">:</span> <span class="s">Mandate</span>
-      <span class="na">metadata</span><span class="pi">:</span>
-        <span class="na">id</span><span class="pi">:</span> <span class="s">mandate-service-change</span>
-        <span class="na">name</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Service-change mandate</span>
-        <span class="na">description</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Durable change boundary</span>
-        <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-      <span class="na">mandate</span><span class="pi">:</span>
-        <span class="na">businessArea</span><span class="pi">:</span> <span class="s">Service planning</span>
-        <span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Service</span>
-      <span class="na">boundary</span><span class="pi">:</span> <span class="c1"># local permissions and limits</span>
-
-    <span class="na">workEnvelope</span><span class="pi">:</span>
-      <span class="na">kind</span><span class="pi">:</span> <span class="s">WorkEnvelope</span>
-      <span class="na">metadata</span><span class="pi">:</span>
-        <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
-        <span class="na">name</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Reviewed service-change assignment</span>
-        <span class="na">description</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Bounded change assignment</span>
-        <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-      <span class="na">assignment</span><span class="pi">:</span>
-        <span class="na">mandateReference</span><span class="pi">:</span>
-          <span class="na">id</span><span class="pi">:</span> <span class="s">mandate-service-change</span>
-          <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-        <span class="na">requestedResult</span><span class="pi">:</span> <span class="c1"># reviewed deliverable</span>
-      <span class="na">boundary</span><span class="pi">:</span> <span class="c1"># narrowed local permissions and limits</span>
-
-  <span class="na">execution</span><span class="pi">:</span>
-    <span class="na">executionPackage</span><span class="pi">:</span>
-      <span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionPackage</span>
-      <span class="na">metadata</span><span class="pi">:</span>
-        <span class="na">id</span><span class="pi">:</span> <span class="s">package-service-change</span>
-        <span class="na">name</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Service-change execution plan</span>
-        <span class="na">description</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Planned service-change work</span>
-        <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-      <span class="na">execution</span><span class="pi">:</span>
-        <span class="na">workEnvelopeReference</span><span class="pi">:</span>
-          <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
-          <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-      <span class="na">plan</span><span class="pi">:</span>
-        <span class="na">plannedSteps</span><span class="pi">:</span> <span class="c1"># ordered steps</span>
-        <span class="na">expectedOutputs</span><span class="pi">:</span> <span class="c1"># expected results</span>
-        <span class="na">acceptanceCriteria</span><span class="pi">:</span> <span class="c1"># review conditions</span>
-
-    <span class="na">executionRequest</span><span class="pi">:</span>
-      <span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionRequest</span>
-      <span class="na">metadata</span><span class="pi">:</span>
-        <span class="na">id</span><span class="pi">:</span> <span class="s">request-service-change</span>
-        <span class="na">name</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Submit reviewed service specification</span>
-        <span class="na">description</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Proposed external submission</span>
-        <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-      <span class="na">execution</span><span class="pi">:</span>
-        <span class="na">executionPackageReference</span><span class="pi">:</span>
-          <span class="na">id</span><span class="pi">:</span> <span class="s">package-service-change</span>
-          <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-        <span class="na">revocationPolicyReference</span><span class="pi">:</span> <span class="c1"># policy ID and version</span>
-      <span class="na">request</span><span class="pi">:</span>
-        <span class="na">action</span><span class="pi">:</span> <span class="c1"># explicit proposed action</span>
-        <span class="na">approval</span><span class="pi">:</span>
-          <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
-          <span class="na">expiresAt</span><span class="pi">:</span> <span class="c1"># approval expiry</span>
+  <span class="na">actions</span><span class="pi">:</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">answers</span><span class="pi">:</span> <span class="s">How will the agreed change be carried out?</span>
+      <span class="na">rule</span><span class="pi">:</span> <span class="s">No external write occurs until the proposed action is approved.</span>
+    <span class="na">executionRequests</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionRequest</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">Submit the reviewed capacity-planning change to Maysano.</span>
+    <span class="na">changeTasks</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">ChangeTask</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">The dependency-ordered set of specification changes required for the capacity plan.</span>
+    <span class="na">changeActions</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">ChangeAction</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">One checksum-verified create or update of an ODPC, ODPS, or ODPG file.</span>
+    <span class="na">executionPackages</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionPackage</span>
+        <span class="na">optional</span><span class="pi">:</span> <span class="no">true</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">Use only when a complex action plan needs separate review; otherwise the WorkEnvelope and ChangeTask are sufficient.</span>
 
   <span class="na">evidence</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">EvidenceEvent</span>
-      <span class="na">metadata</span><span class="pi">:</span>
-        <span class="na">id</span><span class="pi">:</span> <span class="s">evidence-context-retrieved</span>
-        <span class="na">name</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Service-change context retrieved</span>
-        <span class="na">description</span><span class="pi">:</span>
-          <span class="na">en</span><span class="pi">:</span> <span class="s">Recorded context retrieval</span>
-        <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-      <span class="na">evidence</span><span class="pi">:</span>
-        <span class="na">workEnvelopeReference</span><span class="pi">:</span>
-          <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
-          <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-        <span class="na">eventType</span><span class="pi">:</span> <span class="s">context_retrieved</span>
-        <span class="na">payload</span><span class="pi">:</span> <span class="c1"># event-specific evidence</span>
-
-  <span class="na">changeControl</span><span class="pi">:</span>
-    <span class="na">actions</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">ChangeAction</span>
-        <span class="na">specification</span><span class="pi">:</span>
-          <span class="na">operation</span><span class="pi">:</span> <span class="s">create</span>
-          <span class="na">family</span><span class="pi">:</span> <span class="s">ODPC</span>
-          <span class="na">file</span><span class="pi">:</span> <span class="s">specifications/odpc/service-objective-v1.yaml</span>
-          <span class="na">sha256</span><span class="pi">:</span> <span class="c1"># source file checksum</span>
-    <span class="na">task</span><span class="pi">:</span>
-      <span class="na">kind</span><span class="pi">:</span> <span class="s">ChangeTask</span>
-      <span class="na">actions</span><span class="pi">:</span>
-        <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">create-service-objective</span>
-          <span class="na">actionFile</span><span class="pi">:</span> <span class="s">actions/create-service-objective.yaml</span>
+    <span class="na">metadata</span><span class="pi">:</span>
+      <span class="na">answers</span><span class="pi">:</span> <span class="s">What proves what was considered, approved, done, and returned?</span>
+    <span class="na">evidenceEvents</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="na">kind</span><span class="pi">:</span> <span class="s">EvidenceEvent</span>
+        <span class="na">content</span><span class="pi">:</span> <span class="s">Context revision and retrieval time, decisions, approvals, submitted files, returned Maysano versions, and reconciliation outcome.</span>
 </code></pre></div><h1 id='model-map'>Model map</h1><h2 id='how-the-top-level-objects-connect'>How the top-level objects connect</h2>
-<p>The six aspects are top-level object kinds, not six peer fields copied into every YAML document. They keep a change request from becoming an unbounded task list. <code>ChangeAction</code> and <code>ChangeTask</code> are peer top-level object kinds: the action declares one direct specification change, while the task packages a dependency-ordered composite change. Maysano remains the authority for accepted records, approvals, applied changes, and audit evidence; ODPH prepares, validates, presents, submits, and links the resulting evidence.</p>
-<div class="highlight"><pre class="highlight plaintext"><code>bounded source context
-        |
-ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; ExecutionRequest
-                                                               |
-                                EvidenceBundle &lt;- receipts, outcomes, reconciliation
+<p>The three groups are package metadata, not new schema kinds. Their contents remain independently valid top-level objects: <strong>Business Need</strong> establishes why work is permitted; <strong>Actions</strong> defines how a proposed change is carried out; and <strong>Evidence</strong> records what proves the result. Maysano remains the authority for accepted records, approvals, applied changes, and audit evidence; ODPH prepares, validates, presents, submits, and links the resulting evidence.</p>
+<div class="highlight"><pre class="highlight plaintext"><code>Business Need                         Actions                       Evidence
+-------------                         -------                       --------
+ContextPackage -&gt; Mandate             ExecutionRequest             EvidenceEvent[]
+                  -&gt; WorkEnvelope     ChangeTask -&gt; ChangeAction[]       ^
+                                     (ExecutionPackage: optional)        |
+                                                                    proof of all groups
 </code></pre></div>
 <table>
 <thead>
 <tr>
-<th>Aspect</th>
+<th>Group</th>
+<th>Object kind</th>
 <th>Question it answers</th>
-<th>v0.2 expression</th>
 <th>It must not become</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>Business Need</td>
 <td><code>ContextPackage</code></td>
 <td>What was known, from which versions, and how fresh was it?</td>
-<td>Bounded Maysano graph revision, required object versions, source provenance, and reported conflicts.</td>
 <td>A shadow copy of the portfolio.</td>
 </tr>
 <tr>
+<td>Business Need</td>
 <td><code>Mandate</code></td>
 <td>What is the durable business boundary for this area?</td>
-<td>The accountable business owner and applicable policy profile, backed by Maysano approval and policy records.</td>
 <td>A task-level permission or an implicit tool grant.</td>
 </tr>
 <tr>
+<td>Business Need</td>
 <td><code>WorkEnvelope</code></td>
 <td>What narrowly bounded assignment is permitted now?</td>
-<td>Requested result, scope, exclusions, review roles, expiry, and acceptance conditions for this change.</td>
 <td>A way to expand the mandate.</td>
 </tr>
 <tr>
-<td><code>ExecutionPackage</code></td>
-<td>What coordinated plan will meet that assignment?</td>
-<td>A plan with steps, dependencies, expected outcomes, and acceptance criteria.</td>
+<td>Actions</td>
+<td><code>ExecutionPackage</code> (optional)</td>
+<td>Does a complex action plan need separate review?</td>
 <td>Independent authority or an autonomous runbook.</td>
 </tr>
 <tr>
+<td>Actions</td>
 <td><code>ExecutionRequest</code></td>
 <td>Which single external write is proposed?</td>
-<td>An explicit proposal bound to its plan and revocation policy.</td>
 <td>An implicit command or embedded business content.</td>
 </tr>
 <tr>
-<td><code>EvidenceBundle</code></td>
+<td>Actions</td>
+<td><code>ChangeTask</code></td>
+<td>How are related specification changes ordered and reviewed?</td>
+<td>The business rationale or a claim of all-or-nothing execution.</td>
+</tr>
+<tr>
+<td>Actions</td>
+<td><code>ChangeAction</code></td>
+<td>Which one versioned specification file is created or updated?</td>
+<td>An embedded business object or a generic relationship command.</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td><code>EvidenceEvent</code></td>
 <td>What proves what was considered, decided, attempted, and returned?</td>
-<td>Validation results, approvals, submitted-file identifiers, Maysano identities and versions, outcomes, and reconciliation state.</td>
 <td>A claim of immutable retention or a second system of record.</td>
 </tr>
 </tbody>
 </table>
 
-<p>The six aspects have a strict direction: context informs the boundary; the mandate limits the assignment; the assignment limits the plan; the plan limits each proposed write; and evidence records the result. A task that lacks any of those links is incomplete even if its YAML is structurally valid.</p>
-<h1 id='business-level-harness'>Business-level harness</h1><h3 id='common-object-contract'>Common object contract</h3>
+<p>The package-level order is deliberate: Business Need explains <strong>why</strong>, Actions explains <strong>how</strong>, and Evidence explains <strong>what proves the result</strong>. <code>ExecutionPackage</code> is optional because a <code>WorkEnvelope</code> already defines the business assignment and a <code>ChangeTask</code> already orders the delivery work.</p>
+<h1 id='business-need'>Business Need</h1><h3 id='common-object-contract'>Common object contract</h3>
 <p>The six governed-work objects—<code>ContextPackage</code>, <code>Mandate</code>, <code>WorkEnvelope</code>, <code>ExecutionPackage</code>, <code>ExecutionRequest</code>, and <code>EvidenceEvent</code>—are composed with the <code>CommonObject</code> definition. Identity, human-readable purpose, and provenance are grouped rather than flattened into every object.</p>
 
 <table>
@@ -844,14 +776,14 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 </table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">ContextPackage</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">context-service-change</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-planning-context</span>
   <span class="na">name</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Current service-change context</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Capacity-planning evidence</span>
   <span class="na">description</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Bounded Maysano graph context used to prepare the service change.</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Bounded evidence used to decide whether customer-service capacity should be reserved before service terms end.</span>
   <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-  <span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
+  <span class="na">actor</span><span class="pi">:</span> <span class="s">capacity-planning-team</span>
 <span class="na">provenance</span><span class="pi">:</span>
   <span class="na">sourceReferences</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">maysano:graph</span>
@@ -861,10 +793,13 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 <span class="na">context</span><span class="pi">:</span>
   <span class="na">retrievalScope</span><span class="pi">:</span>
     <span class="na">graphRevision</span><span class="pi">:</span> <span class="m">4</span>
-    <span class="na">objectiveIds</span><span class="pi">:</span>
-      <span class="pi">-</span> <span class="s">service-objective</span>
+    <span class="na">useCaseId</span><span class="pi">:</span> <span class="s">plan-service-delivery</span>
+    <span class="na">dataProductIds</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">primary-data-product</span>
+      <span class="pi">-</span> <span class="s">context-data-product</span>
   <span class="na">freshness</span><span class="pi">:</span> <span class="s">fresh</span>
-  <span class="na">conflicts</span><span class="pi">:</span> <span class="pi">[]</span>
+  <span class="na">conflicts</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="s">The demand forecast is fresh, but its capacity assumptions still require business-owner review.</span>
 </code></pre></div><h2 id='mandate'>Mandate</h2>
 <p>A <code>Mandate</code> is the durable business boundary for an area of work. It names the accountable owner, permitted scope, tools, data access, review rights, authority level, and expiry. ODPH does not mint authority: a local policy match never grants connector, credential, data-access, or external-write rights.</p>
 
@@ -918,30 +853,30 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 </table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">Mandate</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">mandate-service-change</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">customer-capacity-mandate</span>
   <span class="na">name</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Service-change mandate</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Customer-service capacity planning</span>
   <span class="na">description</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Durable business boundary for service planning changes.</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Authority to prepare and review capacity-planning changes; it does not authorise customer contact or operational dispatch.</span>
   <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-  <span class="na">actor</span><span class="pi">:</span> <span class="s">service-owner</span>
+  <span class="na">actor</span><span class="pi">:</span> <span class="s">head-of-customer-service</span>
 <span class="na">provenance</span><span class="pi">:</span>
   <span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
   <span class="na">relationshipReferences</span><span class="pi">:</span> <span class="pi">[]</span>
 <span class="na">mandate</span><span class="pi">:</span>
-  <span class="na">businessArea</span><span class="pi">:</span> <span class="s">Service planning</span>
-  <span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Service</span>
+  <span class="na">businessArea</span><span class="pi">:</span> <span class="s">Customer service capacity planning</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Customer Service</span>
   <span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2027-01-01T00:00:00Z"</span>
 <span class="na">boundary</span><span class="pi">:</span>
   <span class="na">scope</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">service-change</span>
+    <span class="pi">-</span> <span class="s">customer-capacity-planning</span>
   <span class="na">tools</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">maysano.change-proposal</span>
   <span class="na">dataAccess</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">service-planning-context</span>
+    <span class="pi">-</span> <span class="s">capacity-planning-context</span>
   <span class="na">approvalRights</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">reviewed-change-proposal</span>
+    <span class="pi">-</span> <span class="s">reviewed-capacity-plan</span>
   <span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
 </code></pre></div><h2 id='workenvelope'>WorkEnvelope</h2>
 <p>A <code>WorkEnvelope</code> narrows one mandate into one assignment. It states the requested result, accountable owner, allowed subset, and expiry. It may narrow a mandate but must never broaden it; relationship validation must reject a missing mandate version or an expanded boundary.</p>
@@ -1002,38 +937,38 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 </table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">WorkEnvelope</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-assignment</span>
   <span class="na">name</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Reviewed service-change assignment</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Capacity plan before service terms end</span>
   <span class="na">description</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Bounded assignment to prepare and review the service change.</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Assignment to prepare a reviewed weekly capacity plan for customers likely to require a service change.</span>
   <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-  <span class="na">actor</span><span class="pi">:</span> <span class="s">service-owner</span>
+  <span class="na">actor</span><span class="pi">:</span> <span class="s">head-of-customer-service</span>
 <span class="na">provenance</span><span class="pi">:</span>
   <span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
   <span class="na">relationshipReferences</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">mandate-service-change</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">customer-capacity-mandate</span>
       <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
 <span class="na">assignment</span><span class="pi">:</span>
   <span class="na">mandateReference</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">mandate-service-change</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">customer-capacity-mandate</span>
     <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
-  <span class="na">requestedResult</span><span class="pi">:</span> <span class="s">Reviewed service change proposal</span>
-  <span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Service</span>
+  <span class="na">requestedResult</span><span class="pi">:</span> <span class="s">Reviewed weekly capacity plan, including demand assumptions, available review slots, and unresolved conflicts.</span>
+  <span class="na">owner</span><span class="pi">:</span> <span class="s">Head of Customer Service</span>
   <span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span>
 <span class="na">boundary</span><span class="pi">:</span>
   <span class="na">scope</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">service-change</span>
+    <span class="pi">-</span> <span class="s">customer-capacity-planning</span>
   <span class="na">tools</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">maysano.change-proposal</span>
   <span class="na">dataAccess</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">service-planning-context</span>
+    <span class="pi">-</span> <span class="s">capacity-planning-context</span>
   <span class="na">approvalRights</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">reviewed-change-proposal</span>
+    <span class="pi">-</span> <span class="s">reviewed-capacity-plan</span>
   <span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
-</code></pre></div><h1 id='execution'>Execution</h1><h2 id='executionpackage'>ExecutionPackage</h2>
-<p>An <code>ExecutionPackage</code> is the non-authoritative plan under one work envelope. It describes steps, dependencies, expected outputs, timing, and acceptance criteria. It can be associated with a <code>ChangeTask</code>, but neither object replaces the other: the package governs plan scope; the task governs a composite change.</p>
+</code></pre></div><h1 id='actions'>Actions</h1><h2 id='executionpackage-optional'>ExecutionPackage (optional)</h2>
+<p>An <code>ExecutionPackage</code> is an optional, separately reviewable action plan under one work envelope. Use it when the planned steps, dependencies, outputs, timing, and criteria need their own review. Do not create it merely to repeat a <code>WorkEnvelope</code> or <code>ChangeTask</code>.</p>
 
 <table>
 <thead>
@@ -1049,7 +984,7 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 <td><code>kind</code></td>
 <td>string</td>
 <td>Required; constant <code>ExecutionPackage</code></td>
-<td>Discriminator for a non-authoritative plan. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
+<td>Discriminator for an optional, separately reviewable action plan. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
 </tr>
 <tr>
 <td><code>execution</code></td>
@@ -1109,47 +1044,49 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 </table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionPackage</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">package-service-change</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-execution</span>
   <span class="na">name</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Service-change execution plan</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Capacity-plan preparation</span>
   <span class="na">description</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Planned work required to prepare the reviewed service change.</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Reviewable preparation of a weekly capacity plan and the supporting specification change.</span>
   <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-  <span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
+  <span class="na">actor</span><span class="pi">:</span> <span class="s">capacity-planning-team</span>
 <span class="na">provenance</span><span class="pi">:</span>
   <span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
   <span class="na">relationshipReferences</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-assignment</span>
       <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
 <span class="na">execution</span><span class="pi">:</span>
   <span class="na">workEnvelopeReference</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-assignment</span>
     <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
 <span class="na">boundary</span><span class="pi">:</span>
   <span class="na">scope</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">service-change</span>
+    <span class="pi">-</span> <span class="s">customer-capacity-planning</span>
   <span class="na">tools</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="s">maysano.change-proposal</span>
   <span class="na">dataAccess</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">service-planning-context</span>
+    <span class="pi">-</span> <span class="s">capacity-planning-context</span>
   <span class="na">approvalRights</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">reviewed-change-proposal</span>
+    <span class="pi">-</span> <span class="s">reviewed-capacity-plan</span>
   <span class="na">authorityLevel</span><span class="pi">:</span> <span class="m">1</span>
 <span class="na">plan</span><span class="pi">:</span>
   <span class="na">plannedSteps</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">Validate context</span>
-    <span class="pi">-</span> <span class="s">Prepare the proposed specification</span>
-    <span class="pi">-</span> <span class="s">Request review</span>
+    <span class="pi">-</span> <span class="s">Confirm the demand forecast, graph revision, and unresolved capacity assumptions.</span>
+    <span class="pi">-</span> <span class="s">Prepare the capacity-planning use case and supporting data-product specifications.</span>
+    <span class="pi">-</span> <span class="s">Request business-owner, data-product-owner, and graph-steward review.</span>
   <span class="na">expectedOutputs</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">Reviewed service change proposal</span>
+    <span class="pi">-</span> <span class="s">Reviewed weekly capacity plan</span>
+    <span class="pi">-</span> <span class="s">Dependency-ordered ChangeTask with validated specification files</span>
   <span class="na">dependencies</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">Current Maysano graph</span>
-  <span class="na">timing</span><span class="pi">:</span> <span class="s">Before the service review</span>
+    <span class="pi">-</span> <span class="s">Current Maysano graph revision</span>
+    <span class="pi">-</span> <span class="s">Approved forecast and capacity data sources</span>
+  <span class="na">timing</span><span class="pi">:</span> <span class="s">Before the next weekly contact-centre planning cycle</span>
   <span class="na">acceptanceCriteria</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="s">Names version expectations and unresolved conflicts</span>
+    <span class="pi">-</span> <span class="s">States the forecast source, capacity assumptions, review owners, and every unresolved conflict.</span>
 </code></pre></div><h2 id='executionrequest'>ExecutionRequest</h2>
-<p>An <code>ExecutionRequest</code> is one explicit proposed external action, never an implicit command. It points to its plan and the revocation policy that protects its authority chain. It can be packaged with a <code>ChangeAction</code> for one Maysano resource write. Passing local validation is not permission to dispatch automatically.</p>
+<p>An <code>ExecutionRequest</code> is one explicit proposed external action, never an implicit command. It binds directly to the <code>WorkEnvelope</code> that permits the action and to the revocation policy that protects that authority chain. It may additionally cite an <code>ExecutionPackage</code> when a complex action plan received separate review. Passing local validation is not permission to dispatch automatically.</p>
 
 <table>
 <thead>
@@ -1171,13 +1108,19 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 <td><code>execution</code></td>
 <td>object</td>
 <td>Required; closed structure</td>
-<td>Groups the plan and revocation-policy references for this request.</td>
+<td>Groups the required work-envelope and revocation-policy references, with an optional separately reviewed plan.</td>
+</tr>
+<tr>
+<td><code>execution.workEnvelopeReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the <code>WorkEnvelope</code> that permits the proposed action.</td>
 </tr>
 <tr>
 <td><code>execution.executionPackageReference</code></td>
 <td><code>Reference</code> object</td>
-<td>Required</td>
-<td>Exact ID and version of the <code>ExecutionPackage</code> that contains the request.</td>
+<td>Optional</td>
+<td>Exact ID and version of a separately reviewed <code>ExecutionPackage</code>, used only for complex action delivery.</td>
 </tr>
 <tr>
 <td><code>execution.revocationPolicyReference</code></td>
@@ -1243,37 +1186,37 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 </table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">ExecutionRequest</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">request-service-change</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">submit-capacity-plan</span>
   <span class="na">name</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Submit reviewed service specification</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Submit reviewed capacity-planning change</span>
   <span class="na">description</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Explicit request to submit the reviewed service change.</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Explicit request to submit the reviewed capacity-planning ChangeTask to Maysano.</span>
   <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-  <span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
+  <span class="na">actor</span><span class="pi">:</span> <span class="s">capacity-planning-team</span>
 <span class="na">provenance</span><span class="pi">:</span>
   <span class="na">sourceReferences</span><span class="pi">:</span> <span class="pi">[]</span>
   <span class="na">relationshipReferences</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">package-service-change</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-assignment</span>
       <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
 <span class="na">execution</span><span class="pi">:</span>
-  <span class="na">executionPackageReference</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">package-service-change</span>
+  <span class="na">workEnvelopeReference</span><span class="pi">:</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-assignment</span>
     <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">revocationPolicyReference</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">policy-service-change</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-change-policy</span>
     <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
 <span class="na">request</span><span class="pi">:</span>
-  <span class="na">action</span><span class="pi">:</span> <span class="s">submit reviewed service specification</span>
+  <span class="na">action</span><span class="pi">:</span> <span class="s">submit reviewed capacity-planning ChangeTask</span>
   <span class="na">tool</span><span class="pi">:</span> <span class="s">maysano.change-proposal</span>
-  <span class="na">target</span><span class="pi">:</span> <span class="s">service planning graph</span>
+  <span class="na">target</span><span class="pi">:</span> <span class="s">Maysano customer-service capacity-planning graph</span>
   <span class="na">requestedAuthority</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">approval</span><span class="pi">:</span>
     <span class="na">required</span><span class="pi">:</span> <span class="no">true</span>
     <span class="na">expiresAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-12-01T00:00:00Z"</span>
   <span class="na">redactedParameters</span><span class="pi">:</span>
-    <span class="na">contextReference</span><span class="pi">:</span> <span class="s">context-service-change</span>
-</code></pre></div><h1 id='evidence-and-assurance'>Evidence and assurance</h1><h2 id='evidenceevent'>EvidenceEvent</h2>
+    <span class="na">contextReference</span><span class="pi">:</span> <span class="s">capacity-planning-context</span>
+</code></pre></div><h1 id='evidence'>Evidence</h1><h2 id='evidenceevent'>EvidenceEvent</h2>
 <p>An <code>EvidenceEvent</code> is the durable atomic record; an <code>EvidenceBundle</code> is an exportable grouping of its events. The event links a work envelope to attributable proof of context retrieval, validation, review, submission, returned state, failure, correction, or reconciliation. A local export is not a claim of immutable platform retention.</p>
 
 <table>
@@ -1326,31 +1269,31 @@ ContextPackage -&gt; Mandate -&gt; WorkEnvelope -&gt; ExecutionPackage -&gt; Exe
 </table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">kind</span><span class="pi">:</span> <span class="s">EvidenceEvent</span>
 <span class="na">metadata</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">evidence-context-retrieved</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-context-retrieved</span>
   <span class="na">name</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Service-change context retrieved</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Capacity-planning context retrieved</span>
   <span class="na">description</span><span class="pi">:</span>
-    <span class="na">en</span><span class="pi">:</span> <span class="s">Evidence that the bounded Maysano context was retrieved.</span>
+    <span class="na">en</span><span class="pi">:</span> <span class="s">Evidence that the current planning graph and capacity sources were retrieved before the capacity decision.</span>
   <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">createdAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
-  <span class="na">actor</span><span class="pi">:</span> <span class="s">change-team</span>
+  <span class="na">actor</span><span class="pi">:</span> <span class="s">capacity-planning-team</span>
 <span class="na">provenance</span><span class="pi">:</span>
   <span class="na">sourceReferences</span><span class="pi">:</span>
     <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">maysano:graph</span>
       <span class="na">version</span><span class="pi">:</span> <span class="m">4</span>
       <span class="na">retrievedAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
   <span class="na">relationshipReferences</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
+    <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-assignment</span>
       <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
 <span class="na">evidence</span><span class="pi">:</span>
   <span class="na">occurredAt</span><span class="pi">:</span> <span class="s2">"</span><span class="s">2026-10-20T00:00:00Z"</span>
   <span class="na">workEnvelopeReference</span><span class="pi">:</span>
-    <span class="na">id</span><span class="pi">:</span> <span class="s">envelope-service-change</span>
+    <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-plan-assignment</span>
     <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">eventType</span><span class="pi">:</span> <span class="s">context_retrieved</span>
   <span class="na">payload</span><span class="pi">:</span>
     <span class="na">contextPackageReference</span><span class="pi">:</span>
-      <span class="na">id</span><span class="pi">:</span> <span class="s">context-service-change</span>
+      <span class="na">id</span><span class="pi">:</span> <span class="s">capacity-planning-context</span>
       <span class="na">version</span><span class="pi">:</span> <span class="m">1</span>
 </code></pre></div><h1 id='system-boundaries'>System boundaries</h1><h2 id='architecture-and-responsibilities'>Architecture and responsibilities</h2>
 <p>Maysano is the authoritative record for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded Maysano context; creates and validates specification files; presents a proposed change to the business owner; submits agreed files to Maysano; and records evidence. ODPH is not a second record store.</p>

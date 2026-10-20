@@ -1,27 +1,27 @@
 kind: Mandate
 metadata:
-  id: mandate-service-change
+  id: customer-capacity-mandate
   name:
-    en: Service-change mandate
+    en: Customer-service capacity planning
   description:
-    en: Durable business boundary for service planning changes.
+    en: Authority to prepare and review capacity-planning changes; it does not authorise customer contact or operational dispatch.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
-  actor: service-owner
+  actor: head-of-customer-service
 provenance:
   sourceReferences: []
   relationshipReferences: []
 mandate:
-  businessArea: Service planning
-  owner: Head of Service
+  businessArea: Customer service capacity planning
+  owner: Head of Customer Service
   expiresAt: '2027-01-01T00:00:00Z'
 boundary:
   scope:
-    - service-change
+    - customer-capacity-planning
   tools:
     - maysano.change-proposal
   dataAccess:
-    - service-planning-context
+    - capacity-planning-context
   approvalRights:
-    - reviewed-change-proposal
+    - reviewed-capacity-plan
   authorityLevel: 1

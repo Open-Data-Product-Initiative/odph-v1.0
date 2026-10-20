@@ -1,32 +1,32 @@
 kind: ExecutionRequest
 metadata:
-  id: request-service-change
+  id: submit-capacity-plan
   name:
-    en: Submit reviewed service specification
+    en: Submit reviewed capacity-planning change
   description:
-    en: Explicit request to submit the reviewed service change.
+    en: Explicit request to submit the reviewed capacity-planning ChangeTask to Maysano.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences: []
   relationshipReferences:
-    - id: package-service-change
+    - id: capacity-plan-assignment
       version: 1
 execution:
-  executionPackageReference:
-    id: package-service-change
+  workEnvelopeReference:
+    id: capacity-plan-assignment
     version: 1
   revocationPolicyReference:
-    id: policy-service-change
+    id: capacity-change-policy
     version: 1
 request:
-  action: submit reviewed service specification
+  action: submit reviewed capacity-planning ChangeTask
   tool: maysano.change-proposal
-  target: service planning graph
+  target: Maysano customer-service capacity-planning graph
   requestedAuthority: 1
   approval:
     required: true
     expiresAt: '2026-12-01T00:00:00Z'
   redactedParameters:
-    contextReference: context-service-change
+    contextReference: capacity-planning-context

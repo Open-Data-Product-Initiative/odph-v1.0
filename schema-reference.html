@@ -357,6 +357,7 @@
 <table>
 <thead>
 <tr>
+<th>Group</th>
 <th>Object kind</th>
 <th>Required structure</th>
 <th>Detailed field table and example</th>
@@ -364,41 +365,49 @@
 </thead>
 <tbody>
 <tr>
+<td>Business Need</td>
 <td><code>ContextPackage</code></td>
 <td>Common fields, <code>retrievalScope</code>, <code>freshness</code>, <code>conflicts</code>.</td>
 <td><a href="index.html#contextpackage">ContextPackage</a></td>
 </tr>
 <tr>
+<td>Business Need</td>
 <td><code>Mandate</code></td>
 <td>Common fields, durable boundary fields, business area, owner, expiry.</td>
 <td><a href="index.html#mandate">Mandate</a></td>
 </tr>
 <tr>
+<td>Business Need</td>
 <td><code>WorkEnvelope</code></td>
 <td>Common fields, mandate reference, narrowed boundary, result, owner, expiry.</td>
 <td><a href="index.html#workenvelope">WorkEnvelope</a></td>
 </tr>
 <tr>
-<td><code>ExecutionPackage</code></td>
-<td>Common fields, envelope reference, boundary, plan, outputs, dependencies, timing, criteria.</td>
+<td>Actions</td>
+<td><code>ExecutionPackage</code> (optional)</td>
+<td>Common fields, envelope reference, boundary, plan, outputs, dependencies, timing, criteria. Use only when this plan needs separate review.</td>
 <td><a href="index.html#executionpackage">ExecutionPackage</a></td>
 </tr>
 <tr>
+<td>Actions</td>
 <td><code>ExecutionRequest</code></td>
-<td>Common fields, execution-package and revocation-policy references, proposed action and approval limit.</td>
+<td>Common fields, required work-envelope and revocation-policy references, optional execution-package reference, proposed action, and approval limit.</td>
 <td><a href="index.html#executionrequest">ExecutionRequest</a></td>
 </tr>
 <tr>
+<td>Evidence</td>
 <td><code>EvidenceEvent</code></td>
 <td>Common fields, event time, envelope reference, type, payload.</td>
 <td><a href="index.html#evidenceevent">EvidenceEvent</a></td>
 </tr>
 <tr>
+<td>Actions</td>
 <td><code>ChangeAction</code></td>
 <td>v0.2 change-control header, context, intent, one specification, review, criteria.</td>
 <td><a href="index.html#changeaction">ChangeAction</a></td>
 </tr>
 <tr>
+<td>Actions</td>
 <td><code>ChangeTask</code></td>
 <td>v0.2 change-control header, context, intent, action references, review, criteria.</td>
 <td><a href="index.html#changetask">ChangeTask</a></td>
