@@ -11,9 +11,9 @@ ODPH v0.2 governs bounded change work around versioned business specifications. 
 
 <aside class="warning">This is pre-release material. Direct v0.2 workflows perform ordered, resource-level Maysano writes. They are not multi-action atomic and do not roll back automatically.</aside>
 
-# The six aspects of governed change work
+# Model map
 
-## A task is only one part of the model
+## How the top-level objects connect
 
 The six aspects are top-level object kinds, not six peer fields copied into every YAML document. They keep a change request from becoming an unbounded task list. `ChangeAction` and `ChangeTask` are peer top-level object kinds: the action declares one direct specification change, while the task packages a dependency-ordered composite change. Maysano remains the authority for accepted records, approvals, applied changes, and audit evidence; ODPH prepares, validates, presents, submits, and links the resulting evidence.
 
@@ -36,7 +36,9 @@ ContextPackage -> Mandate -> WorkEnvelope -> ExecutionPackage -> ExecutionReques
 
 The six aspects have a strict direction: context informs the boundary; the mandate limits the assignment; the assignment limits the plan; the plan limits each proposed write; and evidence records the result. A task that lacks any of those links is incomplete even if its YAML is structurally valid.
 
-# ContextPackage
+# Business-level harness
+
+## ContextPackage
 
 A `ContextPackage` is a bounded observation, not a copied catalog. It identifies the retrieval scope, source IDs and versions, retrieval time, freshness, and observed conflicts. Every source observation is attributable to a version and retrieval time; stale or contradictory input must be made visible for human resolution.
 
@@ -63,7 +65,7 @@ freshness: fresh
 conflicts: []
 ```
 
-# Mandate
+## Mandate
 
 A `Mandate` is the durable business boundary for an area of work. It names the accountable owner, permitted scope, tools, data access, review rights, authority level, and expiry. ODPH does not mint authority: a local policy match never grants connector, credential, data-access, or external-write rights.
 
@@ -93,7 +95,7 @@ authorityLevel: 1
 expiresAt: "2027-01-01T00:00:00Z"
 ```
 
-# WorkEnvelope
+## WorkEnvelope
 
 A `WorkEnvelope` narrows one mandate into one assignment. It states the requested result, accountable owner, allowed subset, and expiry. It may narrow a mandate but must never broaden it; relationship validation must reject a missing mandate version or an expanded boundary.
 
@@ -124,7 +126,9 @@ authorityLevel: 1
 expiresAt: "2026-12-01T00:00:00Z"
 ```
 
-# ExecutionPackage
+# Execution
+
+## ExecutionPackage
 
 An `ExecutionPackage` is the non-authoritative plan under one work envelope. It describes steps, dependencies, expected outputs, timing, and acceptance criteria. It can be associated with a `ChangeTask`, but neither object replaces the other: the package governs plan scope; the task governs a composite change.
 
@@ -157,7 +161,7 @@ timing: Before the service review
 acceptanceCriteria: [Names version expectations and unresolved conflicts]
 ```
 
-# ExecutionRequest
+## ExecutionRequest
 
 An `ExecutionRequest` is one explicit proposed external action, never an implicit command. It points to its plan and the revocation policy that protects its authority chain. It can be packaged with a `ChangeAction` for one Maysano resource write. Passing local validation is not permission to dispatch automatically.
 
@@ -189,7 +193,9 @@ approvalExpiresAt: "2026-12-01T00:00:00Z"
 redactedParameters: {contextReference: context-service-change}
 ```
 
-# EvidenceEvent
+# Evidence and assurance
+
+## EvidenceEvent
 
 An `EvidenceEvent` is the durable atomic record; an `EvidenceBundle` is an exportable grouping of its events. The event links a work envelope to attributable proof of context retrieval, validation, review, submission, returned state, failure, correction, or reconciliation. A local export is not a claim of immutable platform retention.
 
@@ -216,9 +222,9 @@ eventType: context_retrieved
 payload: {contextPackageReference: {id: context-service-change, version: 1}}
 ```
 
-# Architecture and responsibilities
+# System boundaries
 
-## Authority boundary
+## Architecture and responsibilities
 
 Maysano is the authoritative record for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded Maysano context; creates and validates specification files; presents a proposed change to the business owner; submits agreed files to Maysano; and records evidence. ODPH is not a second record store.
 
@@ -234,9 +240,11 @@ ODPH v0.2 serializes all eight top-level object kinds. A delivery must connect t
 
 There are no raw relationship JSON, API request bodies, or runtime-cache details in this contract. Boundary fields declare a local governed-work model; they do not issue real tools, data access, approval rights, or authority.
 
-# ChangeAction
+# Change-control delivery
 
-## Direct specification change
+## ChangeAction
+
+### Direct specification change
 
 A `ChangeAction` is a peer top-level object for one agreed direct Maysano API operation. It references exactly one generated specification file and ODPH validates that file against the declared ODPC, ODPS, or ODPG schema before submitting it. It can be packaged with an `ExecutionRequest`, but it does not replace that request's plan, revocation, or approval chain.
 
@@ -265,9 +273,9 @@ acceptanceCriteria: [Objective is accepted by Maysano]
 
 The action cannot embed or duplicate the referenced specification’s object fields. See the complete [schema reference](#schema-reference) and the [first guided workflow](#guided-workflow-execution).
 
-# ChangeTask
+## ChangeTask
 
-## Composite change planning
+### Composite change planning
 
 A `ChangeTask` is a peer top-level object for a composite business change. It groups multiple existing `ChangeAction` files and declares their dependencies. It does not embed, copy, or recreate ODPC, ODPS, or ODPG content, and it does not replace the context, mandate, work-envelope, execution-package, execution-request, or evidence responsibilities.
 
@@ -296,9 +304,9 @@ acceptanceCriteria: [All actions reconcile with returned Maysano versions]
 
 The [example Change Task](examples/change-chain/change-tasks/change-chain.yaml) is the composite example.
 
-# Specification artefacts
+## Specification artefacts
 
-## ODPC, ODPS, and ODPG
+### ODPC, ODPS, and ODPG
 
 `ChangeAction.specification` is a file reference, not a business-object envelope.
 
@@ -312,9 +320,9 @@ ODPG is the declared connection artefact. Connections are not raw relationship J
 
 Every referenced file must be a contained relative `.yaml` or `.yml` path and must match the SHA-256 checksum in its action. The [validation guide](#validation-and-runtime-checks) describes the static and runtime checks.
 
-# Guided workflow execution
+## Guided workflow execution
 
-## Direct Maysano writes
+### Direct Maysano writes
 
 Phase 1 v0.2 creates and submits one validated specification file at a time through Maysano resource APIs.
 
@@ -334,17 +342,17 @@ For the first generic change-chain test case the direct flow is:
 
 Direct workflows use ordered resource-level writes. There is no multi-action atomicity, automatic rollback, or all-or-nothing execution claim. If an action fails, ODPH stops and records completed actions, pending actions, returned Maysano identities and versions, the failure reason, and required reconciliation work.
 
-# Change Task execution
+## Change Task execution
 
-## Declared dependency order
+### Declared dependency order
 
 Phase 2 later v0.2 validates a complete Change Task before execution. The initial implementation still sends individual Maysano API calls in declared dependency order; the task does not grant server-side atomic execution.
 
 The composite example creates one objective, one use case, two data products, reuses an existing context data product, and updates one ODPG graph specification that expresses the new connections. Before each write ODPH verifies the agreed approvals, applicable object versions, and current graph revision. It records each submitted file identifier, Maysano identity and version, validation outcome, and reconciliation state.
 
-# Generic change-chain example
+## Generic change-chain example
 
-## Validated example bundle
+### Validated example bundle
 
 The principal v0.2 examples are linked source files in [`examples/change-chain/`](examples/change-chain/). The actions refer to their specification files from the bundle root so every reference remains contained.
 
@@ -359,9 +367,11 @@ The principal v0.2 examples are linked source files in [`examples/change-chain/`
 
 Test cases 01–05 demonstrate direct actions. Test case 06 also provides the later composite `ChangeTask`, which references its five separately valid action files and uses dependencies to order the individual resource writes.
 
-# Schema reference
+# Reference and delivery
 
-## Common fields
+## Schema reference
+
+### Common fields
 
 The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-control.yaml). `additionalProperties: false` is intentional at every ODPH document object: unknown top-level or nested fields fail validation.
 
@@ -378,19 +388,19 @@ Both document kinds require `schema`, `version`, `kind`, `metadata`, `graphConte
 | `review` | Object. | Required. |
 | `acceptanceCriteria` | Array of one or more non-empty strings. | Required. |
 
-### `metadata`
+#### `metadata`
 
 Required: `id`, `title`, `requestedBy`, `createdAt`. `id` is a string of 3–128 characters matching `^[a-z0-9][a-z0-9-]*$`. `title` and `requestedBy` are non-empty strings; `createdAt` is an RFC 3339 date-time string. Optional `parentTestCase` and `parentChangeTask` use the same identifier rule.
 
-### `graphContext`
+#### `graphContext`
 
 Required: `source: maysano` and `baseGraphRevision`, which is a non-negative integer or non-empty string. Optional `requiredObjects` is an array of object references. Each reference requires `id` (identifier) and `expectedVersion` (non-negative integer or non-empty string), and may declare `specificationFamily` as `ODPC`, `ODPS`, or `ODPG`.
 
-### `intent` and `review`
+#### `intent` and `review`
 
 `intent` requires non-empty `businessOwner`, `reason`, and `expectedOutcome`, plus `policyProfile`, which uses the identifier rule. `review.requiredRoles` is a non-empty, unique array of non-empty strings. `review.approvalExpiresAt` is optional and uses the date-time format.
 
-## `ChangeAction.specification`
+### `ChangeAction.specification`
 
 `ChangeAction` additionally requires `specification`.
 
@@ -404,17 +414,17 @@ Required: `source: maysano` and `baseGraphRevision`, which is a non-negative int
 
 The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.
 
-## `ChangeTask.actions`
+### `ChangeTask.actions`
 
 `ChangeTask` additionally requires `actions`: an array with at least two references. Every reference requires `id` and `actionFile`; `actionFile` has the same contained relative-YAML rule as `specification.file`. Optional `dependsOn` is an array of unique action IDs in the same task. Runtime validation rejects missing references, duplicate action IDs, and dependency cycles.
 
-## Deliberate v0.2 limits
+### Deliberate v0.2 limits
 
 The eight object kinds form one packageable model. Their boundary and evidence fields are intentionally declarative: they do not become raw API request bodies or authority grants. The schema does not embed ODPC, ODPS, or ODPG content, and it does not add generic `link`, `unlink`, or `deprecate` operations.
 
-# Validation and runtime checks
+## Validation and runtime checks
 
-## Level 1: static schema validation
+### Level 1: static schema validation
 
 - Validate `ChangeAction` and `ChangeTask` YAML against [`change-control.yaml`](odph-v0.2/schema/change-control.yaml).
 - Validate ODPC files against the ODPC schema.
@@ -433,15 +443,15 @@ bundle exec middleman build
 
 `validate_examples.py` uses the Open Data Products SDK schemas for ODPC, ODPS 4.2, and ODPG, verifies every referenced file and checksum, and checks the published ODPH schema locally. CI runs the same checks.
 
-## Level 2: cross-file and runtime validation
+### Level 2: cross-file and runtime validation
 
 Before a Maysano write, resolve every referenced specification file; verify the checksum; verify action references; reject duplicate action IDs and dependency cycles; verify required Maysano object versions and the current graph revision; and verify ODPC, ODPS, and ODPG files are mutually consistent. Verify approvals before every write.
 
 Record submitted file identifiers, resulting Maysano identities and versions, validation outcomes, and reconciliation state. Maysano is authoritative for returned state; these checks do not turn ODPH into a record store.
 
-# Roadmap
+## Roadmap
 
-## Delivery direction
+### Delivery direction
 
 | Phase | Direction |
 | --- | --- |
@@ -450,9 +460,9 @@ Record submitted file identifiers, resulting Maysano identities and versions, va
 | v0.3 | Planned MCP interface to ODPH capabilities: `odph.create_change_task`, `odph.validate_change_task`, `odph.submit_change_task`, and `odph.get_change_task_status`. MCP does not replace Maysano APIs or become the record store. |
 | Future | Maysano-native composite execution may add server-side validation, locking, atomic execution, and grouped audit. This is not required for v0.2. |
 
-# Published contract and examples
+## Published contract and examples
 
-## Machine-readable sources
+### Machine-readable sources
 
 The canonical YAML schema is [`change-control.yaml`](odph-v0.2/schema/change-control.yaml); the mechanically derived JSON representation is [`change-control.json`](odph-v0.2/schema/change-control.json). Both use the v0.2 schema identifier `https://opendataproducts.org/odph-v0.2/schema/change-control.yaml`.
 
