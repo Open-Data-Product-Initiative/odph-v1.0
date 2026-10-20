@@ -673,12 +673,16 @@
             "execution": {
               "type": "object",
               "required": [
-                "executionPackageReference",
+                "workEnvelopeReference",
                 "revocationPolicyReference"
               ],
               "properties": {
-                "executionPackageReference": {
+                "workEnvelopeReference": {
                   "$ref": "#/$defs/Reference"
+                },
+                "executionPackageReference": {
+                  "$ref": "#/$defs/Reference",
+                  "description": "Optional separately reviewed plan for complex action delivery."
                 },
                 "revocationPolicyReference": {
                   "$ref": "#/$defs/Reference"

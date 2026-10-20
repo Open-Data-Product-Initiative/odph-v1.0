@@ -15,198 +15,130 @@ ODPH v0.2 governs bounded change work around versioned business specifications. 
 
 ## How the top-level objects are combined
 
-A Business Harness package is a reviewed delivery bundle of independently valid top-level ODPH objects. The skeleton below is intentionally incomplete: it shows the composition and reference chain before the specification defines each object in detail. `package` is an authoring and delivery view, not a ninth schema kind; each object remains a separately validated top-level YAML document. Examples use block-style YAML so every semantic group, reference, and list has a visible indentation level.
+A Business Harness package is a reader view of one governed business change. It groups collections of independently valid peer top-level objects by the question they answer: **why**, **how**, or **what proves the result**. The group-level `metadata` explains the group; it does not create a ninth schema kind, grant authority, or replace the contained objects.
 
 ```yaml
 package:
-  metadata:
-    id: service-change-harness
-    name:
-      en: Reviewed service change
-    description:
-      en: Business Harness package for the reviewed service change.
+  businessNeed:
+    metadata:
+      answers: Why is this change needed, permitted, and bounded?
+      decision: Reserve contact-centre capacity before eligible customers reach their service-term end date.
+      desiredOutcome: A reviewed capacity plan and the supporting data products are accepted for use in weekly planning.
+    contextPackages:
+      - kind: ContextPackage
+        content: Current graph revision, forecast demand, capacity data quality, and unresolved planning assumptions.
+    mandates:
+      - kind: Mandate
+        content: Durable authority for customer-service capacity planning; excludes customer contact and operational dispatch.
+    workEnvelopes:
+      - kind: WorkEnvelope
+        content: A reviewed weekly capacity plan with demand assumptions, review slots, owner, expiry, and acceptance criteria.
 
-  businessHarness:
-    contextPackage:
-      kind: ContextPackage
-      metadata:
-        id: context-service-change
-        name:
-          en: Current service-change context
-        description:
-          en: Bounded change context
-        version: 1
-      context:
-        retrievalScope: # bounded source-specific context
-        freshness: fresh
-        conflicts: []
-
-    mandate:
-      kind: Mandate
-      metadata:
-        id: mandate-service-change
-        name:
-          en: Service-change mandate
-        description:
-          en: Durable change boundary
-        version: 1
-      mandate:
-        businessArea: Service planning
-        owner: Head of Service
-      boundary: # local permissions and limits
-
-    workEnvelope:
-      kind: WorkEnvelope
-      metadata:
-        id: envelope-service-change
-        name:
-          en: Reviewed service-change assignment
-        description:
-          en: Bounded change assignment
-        version: 1
-      assignment:
-        mandateReference:
-          id: mandate-service-change
-          version: 1
-        requestedResult: # reviewed deliverable
-      boundary: # narrowed local permissions and limits
-
-  execution:
-    executionPackage:
-      kind: ExecutionPackage
-      metadata:
-        id: package-service-change
-        name:
-          en: Service-change execution plan
-        description:
-          en: Planned service-change work
-        version: 1
-      execution:
-        workEnvelopeReference:
-          id: envelope-service-change
-          version: 1
-      plan:
-        plannedSteps: # ordered steps
-        expectedOutputs: # expected results
-        acceptanceCriteria: # review conditions
-
-    executionRequest:
-      kind: ExecutionRequest
-      metadata:
-        id: request-service-change
-        name:
-          en: Submit reviewed service specification
-        description:
-          en: Proposed external submission
-        version: 1
-      execution:
-        executionPackageReference:
-          id: package-service-change
-          version: 1
-        revocationPolicyReference: # policy ID and version
-      request:
-        action: # explicit proposed action
-        approval:
-          required: true
-          expiresAt: # approval expiry
+  actions:
+    metadata:
+      answers: How will the agreed change be carried out?
+      rule: No external write occurs until the proposed action is approved.
+    executionRequests:
+      - kind: ExecutionRequest
+        content: Submit the reviewed capacity-planning change to Maysano.
+    changeTasks:
+      - kind: ChangeTask
+        content: The dependency-ordered set of specification changes required for the capacity plan.
+    changeActions:
+      - kind: ChangeAction
+        content: One checksum-verified create or update of an ODPC, ODPS, or ODPG file.
+    executionPackages:
+      - kind: ExecutionPackage
+        optional: true
+        content: Use only when a complex action plan needs separate review; otherwise the WorkEnvelope and ChangeTask are sufficient.
 
   evidence:
-    - kind: EvidenceEvent
-      metadata:
-        id: evidence-context-retrieved
-        name:
-          en: Service-change context retrieved
-        description:
-          en: Recorded context retrieval
-        version: 1
-      evidence:
-        workEnvelopeReference:
-          id: envelope-service-change
-          version: 1
-        eventType: context_retrieved
-        payload: # event-specific evidence
-
-  changeControl:
-    actions:
-      - kind: ChangeAction
-        specification:
-          operation: create
-          family: ODPC
-          file: specifications/odpc/service-objective-v1.yaml
-          sha256: # source file checksum
-    task:
-      kind: ChangeTask
-      actions:
-        - id: create-service-objective
-          actionFile: actions/create-service-objective.yaml
+    metadata:
+      answers: What proves what was considered, approved, done, and returned?
+    evidenceEvents:
+      - kind: EvidenceEvent
+        content: Context revision and retrieval time, decisions, approvals, submitted files, returned Maysano versions, and reconciliation outcome.
 ```
 
 # Model map
 
 ## How the top-level objects connect
 
-The six aspects are top-level object kinds, not six peer fields copied into every YAML document. They keep a change request from becoming an unbounded task list. `ChangeAction` and `ChangeTask` are peer top-level object kinds: the action declares one direct specification change, while the task packages a dependency-ordered composite change. Maysano remains the authority for accepted records, approvals, applied changes, and audit evidence; ODPH prepares, validates, presents, submits, and links the resulting evidence.
+The three groups are package metadata, not new schema kinds. Their contents remain independently valid top-level objects: **Business Need** establishes why work is permitted; **Actions** defines how a proposed change is carried out; and **Evidence** records what proves the result. Maysano remains the authority for accepted records, approvals, applied changes, and audit evidence; ODPH prepares, validates, presents, submits, and links the resulting evidence.
 
 ```text
-bounded source context
-        |
-ContextPackage -> Mandate -> WorkEnvelope -> ExecutionPackage -> ExecutionRequest
-                                                               |
-                                EvidenceBundle <- receipts, outcomes, reconciliation
+Business Need                         Actions                       Evidence
+-------------                         -------                       --------
+ContextPackage -> Mandate             ExecutionRequest             EvidenceEvent[]
+                  -> WorkEnvelope     ChangeTask -> ChangeAction[]       ^
+                                     (ExecutionPackage: optional)        |
+                                                                    proof of all groups
 ```
 
 <table>
 <thead>
 <tr>
-<th>Aspect</th>
+<th>Group</th>
+<th>Object kind</th>
 <th>Question it answers</th>
-<th>v0.2 expression</th>
 <th>It must not become</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>Business Need</td>
 <td><code>ContextPackage</code></td>
 <td>What was known, from which versions, and how fresh was it?</td>
-<td>Bounded Maysano graph revision, required object versions, source provenance, and reported conflicts.</td>
 <td>A shadow copy of the portfolio.</td>
 </tr>
 <tr>
+<td>Business Need</td>
 <td><code>Mandate</code></td>
 <td>What is the durable business boundary for this area?</td>
-<td>The accountable business owner and applicable policy profile, backed by Maysano approval and policy records.</td>
 <td>A task-level permission or an implicit tool grant.</td>
 </tr>
 <tr>
+<td>Business Need</td>
 <td><code>WorkEnvelope</code></td>
 <td>What narrowly bounded assignment is permitted now?</td>
-<td>Requested result, scope, exclusions, review roles, expiry, and acceptance conditions for this change.</td>
 <td>A way to expand the mandate.</td>
 </tr>
 <tr>
-<td><code>ExecutionPackage</code></td>
-<td>What coordinated plan will meet that assignment?</td>
-<td>A plan with steps, dependencies, expected outcomes, and acceptance criteria.</td>
+<td>Actions</td>
+<td><code>ExecutionPackage</code> (optional)</td>
+<td>Does a complex action plan need separate review?</td>
 <td>Independent authority or an autonomous runbook.</td>
 </tr>
 <tr>
+<td>Actions</td>
 <td><code>ExecutionRequest</code></td>
 <td>Which single external write is proposed?</td>
-<td>An explicit proposal bound to its plan and revocation policy.</td>
 <td>An implicit command or embedded business content.</td>
 </tr>
 <tr>
-<td><code>EvidenceBundle</code></td>
+<td>Actions</td>
+<td><code>ChangeTask</code></td>
+<td>How are related specification changes ordered and reviewed?</td>
+<td>The business rationale or a claim of all-or-nothing execution.</td>
+</tr>
+<tr>
+<td>Actions</td>
+<td><code>ChangeAction</code></td>
+<td>Which one versioned specification file is created or updated?</td>
+<td>An embedded business object or a generic relationship command.</td>
+</tr>
+<tr>
+<td>Evidence</td>
+<td><code>EvidenceEvent</code></td>
 <td>What proves what was considered, decided, attempted, and returned?</td>
-<td>Validation results, approvals, submitted-file identifiers, Maysano identities and versions, outcomes, and reconciliation state.</td>
 <td>A claim of immutable retention or a second system of record.</td>
 </tr>
 </tbody>
 </table>
 
-The six aspects have a strict direction: context informs the boundary; the mandate limits the assignment; the assignment limits the plan; the plan limits each proposed write; and evidence records the result. A task that lacks any of those links is incomplete even if its YAML is structurally valid.
+The package-level order is deliberate: Business Need explains **why**, Actions explains **how**, and Evidence explains **what proves the result**. `ExecutionPackage` is optional because a `WorkEnvelope` already defines the business assignment and a `ChangeTask` already orders the delivery work.
 
-# Business-level harness
+# Business Need
 
 ### Common object contract
 
@@ -433,14 +365,14 @@ A `ContextPackage` is a bounded observation, not a copied catalog. It identifies
 ```yaml
 kind: ContextPackage
 metadata:
-  id: context-service-change
+  id: capacity-planning-context
   name:
-    en: Current service-change context
+    en: Capacity-planning evidence
   description:
-    en: Bounded Maysano graph context used to prepare the service change.
+    en: Bounded evidence used to decide whether customer-service capacity should be reserved before service terms end.
   version: 1
   createdAt: "2026-10-20T00:00:00Z"
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences:
     - id: maysano:graph
@@ -450,10 +382,13 @@ provenance:
 context:
   retrievalScope:
     graphRevision: 4
-    objectiveIds:
-      - service-objective
+    useCaseId: plan-service-delivery
+    dataProductIds:
+      - primary-data-product
+      - context-data-product
   freshness: fresh
-  conflicts: []
+  conflicts:
+    - The demand forecast is fresh, but its capacity assumptions still require business-owner review.
 ```
 
 ## Mandate
@@ -512,30 +447,30 @@ A `Mandate` is the durable business boundary for an area of work. It names the a
 ```yaml
 kind: Mandate
 metadata:
-  id: mandate-service-change
+  id: customer-capacity-mandate
   name:
-    en: Service-change mandate
+    en: Customer-service capacity planning
   description:
-    en: Durable business boundary for service planning changes.
+    en: Authority to prepare and review capacity-planning changes; it does not authorise customer contact or operational dispatch.
   version: 1
   createdAt: "2026-10-20T00:00:00Z"
-  actor: service-owner
+  actor: head-of-customer-service
 provenance:
   sourceReferences: []
   relationshipReferences: []
 mandate:
-  businessArea: Service planning
-  owner: Head of Service
+  businessArea: Customer service capacity planning
+  owner: Head of Customer Service
   expiresAt: "2027-01-01T00:00:00Z"
 boundary:
   scope:
-    - service-change
+    - customer-capacity-planning
   tools:
     - maysano.change-proposal
   dataAccess:
-    - service-planning-context
+    - capacity-planning-context
   approvalRights:
-    - reviewed-change-proposal
+    - reviewed-capacity-plan
   authorityLevel: 1
 ```
 
@@ -601,43 +536,43 @@ A `WorkEnvelope` narrows one mandate into one assignment. It states the requeste
 ```yaml
 kind: WorkEnvelope
 metadata:
-  id: envelope-service-change
+  id: capacity-plan-assignment
   name:
-    en: Reviewed service-change assignment
+    en: Capacity plan before service terms end
   description:
-    en: Bounded assignment to prepare and review the service change.
+    en: Assignment to prepare a reviewed weekly capacity plan for customers likely to require a service change.
   version: 1
   createdAt: "2026-10-20T00:00:00Z"
-  actor: service-owner
+  actor: head-of-customer-service
 provenance:
   sourceReferences: []
   relationshipReferences:
-    - id: mandate-service-change
+    - id: customer-capacity-mandate
       version: 1
 assignment:
   mandateReference:
-    id: mandate-service-change
+    id: customer-capacity-mandate
     version: 1
-  requestedResult: Reviewed service change proposal
-  owner: Head of Service
+  requestedResult: Reviewed weekly capacity plan, including demand assumptions, available review slots, and unresolved conflicts.
+  owner: Head of Customer Service
   expiresAt: "2026-12-01T00:00:00Z"
 boundary:
   scope:
-    - service-change
+    - customer-capacity-planning
   tools:
     - maysano.change-proposal
   dataAccess:
-    - service-planning-context
+    - capacity-planning-context
   approvalRights:
-    - reviewed-change-proposal
+    - reviewed-capacity-plan
   authorityLevel: 1
 ```
 
-# Execution
+# Actions
 
-## ExecutionPackage
+## ExecutionPackage (optional)
 
-An `ExecutionPackage` is the non-authoritative plan under one work envelope. It describes steps, dependencies, expected outputs, timing, and acceptance criteria. It can be associated with a `ChangeTask`, but neither object replaces the other: the package governs plan scope; the task governs a composite change.
+An `ExecutionPackage` is an optional, separately reviewable action plan under one work envelope. Use it when the planned steps, dependencies, outputs, timing, and criteria need their own review. Do not create it merely to repeat a `WorkEnvelope` or `ChangeTask`.
 
 <table>
 <thead>
@@ -653,7 +588,7 @@ An `ExecutionPackage` is the non-authoritative plan under one work envelope. It 
 <td><code>kind</code></td>
 <td>string</td>
 <td>Required; constant <code>ExecutionPackage</code></td>
-<td>Discriminator for a non-authoritative plan. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
+<td>Discriminator for an optional, separately reviewable action plan. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
 </tr>
 <tr>
 <td><code>execution</code></td>
@@ -715,50 +650,52 @@ An `ExecutionPackage` is the non-authoritative plan under one work envelope. It 
 ```yaml
 kind: ExecutionPackage
 metadata:
-  id: package-service-change
+  id: capacity-plan-execution
   name:
-    en: Service-change execution plan
+    en: Capacity-plan preparation
   description:
-    en: Planned work required to prepare the reviewed service change.
+    en: Reviewable preparation of a weekly capacity plan and the supporting specification change.
   version: 1
   createdAt: "2026-10-20T00:00:00Z"
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences: []
   relationshipReferences:
-    - id: envelope-service-change
+    - id: capacity-plan-assignment
       version: 1
 execution:
   workEnvelopeReference:
-    id: envelope-service-change
+    id: capacity-plan-assignment
     version: 1
 boundary:
   scope:
-    - service-change
+    - customer-capacity-planning
   tools:
     - maysano.change-proposal
   dataAccess:
-    - service-planning-context
+    - capacity-planning-context
   approvalRights:
-    - reviewed-change-proposal
+    - reviewed-capacity-plan
   authorityLevel: 1
 plan:
   plannedSteps:
-    - Validate context
-    - Prepare the proposed specification
-    - Request review
+    - Confirm the demand forecast, graph revision, and unresolved capacity assumptions.
+    - Prepare the capacity-planning use case and supporting data-product specifications.
+    - Request business-owner, data-product-owner, and graph-steward review.
   expectedOutputs:
-    - Reviewed service change proposal
+    - Reviewed weekly capacity plan
+    - Dependency-ordered ChangeTask with validated specification files
   dependencies:
-    - Current Maysano graph
-  timing: Before the service review
+    - Current Maysano graph revision
+    - Approved forecast and capacity data sources
+  timing: Before the next weekly contact-centre planning cycle
   acceptanceCriteria:
-    - Names version expectations and unresolved conflicts
+    - States the forecast source, capacity assumptions, review owners, and every unresolved conflict.
 ```
 
 ## ExecutionRequest
 
-An `ExecutionRequest` is one explicit proposed external action, never an implicit command. It points to its plan and the revocation policy that protects its authority chain. It can be packaged with a `ChangeAction` for one Maysano resource write. Passing local validation is not permission to dispatch automatically.
+An `ExecutionRequest` is one explicit proposed external action, never an implicit command. It binds directly to the `WorkEnvelope` that permits the action and to the revocation policy that protects that authority chain. It may additionally cite an `ExecutionPackage` when a complex action plan received separate review. Passing local validation is not permission to dispatch automatically.
 
 <table>
 <thead>
@@ -780,13 +717,19 @@ An `ExecutionRequest` is one explicit proposed external action, never an implici
 <td><code>execution</code></td>
 <td>object</td>
 <td>Required; closed structure</td>
-<td>Groups the plan and revocation-policy references for this request.</td>
+<td>Groups the required work-envelope and revocation-policy references, with an optional separately reviewed plan.</td>
+</tr>
+<tr>
+<td><code>execution.workEnvelopeReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the <code>WorkEnvelope</code> that permits the proposed action.</td>
 </tr>
 <tr>
 <td><code>execution.executionPackageReference</code></td>
 <td><code>Reference</code> object</td>
-<td>Required</td>
-<td>Exact ID and version of the <code>ExecutionPackage</code> that contains the request.</td>
+<td>Optional</td>
+<td>Exact ID and version of a separately reviewed <code>ExecutionPackage</code>, used only for complex action delivery.</td>
 </tr>
 <tr>
 <td><code>execution.revocationPolicyReference</code></td>
@@ -854,39 +797,39 @@ An `ExecutionRequest` is one explicit proposed external action, never an implici
 ```yaml
 kind: ExecutionRequest
 metadata:
-  id: request-service-change
+  id: submit-capacity-plan
   name:
-    en: Submit reviewed service specification
+    en: Submit reviewed capacity-planning change
   description:
-    en: Explicit request to submit the reviewed service change.
+    en: Explicit request to submit the reviewed capacity-planning ChangeTask to Maysano.
   version: 1
   createdAt: "2026-10-20T00:00:00Z"
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences: []
   relationshipReferences:
-    - id: package-service-change
+    - id: capacity-plan-assignment
       version: 1
 execution:
-  executionPackageReference:
-    id: package-service-change
+  workEnvelopeReference:
+    id: capacity-plan-assignment
     version: 1
   revocationPolicyReference:
-    id: policy-service-change
+    id: capacity-change-policy
     version: 1
 request:
-  action: submit reviewed service specification
+  action: submit reviewed capacity-planning ChangeTask
   tool: maysano.change-proposal
-  target: service planning graph
+  target: Maysano customer-service capacity-planning graph
   requestedAuthority: 1
   approval:
     required: true
     expiresAt: "2026-12-01T00:00:00Z"
   redactedParameters:
-    contextReference: context-service-change
+    contextReference: capacity-planning-context
 ```
 
-# Evidence and assurance
+# Evidence
 
 ## EvidenceEvent
 
@@ -944,31 +887,31 @@ An `EvidenceEvent` is the durable atomic record; an `EvidenceBundle` is an expor
 ```yaml
 kind: EvidenceEvent
 metadata:
-  id: evidence-context-retrieved
+  id: capacity-context-retrieved
   name:
-    en: Service-change context retrieved
+    en: Capacity-planning context retrieved
   description:
-    en: Evidence that the bounded Maysano context was retrieved.
+    en: Evidence that the current planning graph and capacity sources were retrieved before the capacity decision.
   version: 1
   createdAt: "2026-10-20T00:00:00Z"
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences:
     - id: maysano:graph
       version: 4
       retrievedAt: "2026-10-20T00:00:00Z"
   relationshipReferences:
-    - id: envelope-service-change
+    - id: capacity-plan-assignment
       version: 1
 evidence:
   occurredAt: "2026-10-20T00:00:00Z"
   workEnvelopeReference:
-    id: envelope-service-change
+    id: capacity-plan-assignment
     version: 1
   eventType: context_retrieved
   payload:
     contextPackageReference:
-      id: context-service-change
+      id: capacity-planning-context
       version: 1
 ```
 

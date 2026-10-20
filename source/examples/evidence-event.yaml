@@ -1,28 +1,28 @@
 kind: EvidenceEvent
 metadata:
-  id: evidence-context-retrieved
+  id: capacity-context-retrieved
   name:
-    en: Service-change context retrieved
+    en: Capacity-planning context retrieved
   description:
-    en: Evidence that the bounded Maysano context was retrieved.
+    en: Evidence that the current planning graph and capacity sources were retrieved before the capacity decision.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences:
     - id: maysano:graph
       version: 4
       retrievedAt: '2026-10-20T00:00:00Z'
   relationshipReferences:
-    - id: envelope-service-change
+    - id: capacity-plan-assignment
       version: 1
 evidence:
   occurredAt: '2026-10-20T00:00:00Z'
   workEnvelopeReference:
-    id: envelope-service-change
+    id: capacity-plan-assignment
     version: 1
   eventType: context_retrieved
   payload:
     contextPackageReference:
-      id: context-service-change
+      id: capacity-planning-context
       version: 1

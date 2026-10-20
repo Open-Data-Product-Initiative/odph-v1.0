@@ -27,6 +27,9 @@ class OdphArtifactsTest(unittest.TestCase):
             schema["$defs"]["ObjectMetadata"]["required"],
             ["id", "name", "description", "version", "createdAt", "actor"],
         )
+        request_execution = schema["$defs"]["ExecutionRequest"]["allOf"][-1]["properties"]["execution"]
+        self.assertEqual(request_execution["required"], ["workEnvelopeReference", "revocationPolicyReference"])
+        self.assertIn("executionPackageReference", request_execution["properties"])
         self.assertEqual(schema["$defs"]["ChangeAction"]["properties"]["kind"]["const"], "ChangeAction")
         self.assertEqual(schema["$defs"]["ChangeTask"]["properties"]["kind"]["const"], "ChangeTask")
 
@@ -86,6 +89,19 @@ class OdphArtifactsTest(unittest.TestCase):
         self.assertGreater(len(yaml_blocks), 0)
         for block in yaml_blocks:
             self.assertNotIn("{", block, "YAML examples must not hide nested maps in flow notation")
+
+    def test_harness_skeleton_groups_content_by_why_how_and_proof(self):
+        documentation = (SOURCE / "index.html.md").read_text(encoding="utf-8")
+        skeleton = documentation.split("# Harness package skeleton", 1)[1].split("# Model map", 1)[0]
+        self.assertIn("businessNeed:", skeleton)
+        self.assertIn("actions:", skeleton)
+        self.assertIn("evidence:", skeleton)
+        self.assertIn("contextPackages:", skeleton)
+        self.assertIn("changeActions:", skeleton)
+        self.assertIn("evidenceEvents:", skeleton)
+        self.assertIn("decision:", skeleton)
+        self.assertIn("desiredOutcome:", skeleton)
+        self.assertNotIn("null", skeleton)
 
     def test_published_tables_do_not_depend_on_markdown_table_rendering(self):
         documents_with_tables = {

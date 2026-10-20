@@ -317,9 +317,12 @@ $defs:
           provenance: { $ref: '#/$defs/ObjectProvenance' }
           execution:
             type: object
-            required: [executionPackageReference, revocationPolicyReference]
+            required: [workEnvelopeReference, revocationPolicyReference]
             properties:
-              executionPackageReference: { $ref: '#/$defs/Reference' }
+              workEnvelopeReference: { $ref: '#/$defs/Reference' }
+              executionPackageReference:
+                $ref: '#/$defs/Reference'
+                description: Optional separately reviewed plan for complex action delivery.
               revocationPolicyReference: { $ref: '#/$defs/Reference' }
             additionalProperties: false
           request:

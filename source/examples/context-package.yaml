@@ -1,13 +1,13 @@
 kind: ContextPackage
 metadata:
-  id: context-service-change
+  id: capacity-planning-context
   name:
-    en: Current service-change context
+    en: Capacity-planning evidence
   description:
-    en: Bounded Maysano graph context used to prepare the service change.
+    en: Bounded evidence used to decide whether customer-service capacity should be reserved before service terms end.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences:
     - id: maysano:graph
@@ -17,7 +17,10 @@ provenance:
 context:
   retrievalScope:
     graphRevision: 4
-    objectiveIds:
-      - service-objective
+    useCaseId: plan-service-delivery
+    dataProductIds:
+      - primary-data-product
+      - context-data-product
   freshness: fresh
-  conflicts: []
+  conflicts:
+    - The demand forecast is fresh, but its capacity assumptions still require business-owner review.

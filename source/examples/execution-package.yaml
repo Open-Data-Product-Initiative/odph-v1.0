@@ -1,41 +1,43 @@
 kind: ExecutionPackage
 metadata:
-  id: package-service-change
+  id: capacity-plan-execution
   name:
-    en: Service-change execution plan
+    en: Capacity-plan preparation
   description:
-    en: Planned work required to prepare the reviewed service change.
+    en: Reviewable preparation of a weekly capacity plan and the supporting specification change.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
-  actor: change-team
+  actor: capacity-planning-team
 provenance:
   sourceReferences: []
   relationshipReferences:
-    - id: envelope-service-change
+    - id: capacity-plan-assignment
       version: 1
 execution:
   workEnvelopeReference:
-    id: envelope-service-change
+    id: capacity-plan-assignment
     version: 1
 boundary:
   scope:
-    - service-change
+    - customer-capacity-planning
   tools:
     - maysano.change-proposal
   dataAccess:
-    - service-planning-context
+    - capacity-planning-context
   approvalRights:
-    - reviewed-change-proposal
+    - reviewed-capacity-plan
   authorityLevel: 1
 plan:
   plannedSteps:
-    - Validate context
-    - Prepare the proposed specification
-    - Request review
+    - Confirm the demand forecast, graph revision, and unresolved capacity assumptions.
+    - Prepare the capacity-planning use case and supporting data-product specifications.
+    - Request business-owner, data-product-owner, and graph-steward review.
   expectedOutputs:
-    - Reviewed service change proposal
+    - Reviewed weekly capacity plan
+    - Dependency-ordered ChangeTask with validated specification files
   dependencies:
-    - Current Maysano graph
-  timing: Before the service review
+    - Current Maysano graph revision
+    - Approved forecast and capacity data sources
+  timing: Before the next weekly contact-centre planning cycle
   acceptanceCriteria:
-    - Names version expectations and unresolved conflicts
+    - States the forecast source, capacity assumptions, review owners, and every unresolved conflict.

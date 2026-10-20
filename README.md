@@ -1,6 +1,6 @@
 # Business Harness Model
 
-ODPH v0.2 packages eight peer top-level governed-work objects around versioned ODPC, ODPS, and ODPG YAML specifications: ContextPackage, Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, EvidenceEvent, ChangeAction, and ChangeTask. It does not replace business-object, graph, or Maysano record authority.
+ODPH v0.2 packages eight peer top-level object kinds around versioned ODPC, ODPS, and ODPG YAML specifications. The package view groups them by the question they answer: **Business Need** (`ContextPackage`, `Mandate`, `WorkEnvelope`), **Actions** (`ExecutionRequest`, `ChangeTask`, `ChangeAction`, and optional `ExecutionPackage`), and **Evidence** (`EvidenceEvent`). It does not replace business-object, graph, or Maysano record authority.
 
 Maysano is authoritative for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded context, creates and validates one specification file at a time, obtains business-owner agreement, submits that file to Maysano, and records evidence.
 
