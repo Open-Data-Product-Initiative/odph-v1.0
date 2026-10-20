@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc05-create-context-data-product, title: Create Context Data Product, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-05}
+graphContext: {source: maysano, baseGraphRevision: 3}
+intent: {businessOwner: Head of Change Team, reason: Provide a reviewed context data product for change planning, expectedOutcome: An accepted data-product identity and version, policyProfile: example-change-control}
+specification: {operation: create, family: ODPS, file: specifications/odps/tc05-context-data-product-v1.yaml, sha256: b4e3abb3458eb5c5d9bf24d36e524bb55e0c8715398c0649e400ac224278b18f}
+review: {requiredRoles: [business-owner, data-product-owner]}
+acceptanceCriteria: [Maysano accepts Context Data Product version 1.]

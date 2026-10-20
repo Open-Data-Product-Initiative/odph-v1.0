@@ -1,0 +1,17 @@
+schema: https://opendataproducts.org/odpg-v1.0/schema/odpg.yaml
+version: '1.0'
+kind: Graph
+graph:
+  metadata:
+    id: example-change-graph
+    name: {en: Example change graph}
+    description: {en: Graph revision 4 adds the context data product and marks the former eligibility version as deprecated.}
+  nodes:
+    - {id: service-outcome-objective, type: BusinessObjective, $ref: ../odpc/tc01-objective-v1.yaml#/catalog/businessObjectives/0}
+    - {id: prioritise-service-delivery, type: UseCase, $ref: ../odpc/tc04-use-case-v1.yaml#/catalog/useCases/0}
+    - {id: context-data-product, type: DataProduct, $ref: ../odps/tc05-context-data-product-v1.yaml}
+    - {id: primary-data-product, type: DataProduct, $ref: ../odps/tc05-primary-data-product-v3-deprecated.yaml}
+  edges:
+    - {from: prioritise-service-delivery, to: service-outcome-objective, type: supports, confidence: high}
+    - {from: prioritise-service-delivery, to: context-data-product, type: uses, confidence: high}
+    - {from: context-data-product, to: service-outcome-objective, type: contributesTo, confidence: medium}

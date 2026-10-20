@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc01-create-use-case, title: Create outcome change use case, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-01}
+graphContext: {source: maysano, baseGraphRevision: 0}
+intent: {businessOwner: Head of Change Team, reason: Record the agreed change planning use case, expectedOutcome: An accepted use-case identity and version, policyProfile: example-change-control}
+specification: {operation: create, family: ODPC, file: specifications/odpc/tc01-use-case-v1.yaml, sha256: 621fb39e6ec238486f6e9eb7d7bc14da4280bf3d45ebd566cab8c149dcc3fcd9}
+review: {requiredRoles: [business-owner]}
+acceptanceCriteria: [Maysano accepts the use-case specification and returns its identity and version.]

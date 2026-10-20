@@ -1,0 +1,21 @@
+schema: https://opendataproducts.org/odpg-v1.0/schema/odpg.yaml
+version: '1.0'
+kind: Graph
+graph:
+  metadata:
+    id: example-change-graph
+    name: {en: Example change graph}
+    description: {en: Graph revision 5 connects the service-secondary planning change.}
+  nodes:
+    - {id: service-outcome-objective, type: BusinessObjective, $ref: ../odpc/tc01-objective-v1.yaml#/catalog/businessObjectives/0}
+    - {id: service-capacity-objective, type: BusinessObjective, $ref: ../odpc/tc06-objective-v1.yaml#/catalog/businessObjectives/0}
+    - {id: plan-capacity, type: UseCase, $ref: ../odpc/tc06-use-case-v1.yaml#/catalog/useCases/0}
+    - {id: additional-data-product, type: DataProduct, $ref: ../odps/tc06-additional-data-product-v1.yaml}
+    - {id: capacity-data-product, type: DataProduct, $ref: ../odps/tc06-capacity-data-product-v1.yaml}
+    - {id: context-data-product, type: DataProduct, $ref: ../odps/tc05-context-data-product-v1.yaml}
+  edges:
+    - {from: plan-capacity, to: service-capacity-objective, type: supports, confidence: high}
+    - {from: plan-capacity, to: additional-data-product, type: uses, confidence: high}
+    - {from: plan-capacity, to: capacity-data-product, type: uses, confidence: high}
+    - {from: additional-data-product, to: service-outcome-objective, type: contributesTo, confidence: medium}
+    - {from: capacity-data-product, to: service-capacity-objective, type: contributesTo, confidence: high}

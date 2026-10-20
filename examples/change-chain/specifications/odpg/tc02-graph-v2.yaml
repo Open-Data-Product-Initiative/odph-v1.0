@@ -1,0 +1,16 @@
+schema: https://opendataproducts.org/odpg-v1.0/schema/odpg.yaml
+version: '1.0'
+kind: Graph
+graph:
+  metadata:
+    id: example-change-graph
+    name: {en: Example change graph}
+    description: {en: Graph revision 2 adds Primary Data Product.}
+  nodes:
+    - {id: service-outcome-objective, type: BusinessObjective, $ref: ../odpc/tc01-objective-v1.yaml#/catalog/businessObjectives/0}
+    - {id: plan-service-delivery, type: UseCase, $ref: ../odpc/tc01-use-case-v1.yaml#/catalog/useCases/0}
+    - {id: primary-data-product, type: DataProduct, $ref: ../odps/tc02-primary-data-product-v1.yaml}
+  edges:
+    - {from: plan-service-delivery, to: service-outcome-objective, type: supports, confidence: high}
+    - {from: plan-service-delivery, to: primary-data-product, type: uses, confidence: high}
+    - {from: primary-data-product, to: service-outcome-objective, type: contributesTo, confidence: medium}

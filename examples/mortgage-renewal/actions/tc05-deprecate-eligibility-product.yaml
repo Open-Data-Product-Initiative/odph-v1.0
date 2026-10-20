@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
-version: 0.2-draft
-kind: KentaroAction
-metadata: {id: tc05-deprecate-eligibility-product, title: Deprecate Mortgage Renewal Eligibility, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-05}
-graphContext: {source: maysano, baseGraphRevision: 3, requiredObjects: [{id: mortgage-renewal-eligibility, expectedVersion: 2, specificationFamily: ODPS}]}
-intent: {businessOwner: Head of Mortgage Lending, reason: Record the lifecycle change in a new product specification version, expectedOutcome: An accepted retired product version, policyProfile: mortgage-change-control}
-specification: {operation: update, family: ODPS, file: specifications/odps/tc05-eligibility-v3-deprecated.yaml, sha256: 53d8f64a66cf01c9e0959107cfe3637ac7020b4702c3ed7618e6d022b31028d6, expectedVersion: 2}
-review: {requiredRoles: [business-owner, data-product-owner]}
-acceptanceCriteria: [Maysano accepts Mortgage Renewal Eligibility version 3 with its lifecycle state retired.]

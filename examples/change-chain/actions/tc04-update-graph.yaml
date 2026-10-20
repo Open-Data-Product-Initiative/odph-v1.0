@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc04-update-graph, title: Add secondary use case to graph, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-04}
+graphContext: {source: maysano, baseGraphRevision: 2, requiredObjects: [{id: example-change-graph, expectedVersion: 2, specificationFamily: ODPG}]}
+intent: {businessOwner: Head of Change Team, reason: Connect secondary prioritisation to the change objective and eligibility product, expectedOutcome: An accepted graph revision, policyProfile: example-change-control}
+specification: {operation: update, family: ODPG, file: specifications/odpg/tc04-graph-v3.yaml, sha256: 707b4f7d3c27537c08fbd9761b07f0d54d5ca4e9824283905efd126be6c7d71f, expectedVersion: 2}
+review: {requiredRoles: [business-owner, graph-steward]}
+acceptanceCriteria: [Maysano accepts graph revision 3 with the secondary use case.]

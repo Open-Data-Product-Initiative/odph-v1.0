@@ -1,0 +1,9 @@
+schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+version: 0.2-draft
+kind: KentaroAction
+metadata: {id: tc02-update-graph, title: Update graph for eligibility product, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-02}
+graphContext: {source: maysano, baseGraphRevision: 1, requiredObjects: [{id: example-change-graph, expectedVersion: 1, specificationFamily: ODPG}]}
+intent: {businessOwner: Head of Change Team, reason: Connect Primary Data Product to change planning, expectedOutcome: An accepted graph revision, policyProfile: example-change-control}
+specification: {operation: update, family: ODPG, file: specifications/odpg/tc02-graph-v2.yaml, sha256: 3bd5a1c4fe0c2b6c125f6c04e3df615cf446da03658ad67071ae6ee583da272a, expectedVersion: 1}
+review: {requiredRoles: [business-owner, graph-steward]}
+acceptanceCriteria: [Maysano accepts graph revision 2 with the eligibility connections.]

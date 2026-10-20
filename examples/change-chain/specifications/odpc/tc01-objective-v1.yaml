@@ -1,0 +1,14 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: example-objective-catalog
+    name: {en: Example change objective}
+    description: {en: Version 1 of the service-change business objective.}
+  businessObjectives:
+    - id: service-outcome-objective
+      name: {en: Improve outcome change retention}
+      description: {en: "Improve timely, suitable change offers for eligible service customers."}
+      expectedOutcomes:
+        - {en: More eligible customers receive a change offer before their current term ends.}

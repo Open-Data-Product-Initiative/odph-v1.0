@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
-version: 0.2-draft
-kind: KentaroAction
-metadata: {id: tc01-update-graph, title: Create first mortgage renewal graph, requestedBy: Mortgage Lending, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-01}
-graphContext: {source: maysano, baseGraphRevision: 0, requiredObjects: [{id: mortgage-renewal-retention, expectedVersion: 1, specificationFamily: ODPC}, {id: plan-mortgage-renewals, expectedVersion: 1, specificationFamily: ODPC}]}
-intent: {businessOwner: Head of Mortgage Lending, reason: Express the accepted objective to use-case connection, expectedOutcome: An accepted graph revision, policyProfile: mortgage-change-control}
-specification: {operation: create, family: ODPG, file: specifications/odpg/tc01-graph-v1.yaml, sha256: d276da3ee15977126807b2e8ba03fa905844f3c97b42b2c2e793300da79b7896}
-review: {requiredRoles: [business-owner, graph-steward]}
-acceptanceCriteria: [Maysano accepts graph revision 1 with the objective and use-case connection.]

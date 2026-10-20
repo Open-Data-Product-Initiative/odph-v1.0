@@ -1,0 +1,12 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: '4.2'
+product:
+  details:
+    en:
+      productID: additional-data-product
+      name: Additional Data Product
+      productVersion: v1
+      visibility: organisation
+      status: draft
+      type: decision support
+      description: Identifies customers suitable for a reviewed outcome change offer.
