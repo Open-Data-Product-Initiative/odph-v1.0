@@ -155,14 +155,54 @@ ContextPackage -> Mandate -> WorkEnvelope -> ExecutionPackage -> ExecutionReques
                                 EvidenceBundle <- receipts, outcomes, reconciliation
 ```
 
-| Aspect | Question it answers | v0.2 expression | It must not become |
-| --- | --- | --- | --- |
-| `ContextPackage` | What was known, from which versions, and how fresh was it? | Bounded Maysano graph revision, required object versions, source provenance, and reported conflicts. | A shadow copy of the portfolio. |
-| `Mandate` | What is the durable business boundary for this area? | The accountable business owner and applicable policy profile, backed by Maysano approval and policy records. | A task-level permission or an implicit tool grant. |
-| `WorkEnvelope` | What narrowly bounded assignment is permitted now? | Requested result, scope, exclusions, review roles, expiry, and acceptance conditions for this change. | A way to expand the mandate. |
-| `ExecutionPackage` | What coordinated plan will meet that assignment? | A plan with steps, dependencies, expected outcomes, and acceptance criteria. | Independent authority or an autonomous runbook. |
-| `ExecutionRequest` | Which single external write is proposed? | An explicit proposal bound to its plan and revocation policy. | An implicit command or embedded business content. |
-| `EvidenceBundle` | What proves what was considered, decided, attempted, and returned? | Validation results, approvals, submitted-file identifiers, Maysano identities and versions, outcomes, and reconciliation state. | A claim of immutable retention or a second system of record. |
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Question it answers</th>
+<th>v0.2 expression</th>
+<th>It must not become</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ContextPackage</code></td>
+<td>What was known, from which versions, and how fresh was it?</td>
+<td>Bounded Maysano graph revision, required object versions, source provenance, and reported conflicts.</td>
+<td>A shadow copy of the portfolio.</td>
+</tr>
+<tr>
+<td><code>Mandate</code></td>
+<td>What is the durable business boundary for this area?</td>
+<td>The accountable business owner and applicable policy profile, backed by Maysano approval and policy records.</td>
+<td>A task-level permission or an implicit tool grant.</td>
+</tr>
+<tr>
+<td><code>WorkEnvelope</code></td>
+<td>What narrowly bounded assignment is permitted now?</td>
+<td>Requested result, scope, exclusions, review roles, expiry, and acceptance conditions for this change.</td>
+<td>A way to expand the mandate.</td>
+</tr>
+<tr>
+<td><code>ExecutionPackage</code></td>
+<td>What coordinated plan will meet that assignment?</td>
+<td>A plan with steps, dependencies, expected outcomes, and acceptance criteria.</td>
+<td>Independent authority or an autonomous runbook.</td>
+</tr>
+<tr>
+<td><code>ExecutionRequest</code></td>
+<td>Which single external write is proposed?</td>
+<td>An explicit proposal bound to its plan and revocation policy.</td>
+<td>An implicit command or embedded business content.</td>
+</tr>
+<tr>
+<td><code>EvidenceBundle</code></td>
+<td>What proves what was considered, decided, attempted, and returned?</td>
+<td>Validation results, approvals, submitted-file identifiers, Maysano identities and versions, outcomes, and reconciliation state.</td>
+<td>A claim of immutable retention or a second system of record.</td>
+</tr>
+</tbody>
+</table>
 
 The six aspects have a strict direction: context informs the boundary; the mandate limits the assignment; the assignment limits the plan; the plan limits each proposed write; and evidence records the result. A task that lacks any of those links is incomplete even if its YAML is structurally valid.
 
@@ -172,53 +212,223 @@ The six aspects have a strict direction: context informs the boundary; the manda
 
 The six governed-work objects—`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent`—are composed with the `CommonObject` definition. Identity, human-readable purpose, and provenance are grouped rather than flattened into every object.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- | --- |
-| `kind` | string | Required; constrained by object definition | Discriminator for the top-level object kind. Each object table names its permitted constant value. |
-| `metadata` | object | Required; closed structure | Groups object identity, human-readable purpose, and attribution. |
-| `metadata.id` | string | Required; minimum length 1 | Stable identifier of this object version. The schema does not impose a global identifier pattern. |
-| `metadata.name` | object | Required; one or more language keys | Human-readable, language-keyed name of the object. Each value is a non-empty string. |
-| `metadata.description` | object | Required; one or more language keys | Human-readable, language-keyed description of the object’s purpose and bounded meaning. Each value is a non-empty string. |
-| `metadata.version` | integer | Required; minimum `1` | Positive version of this ODPH object, used by all object references. |
-| `metadata.createdAt` | string | Required; RFC 3339 `date-time` | Time at which this object version was created. |
-| `metadata.actor` | string | Required; minimum length 1 | Attributed creator or producing actor. It is attribution, not authentication proof. |
-| `provenance` | object | Required; closed structure | Groups source observations and relationships without embedding their contents. |
-| `provenance.sourceReferences` | array of `Reference` | Required; may be empty | Versioned source observations or records used when producing the object. |
-| `provenance.relationshipReferences` | array of `Reference` | Required; may be empty | Versioned links to related ODPH objects or governed records. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constrained by object definition</td>
+<td>Discriminator for the top-level object kind. Each object table names its permitted constant value.</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups object identity, human-readable purpose, and attribution.</td>
+</tr>
+<tr>
+<td><code>metadata.id</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Stable identifier of this object version. The schema does not impose a global identifier pattern.</td>
+</tr>
+<tr>
+<td><code>metadata.name</code></td>
+<td>object</td>
+<td>Required; one or more language keys</td>
+<td>Human-readable, language-keyed name of the object. Each value is a non-empty string.</td>
+</tr>
+<tr>
+<td><code>metadata.description</code></td>
+<td>object</td>
+<td>Required; one or more language keys</td>
+<td>Human-readable, language-keyed description of the object’s purpose and bounded meaning. Each value is a non-empty string.</td>
+</tr>
+<tr>
+<td><code>metadata.version</code></td>
+<td>integer</td>
+<td>Required; minimum <code>1</code></td>
+<td>Positive version of this ODPH object, used by all object references.</td>
+</tr>
+<tr>
+<td><code>metadata.createdAt</code></td>
+<td>string</td>
+<td>Required; RFC 3339 <code>date-time</code></td>
+<td>Time at which this object version was created.</td>
+</tr>
+<tr>
+<td><code>metadata.actor</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Attributed creator or producing actor. It is attribution, not authentication proof.</td>
+</tr>
+<tr>
+<td><code>provenance</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups source observations and relationships without embedding their contents.</td>
+</tr>
+<tr>
+<td><code>provenance.sourceReferences</code></td>
+<td>array of <code>Reference</code></td>
+<td>Required; may be empty</td>
+<td>Versioned source observations or records used when producing the object.</td>
+</tr>
+<tr>
+<td><code>provenance.relationshipReferences</code></td>
+<td>array of <code>Reference</code></td>
+<td>Required; may be empty</td>
+<td>Versioned links to related ODPH objects or governed records.</td>
+</tr>
+</tbody>
+</table>
 
 ### Reference
 
-| Element name | Type | Options | Description |
-| --- | --- | --- | --- |
-| `id` | string | Required; minimum length 1 | Identifier of the referenced object or source. |
-| `version` | integer | Required; minimum `1` | Exact referenced version. |
-| `retrievedAt` | string | Optional; RFC 3339 `date-time` | Retrieval time for an observed source reference. |
-| `objectType` | string | Optional | Source-specific or ODPH object-type label. |
-| `uri` | string | Optional; `uri-reference` format | Relative or absolute locator for the reference. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Identifier of the referenced object or source.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>integer</td>
+<td>Required; minimum <code>1</code></td>
+<td>Exact referenced version.</td>
+</tr>
+<tr>
+<td><code>retrievedAt</code></td>
+<td>string</td>
+<td>Optional; RFC 3339 <code>date-time</code></td>
+<td>Retrieval time for an observed source reference.</td>
+</tr>
+<tr>
+<td><code>objectType</code></td>
+<td>string</td>
+<td>Optional</td>
+<td>Source-specific or ODPH object-type label.</td>
+</tr>
+<tr>
+<td><code>uri</code></td>
+<td>string</td>
+<td>Optional; <code>uri-reference</code> format</td>
+<td>Relative or absolute locator for the reference.</td>
+</tr>
+</tbody>
+</table>
 
 ### Boundary
 
 `Mandate`, `WorkEnvelope`, and `ExecutionPackage` additionally compose the `Boundary` definition under their `boundary` element.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- | --- |
-| `scope` | array of string | Required; items have minimum length 1 | Declared business scope. A relationship validator must ensure a child boundary does not broaden its parent. |
-| `tools` | array of string | Required; items have minimum length 1 | Named local tool or capability boundary. This declaration does not grant access. |
-| `dataAccess` | array of string | Required; items have minimum length 1 | Named local data-access boundary. This declaration does not grant data access. |
-| `approvalRights` | array of string | Required; items have minimum length 1 | Named local approval boundary. This declaration does not confer approval rights. |
-| `authorityLevel` | integer | Required; `0`–`3` | Local ordinal used for deterministic comparison only; values have no portable cross-organisation meaning. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>scope</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Declared business scope. A relationship validator must ensure a child boundary does not broaden its parent.</td>
+</tr>
+<tr>
+<td><code>tools</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Named local tool or capability boundary. This declaration does not grant access.</td>
+</tr>
+<tr>
+<td><code>dataAccess</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Named local data-access boundary. This declaration does not grant data access.</td>
+</tr>
+<tr>
+<td><code>approvalRights</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Named local approval boundary. This declaration does not confer approval rights.</td>
+</tr>
+<tr>
+<td><code>authorityLevel</code></td>
+<td>integer</td>
+<td>Required; <code>0</code>–<code>3</code></td>
+<td>Local ordinal used for deterministic comparison only; values have no portable cross-organisation meaning.</td>
+</tr>
+</tbody>
+</table>
 
 ## ContextPackage
 
 A `ContextPackage` is a bounded observation, not a copied catalog. It identifies the retrieval scope, source IDs and versions, retrieval time, freshness, and observed conflicts. Every source observation is attributable to a version and retrieval time; stale or contradictory input must be made visible for human resolution.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- | --- |
-| `kind` | string | Required; constant `ContextPackage` | Discriminator for a bounded, attributable context observation. All `CommonObject` elements are also required. |
-| `context` | object | Required; closed structure | Groups the scope, freshness, and conflict statement for this observation. |
-| `context.retrievalScope` | object | Required; open structure | Source-specific description of the retrieved objectives, use cases, data products, graph revision, or other bounded slice. |
-| `context.freshness` | string | Required; `fresh`, `stale`, or `unknown` | Declared freshness state of this observation. It does not assert a universal source-consistency guarantee. |
-| `context.conflicts` | array | Required; may be empty | Observed conflicts that need resolution. An empty array means no conflict was observed in this snapshot. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>ContextPackage</code></td>
+<td>Discriminator for a bounded, attributable context observation. All <code>CommonObject</code> elements are also required.</td>
+</tr>
+<tr>
+<td><code>context</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the scope, freshness, and conflict statement for this observation.</td>
+</tr>
+<tr>
+<td><code>context.retrievalScope</code></td>
+<td>object</td>
+<td>Required; open structure</td>
+<td>Source-specific description of the retrieved objectives, use cases, data products, graph revision, or other bounded slice.</td>
+</tr>
+<tr>
+<td><code>context.freshness</code></td>
+<td>string</td>
+<td>Required; <code>fresh</code>, <code>stale</code>, or <code>unknown</code></td>
+<td>Declared freshness state of this observation. It does not assert a universal source-consistency guarantee.</td>
+</tr>
+<tr>
+<td><code>context.conflicts</code></td>
+<td>array</td>
+<td>Required; may be empty</td>
+<td>Observed conflicts that need resolution. An empty array means no conflict was observed in this snapshot.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 kind: ContextPackage
@@ -250,14 +460,54 @@ context:
 
 A `Mandate` is the durable business boundary for an area of work. It names the accountable owner, permitted scope, tools, data access, review rights, authority level, and expiry. ODPH does not mint authority: a local policy match never grants connector, credential, data-access, or external-write rights.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- | --- |
-| `kind` | string | Required; constant `Mandate` | Discriminator for a durable business boundary. All `CommonObject` and `Boundary` elements are also required. |
-| `mandate` | object | Required; closed structure | Groups the durable business boundary's area, owner, and review expiry. |
-| `mandate.businessArea` | string | Required; minimum length 1 | Business area governed by this mandate. |
-| `mandate.owner` | string | Required; minimum length 1 | Accountable owner of the durable boundary. |
-| `mandate.expiresAt` | string | Required; RFC 3339 `date-time` | Time after which the mandate must be reviewed or replaced. |
-| `boundary` | `Boundary` object | Required | Local scope, tool, data-access, approval, and authority constraints. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>Mandate</code></td>
+<td>Discriminator for a durable business boundary. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
+</tr>
+<tr>
+<td><code>mandate</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the durable business boundary's area, owner, and review expiry.</td>
+</tr>
+<tr>
+<td><code>mandate.businessArea</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Business area governed by this mandate.</td>
+</tr>
+<tr>
+<td><code>mandate.owner</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Accountable owner of the durable boundary.</td>
+</tr>
+<tr>
+<td><code>mandate.expiresAt</code></td>
+<td>string</td>
+<td>Required; RFC 3339 <code>date-time</code></td>
+<td>Time after which the mandate must be reviewed or replaced.</td>
+</tr>
+<tr>
+<td><code>boundary</code></td>
+<td><code>Boundary</code> object</td>
+<td>Required</td>
+<td>Local scope, tool, data-access, approval, and authority constraints.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 kind: Mandate
@@ -293,15 +543,60 @@ boundary:
 
 A `WorkEnvelope` narrows one mandate into one assignment. It states the requested result, accountable owner, allowed subset, and expiry. It may narrow a mandate but must never broaden it; relationship validation must reject a missing mandate version or an expanded boundary.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- | --- |
-| `kind` | string | Required; constant `WorkEnvelope` | Discriminator for an assignment-specific boundary. All `CommonObject` and `Boundary` elements are also required. |
-| `assignment` | object | Required; closed structure | Groups the assignment's parent mandate, result, owner, and expiry. |
-| `assignment.mandateReference` | `Reference` object | Required | Exact ID and version of the `Mandate` being narrowed. Relationship validation rejects a missing or broadened parent boundary. |
-| `assignment.requestedResult` | string | Required; minimum length 1 | Business result requested for this assignment. |
-| `assignment.owner` | string | Required; minimum length 1 | Accountable owner of this assignment. |
-| `assignment.expiresAt` | string | Required; RFC 3339 `date-time` | Time after which the assignment boundary is no longer valid. |
-| `boundary` | `Boundary` object | Required | Local scope, tool, data-access, approval, and authority constraints. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>WorkEnvelope</code></td>
+<td>Discriminator for an assignment-specific boundary. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
+</tr>
+<tr>
+<td><code>assignment</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the assignment's parent mandate, result, owner, and expiry.</td>
+</tr>
+<tr>
+<td><code>assignment.mandateReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the <code>Mandate</code> being narrowed. Relationship validation rejects a missing or broadened parent boundary.</td>
+</tr>
+<tr>
+<td><code>assignment.requestedResult</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Business result requested for this assignment.</td>
+</tr>
+<tr>
+<td><code>assignment.owner</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Accountable owner of this assignment.</td>
+</tr>
+<tr>
+<td><code>assignment.expiresAt</code></td>
+<td>string</td>
+<td>Required; RFC 3339 <code>date-time</code></td>
+<td>Time after which the assignment boundary is no longer valid.</td>
+</tr>
+<tr>
+<td><code>boundary</code></td>
+<td><code>Boundary</code> object</td>
+<td>Required</td>
+<td>Local scope, tool, data-access, approval, and authority constraints.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 kind: WorkEnvelope
@@ -344,18 +639,78 @@ boundary:
 
 An `ExecutionPackage` is the non-authoritative plan under one work envelope. It describes steps, dependencies, expected outputs, timing, and acceptance criteria. It can be associated with a `ChangeTask`, but neither object replaces the other: the package governs plan scope; the task governs a composite change.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `kind` | string | Required; constant `ExecutionPackage` | Discriminator for a non-authoritative plan. All `CommonObject` and `Boundary` elements are also required. |
-| `execution` | object | Required; closed structure | Groups the envelope reference that bounds this execution package. |
-| `execution.workEnvelopeReference` | `Reference` object | Required | Exact ID and version of the `WorkEnvelope` that bounds this plan. |
-| `boundary` | `Boundary` object | Required | Local scope, tool, data-access, approval, and authority constraints. |
-| `plan` | object | Required; closed structure | Groups steps, outputs, dependencies, timing, and criteria. |
-| `plan.plannedSteps` | array of string | Required; items have minimum length 1 | Ordered plan steps. The schema permits an empty array; a profile may impose a stronger minimum. |
-| `plan.expectedOutputs` | array of string | Required; items have minimum length 1 | Outputs expected from the planned work. The schema permits an empty array. |
-| `plan.dependencies` | array of string | Required; items have minimum length 1 | Named prerequisites or external dependencies. The schema permits an empty array. |
-| `plan.timing` | string | Required; minimum length 1 | Human-readable timing constraint for the plan. |
-| `plan.acceptanceCriteria` | array of string | Required; items have minimum length 1 | Conditions used to evaluate the planned result. The schema permits an empty array. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>ExecutionPackage</code></td>
+<td>Discriminator for a non-authoritative plan. All <code>CommonObject</code> and <code>Boundary</code> elements are also required.</td>
+</tr>
+<tr>
+<td><code>execution</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the envelope reference that bounds this execution package.</td>
+</tr>
+<tr>
+<td><code>execution.workEnvelopeReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the <code>WorkEnvelope</code> that bounds this plan.</td>
+</tr>
+<tr>
+<td><code>boundary</code></td>
+<td><code>Boundary</code> object</td>
+<td>Required</td>
+<td>Local scope, tool, data-access, approval, and authority constraints.</td>
+</tr>
+<tr>
+<td><code>plan</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups steps, outputs, dependencies, timing, and criteria.</td>
+</tr>
+<tr>
+<td><code>plan.plannedSteps</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Ordered plan steps. The schema permits an empty array; a profile may impose a stronger minimum.</td>
+</tr>
+<tr>
+<td><code>plan.expectedOutputs</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Outputs expected from the planned work. The schema permits an empty array.</td>
+</tr>
+<tr>
+<td><code>plan.dependencies</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Named prerequisites or external dependencies. The schema permits an empty array.</td>
+</tr>
+<tr>
+<td><code>plan.timing</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Human-readable timing constraint for the plan.</td>
+</tr>
+<tr>
+<td><code>plan.acceptanceCriteria</code></td>
+<td>array of string</td>
+<td>Required; items have minimum length 1</td>
+<td>Conditions used to evaluate the planned result. The schema permits an empty array.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 kind: ExecutionPackage
@@ -405,21 +760,96 @@ plan:
 
 An `ExecutionRequest` is one explicit proposed external action, never an implicit command. It points to its plan and the revocation policy that protects its authority chain. It can be packaged with a `ChangeAction` for one Maysano resource write. Passing local validation is not permission to dispatch automatically.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `kind` | string | Required; constant `ExecutionRequest` | Discriminator for one explicit proposed action. All `CommonObject` elements are also required. |
-| `execution` | object | Required; closed structure | Groups the plan and revocation-policy references for this request. |
-| `execution.executionPackageReference` | `Reference` object | Required | Exact ID and version of the `ExecutionPackage` that contains the request. |
-| `execution.revocationPolicyReference` | `Reference` object | Required | Exact ID and version of the policy governing suspension or restoration of this request authority chain. |
-| `request` | object | Required; closed structure | Groups the action proposal, requested authority, approval, and non-secret parameters. |
-| `request.action` | string | Required; minimum length 1 | Human-readable proposed action. It is not an implicit dispatch instruction. |
-| `request.tool` | string | Required; minimum length 1 | Named tool or capability requested by the action. |
-| `request.target` | string | Required; minimum length 1 | Intended target of the action. |
-| `request.requestedAuthority` | integer | Required; `0`–`3` | Requested local authority ordinal. It must be compared to the enclosing boundary by relationship validation. |
-| `request.approval` | object | Required; closed structure | Groups the approval requirement and its expiry. |
-| `request.approval.required` | boolean | Required | Whether a platform approval decision is required before execution. |
-| `request.approval.expiresAt` | string or null | Required; RFC 3339 `date-time` or `null` | Expiry of the applicable approval when present. |
-| `request.redactedParameters` | object | Optional; open structure | Non-secret request context. Raw secrets must not be included. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>ExecutionRequest</code></td>
+<td>Discriminator for one explicit proposed action. All <code>CommonObject</code> elements are also required.</td>
+</tr>
+<tr>
+<td><code>execution</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the plan and revocation-policy references for this request.</td>
+</tr>
+<tr>
+<td><code>execution.executionPackageReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the <code>ExecutionPackage</code> that contains the request.</td>
+</tr>
+<tr>
+<td><code>execution.revocationPolicyReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the policy governing suspension or restoration of this request authority chain.</td>
+</tr>
+<tr>
+<td><code>request</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the action proposal, requested authority, approval, and non-secret parameters.</td>
+</tr>
+<tr>
+<td><code>request.action</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Human-readable proposed action. It is not an implicit dispatch instruction.</td>
+</tr>
+<tr>
+<td><code>request.tool</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Named tool or capability requested by the action.</td>
+</tr>
+<tr>
+<td><code>request.target</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Intended target of the action.</td>
+</tr>
+<tr>
+<td><code>request.requestedAuthority</code></td>
+<td>integer</td>
+<td>Required; <code>0</code>–<code>3</code></td>
+<td>Requested local authority ordinal. It must be compared to the enclosing boundary by relationship validation.</td>
+</tr>
+<tr>
+<td><code>request.approval</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the approval requirement and its expiry.</td>
+</tr>
+<tr>
+<td><code>request.approval.required</code></td>
+<td>boolean</td>
+<td>Required</td>
+<td>Whether a platform approval decision is required before execution.</td>
+</tr>
+<tr>
+<td><code>request.approval.expiresAt</code></td>
+<td>string or null</td>
+<td>Required; RFC 3339 <code>date-time</code> or <code>null</code></td>
+<td>Expiry of the applicable approval when present.</td>
+</tr>
+<tr>
+<td><code>request.redactedParameters</code></td>
+<td>object</td>
+<td>Optional; open structure</td>
+<td>Non-secret request context. Raw secrets must not be included.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 kind: ExecutionRequest
@@ -462,14 +892,54 @@ request:
 
 An `EvidenceEvent` is the durable atomic record; an `EvidenceBundle` is an exportable grouping of its events. The event links a work envelope to attributable proof of context retrieval, validation, review, submission, returned state, failure, correction, or reconciliation. A local export is not a claim of immutable platform retention.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `kind` | string | Required; constant `EvidenceEvent` | Discriminator for one durable, attributable event. All `CommonObject` elements are also required. |
-| `evidence` | object | Required; closed structure | Groups the time, assignment, type, and payload of this event. |
-| `evidence.occurredAt` | string | Required; RFC 3339 `date-time` | Time at which the recorded event occurred. |
-| `evidence.workEnvelopeReference` | `Reference` object | Required | Exact ID and version of the `WorkEnvelope` to which the evidence belongs. |
-| `evidence.eventType` | string | Required; minimum length 1 | Extensible event label, such as `context_retrieved` or `validation_completed`. |
-| `evidence.payload` | object | Required; open structure | Structured, non-secret event details and authoritative receipt references. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>EvidenceEvent</code></td>
+<td>Discriminator for one durable, attributable event. All <code>CommonObject</code> elements are also required.</td>
+</tr>
+<tr>
+<td><code>evidence</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Groups the time, assignment, type, and payload of this event.</td>
+</tr>
+<tr>
+<td><code>evidence.occurredAt</code></td>
+<td>string</td>
+<td>Required; RFC 3339 <code>date-time</code></td>
+<td>Time at which the recorded event occurred.</td>
+</tr>
+<tr>
+<td><code>evidence.workEnvelopeReference</code></td>
+<td><code>Reference</code> object</td>
+<td>Required</td>
+<td>Exact ID and version of the <code>WorkEnvelope</code> to which the evidence belongs.</td>
+</tr>
+<tr>
+<td><code>evidence.eventType</code></td>
+<td>string</td>
+<td>Required; minimum length 1</td>
+<td>Extensible event label, such as <code>context_retrieved</code> or <code>validation_completed</code>.</td>
+</tr>
+<tr>
+<td><code>evidence.payload</code></td>
+<td>object</td>
+<td>Required; open structure</td>
+<td>Structured, non-secret event details and authoritative receipt references.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 kind: EvidenceEvent
@@ -508,13 +978,36 @@ evidence:
 
 Maysano is the authoritative record for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded Maysano context; creates and validates specification files; presents a proposed change to the business owner; submits agreed files to Maysano; and records evidence. ODPH is not a second record store.
 
-| Concern | Authoritative location |
-| --- | --- |
-| Data-product definition | ODPS YAML and the ODPS schema |
-| Objective and use-case definition | ODPC YAML and the ODPC schema |
-| Connections | ODPG YAML graph specification and the ODPG schema |
-| Accepted identity, version, approval, graph state, applied change | Maysano |
-| Generated file validation, proposal presentation, submission evidence | ODPH |
+<table>
+<thead>
+<tr>
+<th>Concern</th>
+<th>Authoritative location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Data-product definition</td>
+<td>ODPS YAML and the ODPS schema</td>
+</tr>
+<tr>
+<td>Objective and use-case definition</td>
+<td>ODPC YAML and the ODPC schema</td>
+</tr>
+<tr>
+<td>Connections</td>
+<td>ODPG YAML graph specification and the ODPG schema</td>
+</tr>
+<tr>
+<td>Accepted identity, version, approval, graph state, applied change</td>
+<td>Maysano</td>
+</tr>
+<tr>
+<td>Generated file validation, proposal presentation, submission evidence</td>
+<td>ODPH</td>
+</tr>
+</tbody>
+</table>
 
 ODPH v0.2 serializes all eight top-level object kinds. A delivery must connect the objects instead of pretending that a task or action is self-sufficient. Object identity, business fields, domain semantics, and lifecycle state belong in the referenced ODPC, ODPS, or ODPG file.
 
@@ -530,17 +1023,72 @@ A `ChangeAction` is a peer top-level object for one agreed direct Maysano API op
 
 `operation` is only `create` or `update`. An `update` requires `expectedVersion`. A connection change is an ODPG file update. A deprecation is a new ODPC or ODPS file version with its lifecycle state changed. A business-object update is a new ODPC or ODPS file version. `link`, `unlink`, and `deprecate` are not ChangeAction operations.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `schema` | string | Required; canonical YAML or JSON schema URL | Identifies the v0.2 change-control schema used to validate this document. |
-| `version` | string | Required; constant `0.2-draft` | Version of the ChangeAction contract. |
-| `kind` | string | Required; constant `ChangeAction` | Discriminator for a single direct Maysano resource operation. |
-| `metadata` | object | Required; closed structure | Contains `id`, `title`, `requestedBy`, and `createdAt`; optional `parentTestCase` and `parentChangeTask` use the identifier pattern `^[a-z0-9][a-z0-9-]*$`. |
-| `graphContext` | object | Required; closed structure | Contains `source: maysano`, `baseGraphRevision`, and optional versioned `requiredObjects`. |
-| `intent` | object | Required; closed structure | Contains `businessOwner`, `reason`, `expectedOutcome`, and an identifier-form `policyProfile`. |
-| `specification` | object | Required; closed structure | Contains `operation`, `family`, contained YAML `file`, 64-character hexadecimal `sha256`, and `expectedVersion` when `operation` is `update`. |
-| `review` | object | Required; closed structure | Contains a non-empty, unique `requiredRoles` array and optional `approvalExpiresAt`. |
-| `acceptanceCriteria` | array of string | Required; at least 1 item | Non-empty criteria used to determine whether the requested change is acceptable. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema</code></td>
+<td>string</td>
+<td>Required; canonical YAML or JSON schema URL</td>
+<td>Identifies the v0.2 change-control schema used to validate this document.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>string</td>
+<td>Required; constant <code>0.2-draft</code></td>
+<td>Version of the ChangeAction contract.</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>ChangeAction</code></td>
+<td>Discriminator for a single direct Maysano resource operation.</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains <code>id</code>, <code>title</code>, <code>requestedBy</code>, and <code>createdAt</code>; optional <code>parentTestCase</code> and <code>parentChangeTask</code> use the identifier pattern <code>^[a-z0-9][a-z0-9-]*$</code>.</td>
+</tr>
+<tr>
+<td><code>graphContext</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains <code>source: maysano</code>, <code>baseGraphRevision</code>, and optional versioned <code>requiredObjects</code>.</td>
+</tr>
+<tr>
+<td><code>intent</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains <code>businessOwner</code>, <code>reason</code>, <code>expectedOutcome</code>, and an identifier-form <code>policyProfile</code>.</td>
+</tr>
+<tr>
+<td><code>specification</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains <code>operation</code>, <code>family</code>, contained YAML <code>file</code>, 64-character hexadecimal <code>sha256</code>, and <code>expectedVersion</code> when <code>operation</code> is <code>update</code>.</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains a non-empty, unique <code>requiredRoles</code> array and optional <code>approvalExpiresAt</code>.</td>
+</tr>
+<tr>
+<td><code>acceptanceCriteria</code></td>
+<td>array of string</td>
+<td>Required; at least 1 item</td>
+<td>Non-empty criteria used to determine whether the requested change is acceptable.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
@@ -581,17 +1129,72 @@ A `ChangeTask` is a peer top-level object for a composite business change. It gr
 
 It records the bounded Maysano graph revision, action-file references, dependencies, required reviewers, acceptance criteria, execution status, and resulting evidence. Static validation rejects a task with fewer than two actions or unknown fields. Runtime validation rejects missing action files, duplicate action IDs, missing dependencies, and dependency cycles.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `schema` | string | Required; canonical YAML or JSON schema URL | Identifies the v0.2 change-control schema used to validate this document. |
-| `version` | string | Required; constant `0.2-draft` | Version of the ChangeTask contract. |
-| `kind` | string | Required; constant `ChangeTask` | Discriminator for a composite, dependency-ordered change. |
-| `metadata` | object | Required; closed structure | Contains `id`, `title`, `requestedBy`, and `createdAt`; optional parent identifiers use the identifier pattern. |
-| `graphContext` | object | Required; closed structure | Contains `source: maysano`, `baseGraphRevision`, and optional versioned `requiredObjects`. |
-| `intent` | object | Required; closed structure | Contains `businessOwner`, `reason`, `expectedOutcome`, and identifier-form `policyProfile`. |
-| `actions` | array of `ActionReference` | Required; at least 2 items | Each item contains action `id`, contained YAML `actionFile`, and optional unique `dependsOn` action IDs. Runtime validation rejects missing references and dependency cycles. |
-| `review` | object | Required; closed structure | Contains a non-empty, unique `requiredRoles` array and optional `approvalExpiresAt`. |
-| `acceptanceCriteria` | array of string | Required; at least 1 item | Non-empty criteria used to determine whether the complete change is acceptable. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema</code></td>
+<td>string</td>
+<td>Required; canonical YAML or JSON schema URL</td>
+<td>Identifies the v0.2 change-control schema used to validate this document.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>string</td>
+<td>Required; constant <code>0.2-draft</code></td>
+<td>Version of the ChangeTask contract.</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; constant <code>ChangeTask</code></td>
+<td>Discriminator for a composite, dependency-ordered change.</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains <code>id</code>, <code>title</code>, <code>requestedBy</code>, and <code>createdAt</code>; optional parent identifiers use the identifier pattern.</td>
+</tr>
+<tr>
+<td><code>graphContext</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains <code>source: maysano</code>, <code>baseGraphRevision</code>, and optional versioned <code>requiredObjects</code>.</td>
+</tr>
+<tr>
+<td><code>intent</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains <code>businessOwner</code>, <code>reason</code>, <code>expectedOutcome</code>, and identifier-form <code>policyProfile</code>.</td>
+</tr>
+<tr>
+<td><code>actions</code></td>
+<td>array of <code>ActionReference</code></td>
+<td>Required; at least 2 items</td>
+<td>Each item contains action <code>id</code>, contained YAML <code>actionFile</code>, and optional unique <code>dependsOn</code> action IDs. Runtime validation rejects missing references and dependency cycles.</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Contains a non-empty, unique <code>requiredRoles</code> array and optional <code>approvalExpiresAt</code>.</td>
+</tr>
+<tr>
+<td><code>acceptanceCriteria</code></td>
+<td>array of string</td>
+<td>Required; at least 1 item</td>
+<td>Non-empty criteria used to determine whether the complete change is acceptable.</td>
+</tr>
+</tbody>
+</table>
 
 ```yaml
 schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
@@ -632,11 +1235,32 @@ The [example Change Task](examples/change-chain/change-tasks/change-chain.yaml) 
 
 `ChangeAction.specification` is a file reference, not a business-object envelope.
 
-| Family | Carries | Validated against |
-| --- | --- | --- |
-| `ODPC` | Objective or use-case definitions and their business semantics. | ODPC schema |
-| `ODPS` | Data-product definition, lifecycle, SLA, and data-quality terms. | ODPS schema |
-| `ODPG` | Nodes and connections between objectives, use cases, and data products. | ODPG graph schema |
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Carries</th>
+<th>Validated against</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ODPC</code></td>
+<td>Objective or use-case definitions and their business semantics.</td>
+<td>ODPC schema</td>
+</tr>
+<tr>
+<td><code>ODPS</code></td>
+<td>Data-product definition, lifecycle, SLA, and data-quality terms.</td>
+<td>ODPS schema</td>
+</tr>
+<tr>
+<td><code>ODPG</code></td>
+<td>Nodes and connections between objectives, use cases, and data products.</td>
+<td>ODPG graph schema</td>
+</tr>
+</tbody>
+</table>
 
 ODPG is the declared connection artefact. Connections are not raw relationship JSON. The example graph versions show the progression from an initial objective/use-case connection to a later composite change.
 
@@ -678,14 +1302,40 @@ The composite example creates one objective, one use case, two data products, re
 
 The principal v0.2 examples are linked source files in [`examples/change-chain/`](examples/change-chain/). The actions refer to their specification files from the bundle root so every reference remains contained.
 
-| Test case | Expected specification artefacts |
-| --- | --- |
-| 01 | ODPC objective v1; ODPC use case v1; ODPG graph v1 |
-| 02 | ODPS Primary Data Product v1; ODPG graph v2 |
-| 03 | ODPS Primary Data Product v2 with revised SLA and DQ terms |
-| 04 | ODPC second use case v1; ODPG graph v3 |
-| 05 | ODPS Context Data Product v1; ODPS Primary Data Product v3, deprecated; ODPG graph v4 |
-| 06 | ODPC secondary objective v1; ODPC secondary use case v1; ODPS Additional Data Product v1; ODPS Capacity Data Product v1; ODPG graph v5 |
+<table>
+<thead>
+<tr>
+<th>Test case</th>
+<th>Expected specification artefacts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>01</td>
+<td>ODPC objective v1; ODPC use case v1; ODPG graph v1</td>
+</tr>
+<tr>
+<td>02</td>
+<td>ODPS Primary Data Product v1; ODPG graph v2</td>
+</tr>
+<tr>
+<td>03</td>
+<td>ODPS Primary Data Product v2 with revised SLA and DQ terms</td>
+</tr>
+<tr>
+<td>04</td>
+<td>ODPC second use case v1; ODPG graph v3</td>
+</tr>
+<tr>
+<td>05</td>
+<td>ODPS Context Data Product v1; ODPS Primary Data Product v3, deprecated; ODPG graph v4</td>
+</tr>
+<tr>
+<td>06</td>
+<td>ODPC secondary objective v1; ODPC secondary use case v1; ODPS Additional Data Product v1; ODPS Capacity Data Product v1; ODPG graph v5</td>
+</tr>
+</tbody>
+</table>
 
 Test cases 01–05 demonstrate direct actions. Test case 06 also provides the later composite `ChangeTask`, which references its five separately valid action files and uses dependencies to order the individual resource writes.
 
@@ -699,16 +1349,66 @@ The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-c
 
 Both document kinds require `schema`, `version`, `kind`, `metadata`, `graphContext`, `intent`, `review`, and `acceptanceCriteria`.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `schema` | string | Required; canonical YAML or JSON URL | Schema identifier for the change-control document. |
-| `version` | string | Required; constant `0.2-draft` | Version of the change-control contract. |
-| `kind` | string | Required; `ChangeAction` or `ChangeTask` | Selects the change-control object definition. |
-| `metadata` | object | Required; closed structure | Stable document identity and provenance. |
-| `graphContext` | object | Required; closed structure | Bounded Maysano source and graph revision. |
-| `intent` | object | Required; closed structure | Accountable business owner, reason, outcome, and policy profile. |
-| `review` | object | Required; closed structure | Required reviewer roles and optional approval expiry. |
-| `acceptanceCriteria` | array of string | Required; at least 1 item | Criteria used to judge the requested change. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema</code></td>
+<td>string</td>
+<td>Required; canonical YAML or JSON URL</td>
+<td>Schema identifier for the change-control document.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>string</td>
+<td>Required; constant <code>0.2-draft</code></td>
+<td>Version of the change-control contract.</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; <code>ChangeAction</code> or <code>ChangeTask</code></td>
+<td>Selects the change-control object definition.</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Stable document identity and provenance.</td>
+</tr>
+<tr>
+<td><code>graphContext</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Bounded Maysano source and graph revision.</td>
+</tr>
+<tr>
+<td><code>intent</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Accountable business owner, reason, outcome, and policy profile.</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Required reviewer roles and optional approval expiry.</td>
+</tr>
+<tr>
+<td><code>acceptanceCriteria</code></td>
+<td>array of string</td>
+<td>Required; at least 1 item</td>
+<td>Criteria used to judge the requested change.</td>
+</tr>
+</tbody>
+</table>
 
 #### `metadata`
 
@@ -726,13 +1426,48 @@ Required: `source: maysano` and `baseGraphRevision`, which is a non-negative int
 
 `ChangeAction` additionally requires `specification`.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `operation` | string | Required; `create` or `update` | Requested direct Maysano resource operation. `update` requires `expectedVersion`. |
-| `family` | string | Required; `ODPC`, `ODPS`, or `ODPG` | Standard-family schema against which the referenced file is validated. |
-| `file` | string | Required; contained relative `.yaml` or `.yml` path | File location; it cannot start with `/` or contain `..` path traversal. |
-| `sha256` | string | Required; exactly 64 hexadecimal characters | SHA-256 checksum of the referenced file bytes. |
-| `expectedVersion` | integer or string | Required for `update`; integer is at least `0`, string has minimum length 1 | Version expected by Maysano before an update is accepted. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operation</code></td>
+<td>string</td>
+<td>Required; <code>create</code> or <code>update</code></td>
+<td>Requested direct Maysano resource operation. <code>update</code> requires <code>expectedVersion</code>.</td>
+</tr>
+<tr>
+<td><code>family</code></td>
+<td>string</td>
+<td>Required; <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code></td>
+<td>Standard-family schema against which the referenced file is validated.</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>string</td>
+<td>Required; contained relative <code>.yaml</code> or <code>.yml</code> path</td>
+<td>File location; it cannot start with <code>/</code> or contain <code>..</code> path traversal.</td>
+</tr>
+<tr>
+<td><code>sha256</code></td>
+<td>string</td>
+<td>Required; exactly 64 hexadecimal characters</td>
+<td>SHA-256 checksum of the referenced file bytes.</td>
+</tr>
+<tr>
+<td><code>expectedVersion</code></td>
+<td>integer or string</td>
+<td>Required for <code>update</code>; integer is at least <code>0</code>, string has minimum length 1</td>
+<td>Version expected by Maysano before an update is accepted.</td>
+</tr>
+</tbody>
+</table>
 
 The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.
 

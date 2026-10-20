@@ -6,11 +6,32 @@ title: Specification artefacts | ODPH v0.2
 
 `ChangeAction.specification` is a file reference, not a business-object envelope.
 
-| Family | Carries | Validated against |
-| --- | --- | --- |
-| `ODPC` | Objective or use-case definitions and their business semantics. | ODPC schema |
-| `ODPS` | Data-product definition, lifecycle, SLA, and data-quality terms. | ODPS schema |
-| `ODPG` | Nodes and connections between objectives, use cases, and data products. | ODPG graph schema |
+<table>
+<thead>
+<tr>
+<th>Family</th>
+<th>Carries</th>
+<th>Validated against</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ODPC</code></td>
+<td>Objective or use-case definitions and their business semantics.</td>
+<td>ODPC schema</td>
+</tr>
+<tr>
+<td><code>ODPS</code></td>
+<td>Data-product definition, lifecycle, SLA, and data-quality terms.</td>
+<td>ODPS schema</td>
+</tr>
+<tr>
+<td><code>ODPG</code></td>
+<td>Nodes and connections between objectives, use cases, and data products.</td>
+<td>ODPG graph schema</td>
+</tr>
+</tbody>
+</table>
 
 ODPG is the declared connection artefact. Connections are not raw relationship JSON. The example graph versions show the progression from an initial objective/use-case connection to a later composite change.
 

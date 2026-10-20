@@ -8,16 +8,57 @@ The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-c
 
 ## Top-level object kinds
 
-| Object kind | Required structure | Detailed field table and example |
-| --- | --- | --- |
-| `ContextPackage` | Common fields, `retrievalScope`, `freshness`, `conflicts`. | [ContextPackage](index.html#contextpackage) |
-| `Mandate` | Common fields, durable boundary fields, business area, owner, expiry. | [Mandate](index.html#mandate) |
-| `WorkEnvelope` | Common fields, mandate reference, narrowed boundary, result, owner, expiry. | [WorkEnvelope](index.html#workenvelope) |
-| `ExecutionPackage` | Common fields, envelope reference, boundary, plan, outputs, dependencies, timing, criteria. | [ExecutionPackage](index.html#executionpackage) |
-| `ExecutionRequest` | Common fields, execution-package and revocation-policy references, proposed action and approval limit. | [ExecutionRequest](index.html#executionrequest) |
-| `EvidenceEvent` | Common fields, event time, envelope reference, type, payload. | [EvidenceEvent](index.html#evidenceevent) |
-| `ChangeAction` | v0.2 change-control header, context, intent, one specification, review, criteria. | [ChangeAction](index.html#changeaction) |
-| `ChangeTask` | v0.2 change-control header, context, intent, action references, review, criteria. | [ChangeTask](index.html#changetask) |
+<table>
+<thead>
+<tr>
+<th>Object kind</th>
+<th>Required structure</th>
+<th>Detailed field table and example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ContextPackage</code></td>
+<td>Common fields, <code>retrievalScope</code>, <code>freshness</code>, <code>conflicts</code>.</td>
+<td><a href="index.html#contextpackage">ContextPackage</a></td>
+</tr>
+<tr>
+<td><code>Mandate</code></td>
+<td>Common fields, durable boundary fields, business area, owner, expiry.</td>
+<td><a href="index.html#mandate">Mandate</a></td>
+</tr>
+<tr>
+<td><code>WorkEnvelope</code></td>
+<td>Common fields, mandate reference, narrowed boundary, result, owner, expiry.</td>
+<td><a href="index.html#workenvelope">WorkEnvelope</a></td>
+</tr>
+<tr>
+<td><code>ExecutionPackage</code></td>
+<td>Common fields, envelope reference, boundary, plan, outputs, dependencies, timing, criteria.</td>
+<td><a href="index.html#executionpackage">ExecutionPackage</a></td>
+</tr>
+<tr>
+<td><code>ExecutionRequest</code></td>
+<td>Common fields, execution-package and revocation-policy references, proposed action and approval limit.</td>
+<td><a href="index.html#executionrequest">ExecutionRequest</a></td>
+</tr>
+<tr>
+<td><code>EvidenceEvent</code></td>
+<td>Common fields, event time, envelope reference, type, payload.</td>
+<td><a href="index.html#evidenceevent">EvidenceEvent</a></td>
+</tr>
+<tr>
+<td><code>ChangeAction</code></td>
+<td>v0.2 change-control header, context, intent, one specification, review, criteria.</td>
+<td><a href="index.html#changeaction">ChangeAction</a></td>
+</tr>
+<tr>
+<td><code>ChangeTask</code></td>
+<td>v0.2 change-control header, context, intent, action references, review, criteria.</td>
+<td><a href="index.html#changetask">ChangeTask</a></td>
+</tr>
+</tbody>
+</table>
 
 ## Common governed-work fields
 
@@ -27,16 +68,66 @@ The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-c
 
 Both document kinds require `schema`, `version`, `kind`, `metadata`, `graphContext`, `intent`, `review`, and `acceptanceCriteria`.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `schema` | string | Required; canonical YAML or JSON URL | Schema identifier for the change-control document. |
-| `version` | string | Required; constant `0.2-draft` | Version of the change-control contract. |
-| `kind` | string | Required; `ChangeAction` or `ChangeTask` | Selects the change-control object definition. |
-| `metadata` | object | Required; closed structure | Stable document identity and provenance. |
-| `graphContext` | object | Required; closed structure | Bounded Maysano source and graph revision. |
-| `intent` | object | Required; closed structure | Accountable business owner, reason, outcome, and policy profile. |
-| `review` | object | Required; closed structure | Required reviewer roles and optional approval expiry. |
-| `acceptanceCriteria` | array of string | Required; at least 1 item | Criteria used to judge the requested change. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema</code></td>
+<td>string</td>
+<td>Required; canonical YAML or JSON URL</td>
+<td>Schema identifier for the change-control document.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>string</td>
+<td>Required; constant <code>0.2-draft</code></td>
+<td>Version of the change-control contract.</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; <code>ChangeAction</code> or <code>ChangeTask</code></td>
+<td>Selects the change-control object definition.</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Stable document identity and provenance.</td>
+</tr>
+<tr>
+<td><code>graphContext</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Bounded Maysano source and graph revision.</td>
+</tr>
+<tr>
+<td><code>intent</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Accountable business owner, reason, outcome, and policy profile.</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Required reviewer roles and optional approval expiry.</td>
+</tr>
+<tr>
+<td><code>acceptanceCriteria</code></td>
+<td>array of string</td>
+<td>Required; at least 1 item</td>
+<td>Criteria used to judge the requested change.</td>
+</tr>
+</tbody>
+</table>
 
 ### `metadata`
 
@@ -54,13 +145,48 @@ Required: `source: maysano` and `baseGraphRevision`, which is a non-negative int
 
 `ChangeAction` additionally requires `specification`.
 
-| Element name | Type | Options | Description |
-| --- | --- | --- |
-| `operation` | string | Required; `create` or `update` | Requested direct Maysano resource operation. `update` requires `expectedVersion`. |
-| `family` | string | Required; `ODPC`, `ODPS`, or `ODPG` | Standard-family schema against which the referenced file is validated. |
-| `file` | string | Required; contained relative `.yaml` or `.yml` path | File location; it cannot start with `/` or contain `..` path traversal. |
-| `sha256` | string | Required; exactly 64 hexadecimal characters | SHA-256 checksum of the referenced file bytes. |
-| `expectedVersion` | integer or string | Required for `update`; integer is at least `0`, string has minimum length 1 | Version expected by Maysano before an update is accepted. |
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operation</code></td>
+<td>string</td>
+<td>Required; <code>create</code> or <code>update</code></td>
+<td>Requested direct Maysano resource operation. <code>update</code> requires <code>expectedVersion</code>.</td>
+</tr>
+<tr>
+<td><code>family</code></td>
+<td>string</td>
+<td>Required; <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code></td>
+<td>Standard-family schema against which the referenced file is validated.</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>string</td>
+<td>Required; contained relative <code>.yaml</code> or <code>.yml</code> path</td>
+<td>File location; it cannot start with <code>/</code> or contain <code>..</code> path traversal.</td>
+</tr>
+<tr>
+<td><code>sha256</code></td>
+<td>string</td>
+<td>Required; exactly 64 hexadecimal characters</td>
+<td>SHA-256 checksum of the referenced file bytes.</td>
+</tr>
+<tr>
+<td><code>expectedVersion</code></td>
+<td>integer or string</td>
+<td>Required for <code>update</code>; integer is at least <code>0</code>, string has minimum length 1</td>
+<td>Version expected by Maysano before an update is accepted.</td>
+</tr>
+</tbody>
+</table>
 
 The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.
 

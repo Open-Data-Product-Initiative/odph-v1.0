@@ -87,6 +87,21 @@ class OdphArtifactsTest(unittest.TestCase):
         for block in yaml_blocks:
             self.assertNotIn("{", block, "YAML examples must not hide nested maps in flow notation")
 
+    def test_published_tables_do_not_depend_on_markdown_table_rendering(self):
+        documents_with_tables = {
+            "architecture.html.md",
+            "change-chain.html.md",
+            "index.html.md",
+            "schema-reference.html.md",
+            "specification-artefacts.html.md",
+        }
+        for document in SOURCE.glob("*.html.md"):
+            content = document.read_text(encoding="utf-8")
+            self.assertNotRegex(content, r"(?m)^\|", document.name)
+            self.assertNotIn("| --- |", content, document.name)
+            if document.name in documents_with_tables:
+                self.assertIn("<table>", content, document.name)
+
 
 if __name__ == "__main__":
     unittest.main()
