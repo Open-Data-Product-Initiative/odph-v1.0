@@ -354,69 +354,122 @@
         <h1 id='schema-reference'>Schema reference</h1>
 <p>The canonical v0.2 contract is <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>. It validates eight peer top-level object kinds. The six governed-work objects use common identity, attribution, source, and relationship fields; <code>ChangeAction</code> and <code>ChangeTask</code> retain their constrained change-control structures.</p>
 <h2 id='top-level-object-kinds'>Top-level object kinds</h2>
-<table><thead>
+<table>
+<thead>
 <tr>
 <th>Object kind</th>
 <th>Required structure</th>
 <th>Detailed field table and example</th>
 </tr>
-</thead><tbody>
+</thead>
+<tbody>
 <tr>
 <td><code>ContextPackage</code></td>
 <td>Common fields, <code>retrievalScope</code>, <code>freshness</code>, <code>conflicts</code>.</td>
-<td><a href="./#contextpackage">ContextPackage</a></td>
+<td><a href="index.html#contextpackage">ContextPackage</a></td>
 </tr>
 <tr>
 <td><code>Mandate</code></td>
 <td>Common fields, durable boundary fields, business area, owner, expiry.</td>
-<td><a href="./#mandate">Mandate</a></td>
+<td><a href="index.html#mandate">Mandate</a></td>
 </tr>
 <tr>
 <td><code>WorkEnvelope</code></td>
 <td>Common fields, mandate reference, narrowed boundary, result, owner, expiry.</td>
-<td><a href="./#workenvelope">WorkEnvelope</a></td>
+<td><a href="index.html#workenvelope">WorkEnvelope</a></td>
 </tr>
 <tr>
 <td><code>ExecutionPackage</code></td>
 <td>Common fields, envelope reference, boundary, plan, outputs, dependencies, timing, criteria.</td>
-<td><a href="./#executionpackage">ExecutionPackage</a></td>
+<td><a href="index.html#executionpackage">ExecutionPackage</a></td>
 </tr>
 <tr>
 <td><code>ExecutionRequest</code></td>
 <td>Common fields, execution-package and revocation-policy references, proposed action and approval limit.</td>
-<td><a href="./#executionrequest">ExecutionRequest</a></td>
+<td><a href="index.html#executionrequest">ExecutionRequest</a></td>
 </tr>
 <tr>
 <td><code>EvidenceEvent</code></td>
 <td>Common fields, event time, envelope reference, type, payload.</td>
-<td><a href="./#evidenceevent">EvidenceEvent</a></td>
+<td><a href="index.html#evidenceevent">EvidenceEvent</a></td>
 </tr>
 <tr>
 <td><code>ChangeAction</code></td>
 <td>v0.2 change-control header, context, intent, one specification, review, criteria.</td>
-<td><a href="./#changeaction">ChangeAction</a></td>
+<td><a href="index.html#changeaction">ChangeAction</a></td>
 </tr>
 <tr>
 <td><code>ChangeTask</code></td>
 <td>v0.2 change-control header, context, intent, action references, review, criteria.</td>
-<td><a href="./#changetask">ChangeTask</a></td>
+<td><a href="index.html#changetask">ChangeTask</a></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <h2 id='common-governed-work-fields'>Common governed-work fields</h2>
 <p><code>ContextPackage</code>, <code>Mandate</code>, <code>WorkEnvelope</code>, <code>ExecutionPackage</code>, <code>ExecutionRequest</code>, and <code>EvidenceEvent</code> require <code>kind</code>, <code>metadata</code>, and <code>provenance</code>. <code>metadata</code> groups the stable <code>id</code>, language-keyed <code>name</code> and <code>description</code>, positive integer <code>version</code>, <code>createdAt</code>, and <code>actor</code>; <code>provenance</code> groups <code>sourceReferences</code> and <code>relationshipReferences</code>. A source reference has <code>id</code> and <code>version</code>, with <code>retrievedAt</code> when it is an observation; relationship references link other ODPH objects by ID and version.</p>
 <h2 id='changeaction-and-changetask-fields'>ChangeAction and ChangeTask fields</h2>
 <p>Both document kinds require <code>schema</code>, <code>version</code>, <code>kind</code>, <code>metadata</code>, <code>graphContext</code>, <code>intent</code>, <code>review</code>, and <code>acceptanceCriteria</code>.</p>
 
-<p>| Element name | Type | Options | Description |
-| --- | --- | --- |
-| <code>schema</code> | string | Required; canonical YAML or JSON URL | Schema identifier for the change-control document. |
-| <code>version</code> | string | Required; constant <code>0.2-draft</code> | Version of the change-control contract. |
-| <code>kind</code> | string | Required; <code>ChangeAction</code> or <code>ChangeTask</code> | Selects the change-control object definition. |
-| <code>metadata</code> | object | Required; closed structure | Stable document identity and provenance. |
-| <code>graphContext</code> | object | Required; closed structure | Bounded Maysano source and graph revision. |
-| <code>intent</code> | object | Required; closed structure | Accountable business owner, reason, outcome, and policy profile. |
-| <code>review</code> | object | Required; closed structure | Required reviewer roles and optional approval expiry. |
-| <code>acceptanceCriteria</code> | array of string | Required; at least 1 item | Criteria used to judge the requested change. |</p>
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>schema</code></td>
+<td>string</td>
+<td>Required; canonical YAML or JSON URL</td>
+<td>Schema identifier for the change-control document.</td>
+</tr>
+<tr>
+<td><code>version</code></td>
+<td>string</td>
+<td>Required; constant <code>0.2-draft</code></td>
+<td>Version of the change-control contract.</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td>Required; <code>ChangeAction</code> or <code>ChangeTask</code></td>
+<td>Selects the change-control object definition.</td>
+</tr>
+<tr>
+<td><code>metadata</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Stable document identity and provenance.</td>
+</tr>
+<tr>
+<td><code>graphContext</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Bounded Maysano source and graph revision.</td>
+</tr>
+<tr>
+<td><code>intent</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Accountable business owner, reason, outcome, and policy profile.</td>
+</tr>
+<tr>
+<td><code>review</code></td>
+<td>object</td>
+<td>Required; closed structure</td>
+<td>Required reviewer roles and optional approval expiry.</td>
+</tr>
+<tr>
+<td><code>acceptanceCriteria</code></td>
+<td>array of string</td>
+<td>Required; at least 1 item</td>
+<td>Criteria used to judge the requested change.</td>
+</tr>
+</tbody>
+</table>
 <h3 id='metadata'><code>metadata</code></h3>
 <p>Required: <code>id</code>, <code>title</code>, <code>requestedBy</code>, <code>createdAt</code>. <code>id</code> is a string of 3–128 characters matching <code>^[a-z0-9][a-z0-9-]*$</code>. <code>title</code> and <code>requestedBy</code> are non-empty strings; <code>createdAt</code> is an RFC 3339 date-time string. Optional <code>parentTestCase</code> and <code>parentChangeTask</code> use the same identifier rule.</p>
 <h3 id='graphcontext'><code>graphContext</code></h3>
@@ -426,13 +479,48 @@
 <h2 id='changeaction-specification'><code>ChangeAction.specification</code></h2>
 <p><code>ChangeAction</code> additionally requires <code>specification</code>.</p>
 
-<p>| Element name | Type | Options | Description |
-| --- | --- | --- |
-| <code>operation</code> | string | Required; <code>create</code> or <code>update</code> | Requested direct Maysano resource operation. <code>update</code> requires <code>expectedVersion</code>. |
-| <code>family</code> | string | Required; <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code> | Standard-family schema against which the referenced file is validated. |
-| <code>file</code> | string | Required; contained relative <code>.yaml</code> or <code>.yml</code> path | File location; it cannot start with <code>/</code> or contain <code>..</code> path traversal. |
-| <code>sha256</code> | string | Required; exactly 64 hexadecimal characters | SHA-256 checksum of the referenced file bytes. |
-| <code>expectedVersion</code> | integer or string | Required for <code>update</code>; integer is at least <code>0</code>, string has minimum length 1 | Version expected by Maysano before an update is accepted. |</p>
+<table>
+<thead>
+<tr>
+<th>Element name</th>
+<th>Type</th>
+<th>Options</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>operation</code></td>
+<td>string</td>
+<td>Required; <code>create</code> or <code>update</code></td>
+<td>Requested direct Maysano resource operation. <code>update</code> requires <code>expectedVersion</code>.</td>
+</tr>
+<tr>
+<td><code>family</code></td>
+<td>string</td>
+<td>Required; <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code></td>
+<td>Standard-family schema against which the referenced file is validated.</td>
+</tr>
+<tr>
+<td><code>file</code></td>
+<td>string</td>
+<td>Required; contained relative <code>.yaml</code> or <code>.yml</code> path</td>
+<td>File location; it cannot start with <code>/</code> or contain <code>..</code> path traversal.</td>
+</tr>
+<tr>
+<td><code>sha256</code></td>
+<td>string</td>
+<td>Required; exactly 64 hexadecimal characters</td>
+<td>SHA-256 checksum of the referenced file bytes.</td>
+</tr>
+<tr>
+<td><code>expectedVersion</code></td>
+<td>integer or string</td>
+<td>Required for <code>update</code>; integer is at least <code>0</code>, string has minimum length 1</td>
+<td>Version expected by Maysano before an update is accepted.</td>
+</tr>
+</tbody>
+</table>
 
 <p>The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.</p>
 <h2 id='changetask-actions'><code>ChangeTask.actions</code></h2>
