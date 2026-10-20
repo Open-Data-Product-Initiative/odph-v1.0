@@ -4,7 +4,7 @@ title: Schema reference | ODPH v0.2
 
 # Schema reference
 
-The canonical v0.2 contract is [`kentaro-change.yaml`](odph-v0.2/schema/kentaro-change.yaml). `additionalProperties: false` is intentional at every Kentaro document object: unknown top-level or nested fields fail validation.
+The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-control.yaml). `additionalProperties: false` is intentional at every ODPH document object: unknown top-level or nested fields fail validation.
 
 ## Common fields
 
@@ -12,9 +12,9 @@ Both document kinds require `schema`, `version`, `kind`, `metadata`, `graphConte
 
 | Field | Type and allowed values | Requirement |
 | --- | --- | --- |
-| `schema` | String. `https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml` or `.json`. | Required. |
+| `schema` | String. `https://opendataproducts.org/odph-v0.2/schema/change-control.yaml` or `.json`. | Required. |
 | `version` | Exact string `0.2-draft`. | Required. |
-| `kind` | `KentaroAction` or `KentaroChangeTask`. | Required; selects the document kind. |
+| `kind` | `ChangeAction` or `ChangeTask`. | Required; selects the document kind. |
 | `metadata` | Object. | Required. |
 | `graphContext` | Object. | Required. |
 | `intent` | Object. | Required. |
@@ -33,9 +33,9 @@ Required: `source: maysano` and `baseGraphRevision`, which is a non-negative int
 
 `intent` requires non-empty `businessOwner`, `reason`, and `expectedOutcome`, plus `policyProfile`, which uses the identifier rule. `review.requiredRoles` is a non-empty, unique array of non-empty strings. `review.approvalExpiresAt` is optional and uses the date-time format.
 
-## `KentaroAction.specification`
+## `ChangeAction.specification`
 
-`KentaroAction` additionally requires `specification`.
+`ChangeAction` additionally requires `specification`.
 
 | Field | Type and allowed values | Requirement |
 | --- | --- | --- |
@@ -47,9 +47,9 @@ Required: `source: maysano` and `baseGraphRevision`, which is a non-negative int
 
 The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.
 
-## `KentaroChangeTask.actions`
+## `ChangeTask.actions`
 
-`KentaroChangeTask` additionally requires `actions`: an array with at least two references. Every reference requires `id` and `actionFile`; `actionFile` has the same contained relative-YAML rule as `specification.file`. Optional `dependsOn` is an array of unique action IDs in the same task. Runtime validation rejects missing references, duplicate action IDs, and dependency cycles.
+`ChangeTask` additionally requires `actions`: an array with at least two references. Every reference requires `id` and `actionFile`; `actionFile` has the same contained relative-YAML rule as `specification.file`. Optional `dependsOn` is an array of unique action IDs in the same task. Runtime validation rejects missing references, duplicate action IDs, and dependency cycles.
 
 ## Deliberate v0.2 limits
 

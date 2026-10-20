@@ -1,14 +1,14 @@
-# ODPH v0.2 Draft: Kentaro Change Control
+# ODPH v0.2 Draft: ODPH Change Control
 
-ODPH v0.2 is a thin Kentaro change-control layer around versioned ODPC, ODPS, and ODPG YAML specifications. It does not model business objects, graph connections, runtime execution, or an alternate record store.
+ODPH v0.2 is a thin change-control layer around versioned ODPC, ODPS, and ODPG YAML specifications. It does not model business objects, graph connections, runtime execution, or an alternate record store.
 
-Maysano is authoritative for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. Kentaro retrieves bounded context, creates and validates one specification file at a time, obtains business-owner agreement, submits that file to Maysano, and records evidence.
+Maysano is authoritative for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded context, creates and validates one specification file at a time, obtains business-owner agreement, submits that file to Maysano, and records evidence.
 
 ## Repository structure
 
 - `source/index.html.md`: v0.2 overview and links to the published documentation set.
-- `source/odph-v0.2/schema/kentaro-change.yaml`: canonical KentaroAction/KentaroChangeTask schema published at `/odph-v0.2/schema/kentaro-change.yaml`.
-- `source/odph-v0.2/schema/kentaro-change.json`: generated JSON representation.
+- `source/odph-v0.2/schema/change-control.yaml`: canonical ChangeAction/ChangeTask schema published at `/odph-v0.2/schema/change-control.yaml`.
+- `source/odph-v0.2/schema/change-control.json`: generated JSON representation.
 - `source/examples/change-chain/`: six linked change-chain test cases, actions, a composite Change Task, and referenced ODPC, ODPS, and ODPG files.
 - `scripts/validate_examples.py`: complete static and cross-file example validation.
 - `source/objects.jsonl`: machine-readable definitions for the two v0.2 document kinds.

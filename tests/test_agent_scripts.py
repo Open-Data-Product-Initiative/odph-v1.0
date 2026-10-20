@@ -29,12 +29,12 @@ class OdphScriptsTest(unittest.TestCase):
         ]:
             result = run_script("scripts/validate_package.py", document)
             self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-            self.assertIn("valid Kentaro change-control document", result.stdout)
+            self.assertIn("valid ODPH change-control document", result.stdout)
 
     def test_complete_example_validator_passes(self):
         result = run_script("scripts/validate_examples.py")
         self.assertEqual(result.returncode, 0, result.stderr + result.stdout)
-        self.assertIn("16 KentaroActions", result.stdout)
+        self.assertIn("16 ChangeActions", result.stdout)
 
 
 if __name__ == "__main__":

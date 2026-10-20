@@ -1,12 +1,12 @@
-# ODPH v0.2 Draft: Kentaro Change Control
+# ODPH v0.2 Draft: ODPH Change Control
 
-ODPH v0.2 is a thin Kentaro change-control layer around separately validated ODPC, ODPS, and ODPG YAML specifications. Maysano is authoritative for accepted versions, identities, graph state, approvals, applied changes, and audit evidence. Kentaro creates, validates, presents, submits, and records evidence; it is not a record store.
+ODPH v0.2 is a thin change-control layer around separately validated ODPC, ODPS, and ODPG YAML specifications. Maysano is authoritative for accepted versions, identities, graph state, approvals, applied changes, and audit evidence. ODPH creates, validates, presents, submits, and records evidence; it is not a record store.
 
 ## Canonical resources
 
 - Human-readable overview: /
-- Canonical schema: /odph-v0.2/schema/kentaro-change.yaml
-- Derived JSON schema: /odph-v0.2/schema/kentaro-change.json
+- Canonical schema: /odph-v0.2/schema/change-control.yaml
+- Derived JSON schema: /odph-v0.2/schema/change-control.json
 - Complete field reference: /schema-reference.html
 - Validation guidance: /validation.html
 - Change-chain examples: /examples/change-chain/
@@ -14,15 +14,15 @@ ODPH v0.2 is a thin Kentaro change-control layer around separately validated ODP
 
 ## Document kinds
 
-- `KentaroAction`: one agreed direct Maysano resource operation, referencing exactly one ODPC, ODPS, or ODPG YAML specification file. Its operation is only `create` or `update`.
-- `KentaroChangeTask`: later v0.2 composite change that references existing action files and declares dependencies. It does not copy or embed business specifications.
+- `ChangeAction`: one agreed direct Maysano resource operation, referencing exactly one ODPC, ODPS, or ODPG YAML specification file. Its operation is only `create` or `update`.
+- `ChangeTask`: later v0.2 composite change that references existing action files and declares dependencies. It does not copy or embed business specifications.
 
 ## Authoring and validation
 
 1. Retrieve bounded Maysano context and obtain business-owner agreement.
-2. Create one ODPC, ODPS, or ODPG specification file; do not duplicate its fields in a Kentaro file.
+2. Create one ODPC, ODPS, or ODPG specification file; do not duplicate its fields in an ODPH change-control document.
 3. Create an action with a contained relative YAML path and a SHA-256 checksum of that specification.
-4. Validate the Kentaro document and the referenced standard-family file.
+4. Validate the ODPH document and the referenced standard-family file.
 5. Submit one agreed action through Maysano resource APIs and record returned identity, version, outcome, and reconciliation state.
 
 Run `python scripts/validate_examples.py` for the complete checked example chain. Direct workflows are ordered writes, never automatic rollback or all-or-nothing execution. MCP is planned only for v0.3 and does not replace Maysano APIs.

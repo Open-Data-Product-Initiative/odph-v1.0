@@ -7,7 +7,7 @@ import yaml
 from odph_paths import EXAMPLES_DIR, LLMS_TXT, OBJECTS_JSONL, SCHEMA_JSON, SCHEMA_YAML
 
 
-EXPECTED_OBJECT_IDS = {"KentaroAction", "KentaroChangeTask"}
+EXPECTED_OBJECT_IDS = {"ChangeAction", "ChangeTask"}
 
 
 def load_yaml(path):
@@ -18,10 +18,10 @@ def load_yaml(path):
 def check_schema():
     schema = load_yaml(SCHEMA_YAML)
     json_schema = json.loads(SCHEMA_JSON.read_text(encoding="utf-8"))
-    assert schema["$id"] == "https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml"
+    assert schema["$id"] == "https://opendataproducts.org/odph-v0.2/schema/change-control.yaml"
     assert json_schema == schema
-    assert schema["oneOf"] == [{"$ref": "#/$defs/KentaroAction"}, {"$ref": "#/$defs/KentaroChangeTask"}]
-    assert set(schema["$defs"]) >= {"KentaroAction", "KentaroChangeTask", "SpecificationChange", "ActionReference"}
+    assert schema["oneOf"] == [{"$ref": "#/$defs/ChangeAction"}, {"$ref": "#/$defs/ChangeTask"}]
+    assert set(schema["$defs"]) >= {"ChangeAction", "ChangeTask", "SpecificationChange", "ActionReference"}
 
 
 def check_examples():
@@ -37,7 +37,7 @@ def check_records_and_guidance():
     for record in records:
         assert all(record.get(field) for field in ["definition", "requiredFields", "doUseFor", "doNotUseFor", "exampleFile"])
     llms = LLMS_TXT.read_text(encoding="utf-8")
-    for path in ["/odph-v0.2/schema/kentaro-change.yaml", "/odph-v0.2/schema/kentaro-change.json", "/objects.jsonl", "/examples/change-chain/"]:
+    for path in ["/odph-v0.2/schema/change-control.yaml", "/odph-v0.2/schema/change-control.json", "/objects.jsonl", "/examples/change-chain/"]:
         assert path in llms
 
 

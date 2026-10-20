@@ -4,7 +4,7 @@ title: Specification artefacts | ODPH v0.2
 
 # Specification artefacts: ODPC, ODPS, ODPG
 
-`KentaroAction.specification` is a file reference, not a business-object envelope.
+`ChangeAction.specification` is a file reference, not a business-object envelope.
 
 | Family | Carries | Validated against |
 | --- | --- | --- |

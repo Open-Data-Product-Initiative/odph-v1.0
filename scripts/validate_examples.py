@@ -112,12 +112,12 @@ def main():
             action_path = resolve(root, action_ref["actionFile"])
             action = load_yaml(action_path)
             validate_schema(action, action_path, validator)
-            if action["kind"] != "KentaroAction":
+            if action["kind"] != "ChangeAction":
                 raise ValueError(f"{action_path}: Change Task references a non-action document")
             if action["metadata"].get("parentChangeTask") != task["metadata"]["id"]:
                 raise ValueError(f"{action_path}: parentChangeTask does not match {task_path}")
 
-    print(f"OK: validated {len(actions)} KentaroActions, {len(tasks)} KentaroChangeTask, and their ODPC, ODPS, and ODPG files.")
+    print(f"OK: validated {len(actions)} ChangeActions, {len(tasks)} ChangeTask, and their ODPC, ODPS, and ODPG files.")
     return 0
 
 

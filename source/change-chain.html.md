@@ -15,4 +15,4 @@ The principal v0.2 examples are linked source files in [`examples/change-chain/`
 | 05 | ODPS Context Data Product v1; ODPS Primary Data Product v3, deprecated; ODPG graph v4 |
 | 06 | ODPC secondary objective v1; ODPC secondary use case v1; ODPS Additional Data Product v1; ODPS Capacity Data Product v1; ODPG graph v5 |
 
-Test cases 01–05 demonstrate direct actions. Test case 06 also provides the later composite `KentaroChangeTask`, which references its five separately valid action files and uses dependencies to order the individual resource writes.
+Test cases 01–05 demonstrate direct actions. Test case 06 also provides the later composite `ChangeTask`, which references its five separately valid action files and uses dependencies to order the individual resource writes.

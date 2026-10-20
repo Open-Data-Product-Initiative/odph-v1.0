@@ -1,6 +1,6 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
 version: 0.2-draft
-kind: KentaroAction
+kind: ChangeAction
 metadata: {id: tc05-update-graph, title: Update graph for context data product and deprecation, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-05}
 graphContext: {source: maysano, baseGraphRevision: 3, requiredObjects: [{id: example-change-graph, expectedVersion: 3, specificationFamily: ODPG}]}
 intent: {businessOwner: Head of Change Team, reason: Express the context data product connection in the revised graph, expectedOutcome: An accepted graph revision, policyProfile: example-change-control}
