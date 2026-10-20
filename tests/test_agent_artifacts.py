@@ -47,11 +47,18 @@ class OdphArtifactsTest(unittest.TestCase):
     def test_schema_validates_each_standalone_governed_work_object(self):
         schema = yaml.safe_load((SOURCE / "odph-v0.2/schema/change-control.yaml").read_text(encoding="utf-8"))
         validator = Draft202012Validator(schema, format_checker=FormatChecker())
-        for filename in [
-            "context-package.yaml", "mandate.yaml", "work-envelope.yaml",
-            "execution-package.yaml", "execution-request.yaml", "evidence-event.yaml",
-        ]:
+        required_groups = {
+            "context-package.yaml": {"metadata", "provenance", "context"},
+            "mandate.yaml": {"metadata", "provenance", "mandate", "boundary"},
+            "work-envelope.yaml": {"metadata", "provenance", "assignment", "boundary"},
+            "execution-package.yaml": {"metadata", "provenance", "execution", "boundary", "plan"},
+            "execution-request.yaml": {"metadata", "provenance", "execution", "request"},
+            "evidence-event.yaml": {"metadata", "provenance", "evidence"},
+        }
+        for filename, groups in required_groups.items():
             example = yaml.safe_load((SOURCE / "examples" / filename).read_text(encoding="utf-8"))
+            self.assertFalse({"id", "version", "createdAt", "actor"} & set(example))
+            self.assertTrue(groups <= set(example), filename)
             errors = sorted(validator.iter_errors(example), key=lambda error: list(error.path))
             self.assertEqual(errors, [], f"{filename}: {errors}")
 
@@ -64,7 +71,7 @@ class OdphArtifactsTest(unittest.TestCase):
         guidance = (SOURCE / "llms.txt").read_text(encoding="utf-8")
         self.assertIn("/odph-v0.2/schema/change-control.yaml", guidance)
         self.assertIn("/examples/change-chain/", guidance)
-        self.assertIn("MCP is planned only for v0.3", guidance)
+        self.assertIn("They do not replace Maysano APIs.", guidance)
 
 
 if __name__ == "__main__":

@@ -21,22 +21,22 @@ The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-c
 
 ## Common governed-work fields
 
-`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent` require `id`, `kind`, positive integer `version`, `createdAt`, `actor`, `sourceReferences`, and `relationshipReferences`. A source reference has `id` and `version`, with `retrievedAt` when it is an observation; relationship references link other ODPH objects by ID and version.
+`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent` require `kind`, `metadata`, and `provenance`. `metadata` groups `id`, positive integer `version`, `createdAt`, and `actor`; `provenance` groups `sourceReferences` and `relationshipReferences`. A source reference has `id` and `version`, with `retrievedAt` when it is an observation; relationship references link other ODPH objects by ID and version.
 
 ## ChangeAction and ChangeTask fields
 
 Both document kinds require `schema`, `version`, `kind`, `metadata`, `graphContext`, `intent`, `review`, and `acceptanceCriteria`.
 
-| Field | Type and allowed values | Requirement |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| `schema` | String. `https://opendataproducts.org/odph-v0.2/schema/change-control.yaml` or `.json`. | Required. |
-| `version` | Exact string `0.2-draft`. | Required. |
-| `kind` | `ChangeAction` or `ChangeTask`. | Required; selects the document kind. |
-| `metadata` | Object. | Required. |
-| `graphContext` | Object. | Required. |
-| `intent` | Object. | Required. |
-| `review` | Object. | Required. |
-| `acceptanceCriteria` | Array of one or more non-empty strings. | Required. |
+| `schema` | string | Required; canonical YAML or JSON URL | Schema identifier for the change-control document. |
+| `version` | string | Required; constant `0.2-draft` | Version of the change-control contract. |
+| `kind` | string | Required; `ChangeAction` or `ChangeTask` | Selects the change-control object definition. |
+| `metadata` | object | Required; closed structure | Stable document identity and provenance. |
+| `graphContext` | object | Required; closed structure | Bounded Maysano source and graph revision. |
+| `intent` | object | Required; closed structure | Accountable business owner, reason, outcome, and policy profile. |
+| `review` | object | Required; closed structure | Required reviewer roles and optional approval expiry. |
+| `acceptanceCriteria` | array of string | Required; at least 1 item | Criteria used to judge the requested change. |
 
 ### `metadata`
 
@@ -54,13 +54,13 @@ Required: `source: maysano` and `baseGraphRevision`, which is a non-negative int
 
 `ChangeAction` additionally requires `specification`.
 
-| Field | Type and allowed values | Requirement |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| `operation` | `create` or `update`. | Required. `update` requires `expectedVersion`. |
-| `family` | `ODPC`, `ODPS`, or `ODPG`. | Required. |
-| `file` | Relative YAML filename ending `.yaml` or `.yml`; it cannot start with `/` or contain `..` traversal. | Required. |
-| `sha256` | Exactly 64 hexadecimal characters. | Required. |
-| `expectedVersion` | Non-negative integer or non-empty string. | Required only for `update`. |
+| `operation` | string | Required; `create` or `update` | Requested direct Maysano resource operation. `update` requires `expectedVersion`. |
+| `family` | string | Required; `ODPC`, `ODPS`, or `ODPG` | Standard-family schema against which the referenced file is validated. |
+| `file` | string | Required; contained relative `.yaml` or `.yml` path | File location; it cannot start with `/` or contain `..` path traversal. |
+| `sha256` | string | Required; exactly 64 hexadecimal characters | SHA-256 checksum of the referenced file bytes. |
+| `expectedVersion` | integer or string | Required for `update`; integer is at least `0`, string has minimum length 1 | Version expected by Maysano before an update is accepted. |
 
 The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.
 

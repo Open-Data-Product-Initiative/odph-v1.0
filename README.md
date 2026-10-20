@@ -24,4 +24,4 @@ python -m unittest discover -s tests
 bundle exec middleman build
 ```
 
-Direct workflows are ordered Maysano resource writes. They do not claim multi-action atomicity or automatic rollback. MCP is planned only for v0.3; it does not replace Maysano APIs or Maysano’s system-of-record role.
+Direct workflows are ordered Maysano resource writes. They do not claim multi-action atomicity or automatic rollback, and they do not replace Maysano’s system-of-record role.

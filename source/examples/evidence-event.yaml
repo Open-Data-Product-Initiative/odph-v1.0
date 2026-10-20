@@ -1,12 +1,15 @@
-id: evidence-context-retrieved
 kind: EvidenceEvent
-version: 1
-createdAt: '2026-10-20T00:00:00Z'
-occurredAt: '2026-10-20T00:00:00Z'
-actor: change-team
-sourceReferences:
-  - {id: 'maysano:graph', version: 4, retrievedAt: '2026-10-20T00:00:00Z'}
-relationshipReferences: [{id: envelope-service-change, version: 1}]
-workEnvelopeReference: {id: envelope-service-change, version: 1}
-eventType: context_retrieved
-payload: {contextPackageReference: {id: context-service-change, version: 1}}
+metadata:
+  id: evidence-context-retrieved
+  version: 1
+  createdAt: '2026-10-20T00:00:00Z'
+  actor: change-team
+provenance:
+  sourceReferences:
+    - {id: 'maysano:graph', version: 4, retrievedAt: '2026-10-20T00:00:00Z'}
+  relationshipReferences: [{id: envelope-service-change, version: 1}]
+evidence:
+  occurredAt: '2026-10-20T00:00:00Z'
+  workEnvelopeReference: {id: envelope-service-change, version: 1}
+  eventType: context_retrieved
+  payload: {contextPackageReference: {id: context-service-change, version: 1}}

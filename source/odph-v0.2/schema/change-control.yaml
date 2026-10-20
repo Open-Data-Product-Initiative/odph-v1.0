@@ -4,7 +4,7 @@ title: ODPH Governed Change Objects 0.2 Draft
 description: >-
   Shape validation for six top-level ODPH governed-work objects: ContextPackage,
   Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, and EvidenceEvent.
-  ChangeAction and ChangeTask are constrained execution-profile projections.
+  ChangeAction and ChangeTask are peer top-level change-control objects.
   Cross-object references, subset checks, freshness, approvals, revocation, and
   platform enforcement require deterministic relationship validation.
 
@@ -59,23 +59,37 @@ $defs:
         format: uri-reference
     additionalProperties: false
 
-  CommonObject:
+  ObjectMetadata:
     type: object
-    required: [id, kind, version, createdAt, actor, sourceReferences, relationshipReferences]
+    required: [id, version, createdAt, actor]
     properties:
       id: { $ref: '#/$defs/NonEmptyString' }
-      kind: { type: string }
       version:
         type: integer
         minimum: 1
       createdAt: { $ref: '#/$defs/Timestamp' }
       actor: { $ref: '#/$defs/NonEmptyString' }
+    additionalProperties: false
+
+  ObjectProvenance:
+    type: object
+    required: [sourceReferences, relationshipReferences]
+    properties:
       sourceReferences:
         type: array
         items: { $ref: '#/$defs/Reference' }
       relationshipReferences:
         type: array
         items: { $ref: '#/$defs/Reference' }
+    additionalProperties: false
+
+  CommonObject:
+    type: object
+    required: [kind, metadata, provenance]
+    properties:
+      kind: { type: string }
+      metadata: { $ref: '#/$defs/ObjectMetadata' }
+      provenance: { $ref: '#/$defs/ObjectProvenance' }
 
   Boundary:
     type: object
@@ -201,87 +215,150 @@ $defs:
     allOf:
       - $ref: '#/$defs/CommonObject'
       - type: object
-        required: [kind, retrievalScope, freshness, conflicts]
+        required: [kind, metadata, provenance, context]
         properties:
           kind: { const: ContextPackage }
-          retrievalScope: { type: object }
-          freshness: { enum: [fresh, stale, unknown] }
-          conflicts: { type: array }
+          metadata: { $ref: '#/$defs/ObjectMetadata' }
+          provenance: { $ref: '#/$defs/ObjectProvenance' }
+          context:
+            type: object
+            required: [retrievalScope, freshness, conflicts]
+            properties:
+              retrievalScope: { type: object }
+              freshness: { enum: [fresh, stale, unknown] }
+              conflicts: { type: array }
+            additionalProperties: false
+        additionalProperties: false
 
   Mandate:
     allOf:
       - $ref: '#/$defs/CommonObject'
-      - $ref: '#/$defs/Boundary'
       - type: object
-        required: [kind, businessArea, owner, expiresAt]
+        required: [kind, metadata, provenance, mandate, boundary]
         properties:
           kind: { const: Mandate }
-          businessArea: { $ref: '#/$defs/NonEmptyString' }
-          owner: { $ref: '#/$defs/NonEmptyString' }
-          expiresAt: { $ref: '#/$defs/Timestamp' }
+          metadata: { $ref: '#/$defs/ObjectMetadata' }
+          provenance: { $ref: '#/$defs/ObjectProvenance' }
+          mandate:
+            type: object
+            required: [businessArea, owner, expiresAt]
+            properties:
+              businessArea: { $ref: '#/$defs/NonEmptyString' }
+              owner: { $ref: '#/$defs/NonEmptyString' }
+              expiresAt: { $ref: '#/$defs/Timestamp' }
+            additionalProperties: false
+          boundary: { $ref: '#/$defs/Boundary' }
+        additionalProperties: false
 
   WorkEnvelope:
     allOf:
       - $ref: '#/$defs/CommonObject'
-      - $ref: '#/$defs/Boundary'
       - type: object
-        required: [kind, mandateReference, requestedResult, owner, expiresAt]
+        required: [kind, metadata, provenance, assignment, boundary]
         properties:
           kind: { const: WorkEnvelope }
-          mandateReference: { $ref: '#/$defs/Reference' }
-          requestedResult: { $ref: '#/$defs/NonEmptyString' }
-          owner: { $ref: '#/$defs/NonEmptyString' }
-          expiresAt: { $ref: '#/$defs/Timestamp' }
+          metadata: { $ref: '#/$defs/ObjectMetadata' }
+          provenance: { $ref: '#/$defs/ObjectProvenance' }
+          assignment:
+            type: object
+            required: [mandateReference, requestedResult, owner, expiresAt]
+            properties:
+              mandateReference: { $ref: '#/$defs/Reference' }
+              requestedResult: { $ref: '#/$defs/NonEmptyString' }
+              owner: { $ref: '#/$defs/NonEmptyString' }
+              expiresAt: { $ref: '#/$defs/Timestamp' }
+            additionalProperties: false
+          boundary: { $ref: '#/$defs/Boundary' }
+        additionalProperties: false
 
   ExecutionPackage:
     allOf:
       - $ref: '#/$defs/CommonObject'
-      - $ref: '#/$defs/Boundary'
       - type: object
-        required: [kind, workEnvelopeReference, plannedSteps, expectedOutputs, dependencies, timing, acceptanceCriteria]
+        required: [kind, metadata, provenance, execution, boundary, plan]
         properties:
           kind: { const: ExecutionPackage }
-          workEnvelopeReference: { $ref: '#/$defs/Reference' }
-          plannedSteps: { $ref: '#/$defs/StringList' }
-          expectedOutputs: { $ref: '#/$defs/StringList' }
-          dependencies: { $ref: '#/$defs/StringList' }
-          timing: { $ref: '#/$defs/NonEmptyString' }
-          acceptanceCriteria: { $ref: '#/$defs/StringList' }
+          metadata: { $ref: '#/$defs/ObjectMetadata' }
+          provenance: { $ref: '#/$defs/ObjectProvenance' }
+          execution:
+            type: object
+            required: [workEnvelopeReference]
+            properties:
+              workEnvelopeReference: { $ref: '#/$defs/Reference' }
+            additionalProperties: false
+          boundary: { $ref: '#/$defs/Boundary' }
+          plan:
+            type: object
+            required: [plannedSteps, expectedOutputs, dependencies, timing, acceptanceCriteria]
+            properties:
+              plannedSteps: { $ref: '#/$defs/StringList' }
+              expectedOutputs: { $ref: '#/$defs/StringList' }
+              dependencies: { $ref: '#/$defs/StringList' }
+              timing: { $ref: '#/$defs/NonEmptyString' }
+              acceptanceCriteria: { $ref: '#/$defs/StringList' }
+            additionalProperties: false
+        additionalProperties: false
 
   ExecutionRequest:
     allOf:
       - $ref: '#/$defs/CommonObject'
       - type: object
-        required: [kind, executionPackageReference, revocationPolicyReference, action, tool, target, requestedAuthority, approvalRequired, approvalExpiresAt]
+        required: [kind, metadata, provenance, execution, request]
         properties:
           kind: { const: ExecutionRequest }
-          executionPackageReference: { $ref: '#/$defs/Reference' }
-          revocationPolicyReference: { $ref: '#/$defs/Reference' }
-          action: { $ref: '#/$defs/NonEmptyString' }
-          tool: { $ref: '#/$defs/NonEmptyString' }
-          target: { $ref: '#/$defs/NonEmptyString' }
-          requestedAuthority:
-            type: integer
-            minimum: 0
-            maximum: 3
-          approvalRequired: { type: boolean }
-          approvalExpiresAt:
-            oneOf:
-              - $ref: '#/$defs/Timestamp'
-              - type: 'null'
-          redactedParameters: { type: object }
+          metadata: { $ref: '#/$defs/ObjectMetadata' }
+          provenance: { $ref: '#/$defs/ObjectProvenance' }
+          execution:
+            type: object
+            required: [executionPackageReference, revocationPolicyReference]
+            properties:
+              executionPackageReference: { $ref: '#/$defs/Reference' }
+              revocationPolicyReference: { $ref: '#/$defs/Reference' }
+            additionalProperties: false
+          request:
+            type: object
+            required: [action, tool, target, requestedAuthority, approval]
+            properties:
+              action: { $ref: '#/$defs/NonEmptyString' }
+              tool: { $ref: '#/$defs/NonEmptyString' }
+              target: { $ref: '#/$defs/NonEmptyString' }
+              requestedAuthority:
+                type: integer
+                minimum: 0
+                maximum: 3
+              approval:
+                type: object
+                required: [required, expiresAt]
+                properties:
+                  required: { type: boolean }
+                  expiresAt:
+                    oneOf:
+                      - $ref: '#/$defs/Timestamp'
+                      - type: 'null'
+                additionalProperties: false
+              redactedParameters: { type: object }
+            additionalProperties: false
+        additionalProperties: false
 
   EvidenceEvent:
     allOf:
       - $ref: '#/$defs/CommonObject'
       - type: object
-        required: [kind, occurredAt, workEnvelopeReference, eventType, payload]
+        required: [kind, metadata, provenance, evidence]
         properties:
           kind: { const: EvidenceEvent }
-          occurredAt: { $ref: '#/$defs/Timestamp' }
-          workEnvelopeReference: { $ref: '#/$defs/Reference' }
-          eventType: { $ref: '#/$defs/NonEmptyString' }
-          payload: { type: object }
+          metadata: { $ref: '#/$defs/ObjectMetadata' }
+          provenance: { $ref: '#/$defs/ObjectProvenance' }
+          evidence:
+            type: object
+            required: [occurredAt, workEnvelopeReference, eventType, payload]
+            properties:
+              occurredAt: { $ref: '#/$defs/Timestamp' }
+              workEnvelopeReference: { $ref: '#/$defs/Reference' }
+              eventType: { $ref: '#/$defs/NonEmptyString' }
+              payload: { type: object }
+            additionalProperties: false
+        additionalProperties: false
 
   ChangeAction:
     type: object

@@ -38,92 +38,131 @@ The six aspects have a strict direction: context informs the boundary; the manda
 
 # Business-level harness
 
+### Common object contract
+
+The six governed-work objects—`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent`—are composed with the `CommonObject` definition. Identity and provenance are grouped rather than flattened into every object.
+
+| Element name | Type | Options | Description |
+| --- | --- | --- | --- |
+| `kind` | string | Required; constrained by object definition | Discriminator for the top-level object kind. Each object table names its permitted constant value. |
+| `metadata` | object | Required; closed structure | Groups object identity and attribution: `id`, `version`, `createdAt`, and `actor`. |
+| `metadata.id` | string | Required; minimum length 1 | Stable identifier of this object version. The schema does not impose a global identifier pattern. |
+| `metadata.version` | integer | Required; minimum `1` | Positive version of this ODPH object, used by all object references. |
+| `metadata.createdAt` | string | Required; RFC 3339 `date-time` | Time at which this object version was created. |
+| `metadata.actor` | string | Required; minimum length 1 | Attributed creator or producing actor. It is attribution, not authentication proof. |
+| `provenance` | object | Required; closed structure | Groups source observations and relationships without embedding their contents. |
+| `provenance.sourceReferences` | array of `Reference` | Required; may be empty | Versioned source observations or records used when producing the object. |
+| `provenance.relationshipReferences` | array of `Reference` | Required; may be empty | Versioned links to related ODPH objects or governed records. |
+
+### Reference
+
+| Element name | Type | Options | Description |
+| --- | --- | --- | --- |
+| `id` | string | Required; minimum length 1 | Identifier of the referenced object or source. |
+| `version` | integer | Required; minimum `1` | Exact referenced version. |
+| `retrievedAt` | string | Optional; RFC 3339 `date-time` | Retrieval time for an observed source reference. |
+| `objectType` | string | Optional | Source-specific or ODPH object-type label. |
+| `uri` | string | Optional; `uri-reference` format | Relative or absolute locator for the reference. |
+
+### Boundary
+
+`Mandate`, `WorkEnvelope`, and `ExecutionPackage` additionally compose the `Boundary` definition under their `boundary` element.
+
+| Element name | Type | Options | Description |
+| --- | --- | --- | --- |
+| `scope` | array of string | Required; items have minimum length 1 | Declared business scope. A relationship validator must ensure a child boundary does not broaden its parent. |
+| `tools` | array of string | Required; items have minimum length 1 | Named local tool or capability boundary. This declaration does not grant access. |
+| `dataAccess` | array of string | Required; items have minimum length 1 | Named local data-access boundary. This declaration does not grant data access. |
+| `approvalRights` | array of string | Required; items have minimum length 1 | Named local approval boundary. This declaration does not confer approval rights. |
+| `authorityLevel` | integer | Required; `0`–`3` | Local ordinal used for deterministic comparison only; values have no portable cross-organisation meaning. |
+
 ## ContextPackage
 
 A `ContextPackage` is a bounded observation, not a copied catalog. It identifies the retrieval scope, source IDs and versions, retrieval time, freshness, and observed conflicts. Every source observation is attributable to a version and retrieval time; stale or contradictory input must be made visible for human resolution.
 
-| Attribute | Structure | Purpose |
-| --- | --- | --- |
-| `id`, `kind`, `version`, `createdAt`, `actor` | Common object identity and attribution. `kind` is `ContextPackage`. | Makes this particular observation addressable and attributable. |
-| `sourceReferences` | Array of `{id, version, retrievedAt}` references. | Identifies the bounded evidence consulted. |
-| `relationshipReferences` | Array of `{id, version}` references. | Links the context to related governed objects without copying them. |
-| `retrievalScope` | Object describing the retrieved objectives, use cases, data products, graph, or other source slice. | Declares what was looked at. |
-| `freshness` | `fresh`, `stale`, or `unknown`. | Prevents unqualified reuse of old context. |
-| `conflicts` | Array of observed conflicts or an empty array. | Records what must be resolved; empty means none observed in this snapshot. |
+| Element name | Type | Options | Description |
+| --- | --- | --- | --- |
+| `kind` | string | Required; constant `ContextPackage` | Discriminator for a bounded, attributable context observation. All `CommonObject` elements are also required. |
+| `context` | object | Required; closed structure | Groups the scope, freshness, and conflict statement for this observation. |
+| `context.retrievalScope` | object | Required; open structure | Source-specific description of the retrieved objectives, use cases, data products, graph revision, or other bounded slice. |
+| `context.freshness` | string | Required; `fresh`, `stale`, or `unknown` | Declared freshness state of this observation. It does not assert a universal source-consistency guarantee. |
+| `context.conflicts` | array | Required; may be empty | Observed conflicts that need resolution. An empty array means no conflict was observed in this snapshot. |
 
 ```yaml
-id: context-service-change
 kind: ContextPackage
-version: 1
-createdAt: "2026-10-20T00:00:00Z"
-actor: change-team
-sourceReferences:
-  - {id: maysano:graph, version: 4, retrievedAt: "2026-10-20T00:00:00Z"}
-relationshipReferences: []
-retrievalScope: {graphRevision: 4, objectiveIds: [service-objective]}
-freshness: fresh
-conflicts: []
+metadata:
+  id: context-service-change
+  version: 1
+  createdAt: "2026-10-20T00:00:00Z"
+  actor: change-team
+provenance:
+  sourceReferences:
+    - {id: maysano:graph, version: 4, retrievedAt: "2026-10-20T00:00:00Z"}
+  relationshipReferences: []
+context:
+  retrievalScope: {graphRevision: 4, objectiveIds: [service-objective]}
+  freshness: fresh
+  conflicts: []
 ```
 
 ## Mandate
 
 A `Mandate` is the durable business boundary for an area of work. It names the accountable owner, permitted scope, tools, data access, review rights, authority level, and expiry. ODPH does not mint authority: a local policy match never grants connector, credential, data-access, or external-write rights.
 
-| Attribute | Structure | Purpose |
-| --- | --- | --- |
-| Common identity and references | `id`, `kind: Mandate`, `version`, `createdAt`, `actor`, `sourceReferences`, `relationshipReferences`. | Stable attribution and links. |
-| `businessArea`, `owner` | Non-empty strings. | Names the durable area and accountable person or role. |
-| `scope`, `tools`, `dataAccess`, `approvalRights` | Arrays of non-empty strings. | Defines the outer permitted boundary. |
-| `authorityLevel` | Local integer `0`–`3`; it has no portable cross-organisation meaning. | Supports local comparison only. |
-| `expiresAt` | RFC 3339 timestamp. | Makes the boundary reviewable and finite. |
+| Element name | Type | Options | Description |
+| --- | --- | --- | --- |
+| `kind` | string | Required; constant `Mandate` | Discriminator for a durable business boundary. All `CommonObject` and `Boundary` elements are also required. |
+| `mandate` | object | Required; closed structure | Groups the durable business boundary's area, owner, and review expiry. |
+| `mandate.businessArea` | string | Required; minimum length 1 | Business area governed by this mandate. |
+| `mandate.owner` | string | Required; minimum length 1 | Accountable owner of the durable boundary. |
+| `mandate.expiresAt` | string | Required; RFC 3339 `date-time` | Time after which the mandate must be reviewed or replaced. |
+| `boundary` | `Boundary` object | Required | Local scope, tool, data-access, approval, and authority constraints. |
 
 ```yaml
-id: mandate-service-change
 kind: Mandate
-version: 1
-createdAt: "2026-10-20T00:00:00Z"
-actor: service-owner
-sourceReferences: []
-relationshipReferences: []
-businessArea: Service planning
-owner: Head of Service
-scope: [service-change]
-tools: [maysano.change-proposal]
-dataAccess: [service-planning-context]
-approvalRights: [reviewed-change-proposal]
-authorityLevel: 1
-expiresAt: "2027-01-01T00:00:00Z"
+metadata: {id: mandate-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: service-owner}
+provenance: {sourceReferences: [], relationshipReferences: []}
+mandate:
+  businessArea: Service planning
+  owner: Head of Service
+  expiresAt: "2027-01-01T00:00:00Z"
+boundary:
+  scope: [service-change]
+  tools: [maysano.change-proposal]
+  dataAccess: [service-planning-context]
+  approvalRights: [reviewed-change-proposal]
+  authorityLevel: 1
 ```
 
 ## WorkEnvelope
 
 A `WorkEnvelope` narrows one mandate into one assignment. It states the requested result, accountable owner, allowed subset, and expiry. It may narrow a mandate but must never broaden it; relationship validation must reject a missing mandate version or an expanded boundary.
 
-| Attribute | Structure | Purpose |
-| --- | --- | --- |
-| Common identity and references | `id`, `kind: WorkEnvelope`, `version`, `createdAt`, `actor`, `sourceReferences`, `relationshipReferences`. | Stable attribution and links. |
-| `mandateReference` | `{id, version}` reference to exactly one `Mandate`. | Establishes the durable boundary being narrowed. |
-| `requestedResult`, `owner` | Non-empty strings. | States the expected assignment result and accountable owner. |
-| Boundary fields | `scope`, `tools`, `dataAccess`, `approvalRights`, `authorityLevel`. | Must be a subset of the referenced mandate. |
-| `expiresAt` | RFC 3339 timestamp. | Defines the assignment review horizon. |
+| Element name | Type | Options | Description |
+| --- | --- | --- | --- |
+| `kind` | string | Required; constant `WorkEnvelope` | Discriminator for an assignment-specific boundary. All `CommonObject` and `Boundary` elements are also required. |
+| `assignment` | object | Required; closed structure | Groups the assignment's parent mandate, result, owner, and expiry. |
+| `assignment.mandateReference` | `Reference` object | Required | Exact ID and version of the `Mandate` being narrowed. Relationship validation rejects a missing or broadened parent boundary. |
+| `assignment.requestedResult` | string | Required; minimum length 1 | Business result requested for this assignment. |
+| `assignment.owner` | string | Required; minimum length 1 | Accountable owner of this assignment. |
+| `assignment.expiresAt` | string | Required; RFC 3339 `date-time` | Time after which the assignment boundary is no longer valid. |
+| `boundary` | `Boundary` object | Required | Local scope, tool, data-access, approval, and authority constraints. |
 
 ```yaml
-id: envelope-service-change
 kind: WorkEnvelope
-version: 1
-createdAt: "2026-10-20T00:00:00Z"
-actor: service-owner
-sourceReferences: []
-relationshipReferences: [{id: mandate-service-change, version: 1}]
-mandateReference: {id: mandate-service-change, version: 1}
-requestedResult: Reviewed service change proposal
-owner: Head of Service
-scope: [service-change]
-tools: [maysano.change-proposal]
-dataAccess: [service-planning-context]
-approvalRights: [reviewed-change-proposal]
-authorityLevel: 1
-expiresAt: "2026-12-01T00:00:00Z"
+metadata: {id: envelope-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: service-owner}
+provenance: {sourceReferences: [], relationshipReferences: [{id: mandate-service-change, version: 1}]}
+assignment:
+  mandateReference: {id: mandate-service-change, version: 1}
+  requestedResult: Reviewed service change proposal
+  owner: Head of Service
+  expiresAt: "2026-12-01T00:00:00Z"
+boundary:
+  scope: [service-change]
+  tools: [maysano.change-proposal]
+  dataAccess: [service-planning-context]
+  approvalRights: [reviewed-change-proposal]
+  authorityLevel: 1
 ```
 
 # Execution
@@ -132,65 +171,72 @@ expiresAt: "2026-12-01T00:00:00Z"
 
 An `ExecutionPackage` is the non-authoritative plan under one work envelope. It describes steps, dependencies, expected outputs, timing, and acceptance criteria. It can be associated with a `ChangeTask`, but neither object replaces the other: the package governs plan scope; the task governs a composite change.
 
-| Attribute | Structure | Purpose |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| Common identity and references | `id`, `kind: ExecutionPackage`, `version`, `createdAt`, `actor`, `sourceReferences`, `relationshipReferences`. | Stable attribution and links. |
-| `workEnvelopeReference` | `{id, version}` reference to exactly one `WorkEnvelope`. | Binds the plan to its assignment. |
-| Boundary fields | `scope`, `tools`, `dataAccess`, `approvalRights`, `authorityLevel`. | Must not exceed the envelope. |
-| `plannedSteps`, `dependencies` | Ordered / unordered arrays of non-empty strings. | Makes the plan and its prerequisites reviewable. |
-| `expectedOutputs`, `timing`, `acceptanceCriteria` | Output list, non-empty timing string, and criteria list. | States what good completion looks like. |
+| `kind` | string | Required; constant `ExecutionPackage` | Discriminator for a non-authoritative plan. All `CommonObject` and `Boundary` elements are also required. |
+| `execution` | object | Required; closed structure | Groups the envelope reference that bounds this execution package. |
+| `execution.workEnvelopeReference` | `Reference` object | Required | Exact ID and version of the `WorkEnvelope` that bounds this plan. |
+| `boundary` | `Boundary` object | Required | Local scope, tool, data-access, approval, and authority constraints. |
+| `plan` | object | Required; closed structure | Groups steps, outputs, dependencies, timing, and criteria. |
+| `plan.plannedSteps` | array of string | Required; items have minimum length 1 | Ordered plan steps. The schema permits an empty array; a profile may impose a stronger minimum. |
+| `plan.expectedOutputs` | array of string | Required; items have minimum length 1 | Outputs expected from the planned work. The schema permits an empty array. |
+| `plan.dependencies` | array of string | Required; items have minimum length 1 | Named prerequisites or external dependencies. The schema permits an empty array. |
+| `plan.timing` | string | Required; minimum length 1 | Human-readable timing constraint for the plan. |
+| `plan.acceptanceCriteria` | array of string | Required; items have minimum length 1 | Conditions used to evaluate the planned result. The schema permits an empty array. |
 
 ```yaml
-id: package-service-change
 kind: ExecutionPackage
-version: 1
-createdAt: "2026-10-20T00:00:00Z"
-actor: change-team
-sourceReferences: []
-relationshipReferences: [{id: envelope-service-change, version: 1}]
-workEnvelopeReference: {id: envelope-service-change, version: 1}
-scope: [service-change]
-tools: [maysano.change-proposal]
-dataAccess: [service-planning-context]
-approvalRights: [reviewed-change-proposal]
-authorityLevel: 1
-plannedSteps: [Validate context, Prepare the proposed specification, Request review]
-expectedOutputs: [Reviewed service change proposal]
-dependencies: [Current Maysano graph]
-timing: Before the service review
-acceptanceCriteria: [Names version expectations and unresolved conflicts]
+metadata: {id: package-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: change-team}
+provenance: {sourceReferences: [], relationshipReferences: [{id: envelope-service-change, version: 1}]}
+execution: {workEnvelopeReference: {id: envelope-service-change, version: 1}}
+boundary:
+  scope: [service-change]
+  tools: [maysano.change-proposal]
+  dataAccess: [service-planning-context]
+  approvalRights: [reviewed-change-proposal]
+  authorityLevel: 1
+plan:
+  plannedSteps: [Validate context, Prepare the proposed specification, Request review]
+  expectedOutputs: [Reviewed service change proposal]
+  dependencies: [Current Maysano graph]
+  timing: Before the service review
+  acceptanceCriteria: [Names version expectations and unresolved conflicts]
 ```
 
 ## ExecutionRequest
 
 An `ExecutionRequest` is one explicit proposed external action, never an implicit command. It points to its plan and the revocation policy that protects its authority chain. It can be packaged with a `ChangeAction` for one Maysano resource write. Passing local validation is not permission to dispatch automatically.
 
-| Attribute | Structure | Purpose |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| Common identity and references | `id`, `kind: ExecutionRequest`, `version`, `createdAt`, `actor`, `sourceReferences`, `relationshipReferences`. | Stable attribution and links. |
-| `executionPackageReference` | `{id, version}` reference. | Binds the request to an approved plan. |
-| `revocationPolicyReference` | `{id, version}` reference. | Binds a future executable request to its suspension and restoration path. |
-| `action`, `tool`, `target` | Non-empty strings. | Declares exactly what is proposed. |
-| `requestedAuthority`, `approvalRequired`, `approvalExpiresAt` | Local authority level, boolean approval gate, timestamp or `null`. | Makes authority and time limits explicit. |
-| `redactedParameters` | Object; never raw secrets. | Carries only safe, referential request context. |
+| `kind` | string | Required; constant `ExecutionRequest` | Discriminator for one explicit proposed action. All `CommonObject` elements are also required. |
+| `execution` | object | Required; closed structure | Groups the plan and revocation-policy references for this request. |
+| `execution.executionPackageReference` | `Reference` object | Required | Exact ID and version of the `ExecutionPackage` that contains the request. |
+| `execution.revocationPolicyReference` | `Reference` object | Required | Exact ID and version of the policy governing suspension or restoration of this request authority chain. |
+| `request` | object | Required; closed structure | Groups the action proposal, requested authority, approval, and non-secret parameters. |
+| `request.action` | string | Required; minimum length 1 | Human-readable proposed action. It is not an implicit dispatch instruction. |
+| `request.tool` | string | Required; minimum length 1 | Named tool or capability requested by the action. |
+| `request.target` | string | Required; minimum length 1 | Intended target of the action. |
+| `request.requestedAuthority` | integer | Required; `0`–`3` | Requested local authority ordinal. It must be compared to the enclosing boundary by relationship validation. |
+| `request.approval` | object | Required; closed structure | Groups the approval requirement and its expiry. |
+| `request.approval.required` | boolean | Required | Whether a platform approval decision is required before execution. |
+| `request.approval.expiresAt` | string or null | Required; RFC 3339 `date-time` or `null` | Expiry of the applicable approval when present. |
+| `request.redactedParameters` | object | Optional; open structure | Non-secret request context. Raw secrets must not be included. |
 
 ```yaml
-id: request-service-change
 kind: ExecutionRequest
-version: 1
-createdAt: "2026-10-20T00:00:00Z"
-actor: change-team
-sourceReferences: []
-relationshipReferences: [{id: package-service-change, version: 1}]
-executionPackageReference: {id: package-service-change, version: 1}
-revocationPolicyReference: {id: policy-service-change, version: 1}
-action: submit reviewed service specification
-tool: maysano.change-proposal
-target: service planning graph
-requestedAuthority: 1
-approvalRequired: true
-approvalExpiresAt: "2026-12-01T00:00:00Z"
-redactedParameters: {contextReference: context-service-change}
+metadata: {id: request-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: change-team}
+provenance: {sourceReferences: [], relationshipReferences: [{id: package-service-change, version: 1}]}
+execution:
+  executionPackageReference: {id: package-service-change, version: 1}
+  revocationPolicyReference: {id: policy-service-change, version: 1}
+request:
+  action: submit reviewed service specification
+  tool: maysano.change-proposal
+  target: service planning graph
+  requestedAuthority: 1
+  approval: {required: true, expiresAt: "2026-12-01T00:00:00Z"}
+  redactedParameters: {contextReference: context-service-change}
 ```
 
 # Evidence and assurance
@@ -199,27 +245,27 @@ redactedParameters: {contextReference: context-service-change}
 
 An `EvidenceEvent` is the durable atomic record; an `EvidenceBundle` is an exportable grouping of its events. The event links a work envelope to attributable proof of context retrieval, validation, review, submission, returned state, failure, correction, or reconciliation. A local export is not a claim of immutable platform retention.
 
-| Attribute | Structure | Purpose |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| Common identity and references | `id`, `kind: EvidenceEvent`, `version`, `createdAt`, `actor`, `sourceReferences`, `relationshipReferences`. | Stable attribution and source provenance. |
-| `occurredAt` | RFC 3339 timestamp. | Records when the event happened. |
-| `workEnvelopeReference` | `{id, version}` reference. | Associates proof with one bounded assignment. |
-| `eventType` | Extensible non-empty string. | Names the event, such as `context_retrieved` or `validation_completed`. |
-| `payload` | Object. | Carries structured, non-secret event details and authoritative receipt references. |
+| `kind` | string | Required; constant `EvidenceEvent` | Discriminator for one durable, attributable event. All `CommonObject` elements are also required. |
+| `evidence` | object | Required; closed structure | Groups the time, assignment, type, and payload of this event. |
+| `evidence.occurredAt` | string | Required; RFC 3339 `date-time` | Time at which the recorded event occurred. |
+| `evidence.workEnvelopeReference` | `Reference` object | Required | Exact ID and version of the `WorkEnvelope` to which the evidence belongs. |
+| `evidence.eventType` | string | Required; minimum length 1 | Extensible event label, such as `context_retrieved` or `validation_completed`. |
+| `evidence.payload` | object | Required; open structure | Structured, non-secret event details and authoritative receipt references. |
 
 ```yaml
-id: evidence-context-retrieved
 kind: EvidenceEvent
-version: 1
-createdAt: "2026-10-20T00:00:00Z"
-occurredAt: "2026-10-20T00:00:00Z"
-actor: change-team
-sourceReferences:
-  - {id: maysano:graph, version: 4, retrievedAt: "2026-10-20T00:00:00Z"}
-relationshipReferences: [{id: envelope-service-change, version: 1}]
-workEnvelopeReference: {id: envelope-service-change, version: 1}
-eventType: context_retrieved
-payload: {contextPackageReference: {id: context-service-change, version: 1}}
+metadata: {id: evidence-context-retrieved, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: change-team}
+provenance:
+  sourceReferences:
+    - {id: maysano:graph, version: 4, retrievedAt: "2026-10-20T00:00:00Z"}
+  relationshipReferences: [{id: envelope-service-change, version: 1}]
+evidence:
+  occurredAt: "2026-10-20T00:00:00Z"
+  workEnvelopeReference: {id: envelope-service-change, version: 1}
+  eventType: context_retrieved
+  payload: {contextPackageReference: {id: context-service-change, version: 1}}
 ```
 
 # System boundaries
@@ -250,14 +296,17 @@ A `ChangeAction` is a peer top-level object for one agreed direct Maysano API op
 
 `operation` is only `create` or `update`. An `update` requires `expectedVersion`. A connection change is an ODPG file update. A deprecation is a new ODPC or ODPS file version with its lifecycle state changed. A business-object update is a new ODPC or ODPS file version. `link`, `unlink`, and `deprecate` are not ChangeAction operations.
 
-| Attribute | Structure | Purpose |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| `schema`, `version`, `kind` | v0.2 schema identifier, `0.2-draft`, and `ChangeAction`. | Identifies the action contract. |
-| `metadata` | `id`, title, requester, creation time, and optional parent identifiers. | Stable action identity and provenance. |
-| `graphContext` | Maysano graph revision plus optional required object versions. | Pins the context against which the write is safe. |
-| `intent` | Business owner, reason, expected outcome, and policy profile. | Links the write to a business purpose. |
-| `specification` | `create` or `update`, family, contained YAML file, SHA-256, and update version where relevant. | Names exactly one separately validated standard-family artefact. |
-| `review`, `acceptanceCriteria` | Required roles, optional approval expiry, and one or more criteria. | Makes the human review gate explicit. |
+| `schema` | string | Required; canonical YAML or JSON schema URL | Identifies the v0.2 change-control schema used to validate this document. |
+| `version` | string | Required; constant `0.2-draft` | Version of the ChangeAction contract. |
+| `kind` | string | Required; constant `ChangeAction` | Discriminator for a single direct Maysano resource operation. |
+| `metadata` | object | Required; closed structure | Contains `id`, `title`, `requestedBy`, and `createdAt`; optional `parentTestCase` and `parentChangeTask` use the identifier pattern `^[a-z0-9][a-z0-9-]*$`. |
+| `graphContext` | object | Required; closed structure | Contains `source: maysano`, `baseGraphRevision`, and optional versioned `requiredObjects`. |
+| `intent` | object | Required; closed structure | Contains `businessOwner`, `reason`, `expectedOutcome`, and an identifier-form `policyProfile`. |
+| `specification` | object | Required; closed structure | Contains `operation`, `family`, contained YAML `file`, 64-character hexadecimal `sha256`, and `expectedVersion` when `operation` is `update`. |
+| `review` | object | Required; closed structure | Contains a non-empty, unique `requiredRoles` array and optional `approvalExpiresAt`. |
+| `acceptanceCriteria` | array of string | Required; at least 1 item | Non-empty criteria used to determine whether the requested change is acceptable. |
 
 ```yaml
 schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
@@ -281,12 +330,17 @@ A `ChangeTask` is a peer top-level object for a composite business change. It gr
 
 It records the bounded Maysano graph revision, action-file references, dependencies, required reviewers, acceptance criteria, execution status, and resulting evidence. Static validation rejects a task with fewer than two actions or unknown fields. Runtime validation rejects missing action files, duplicate action IDs, missing dependencies, and dependency cycles.
 
-| Attribute | Structure | Purpose |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| `schema`, `version`, `kind` | v0.2 schema identifier, `0.2-draft`, and `ChangeTask`. | Identifies the task contract. |
-| `metadata`, `graphContext`, `intent` | Same structures as `ChangeAction`. | Establishes provenance, bounded context, and business purpose. |
-| `actions` | At least two `{id, actionFile, dependsOn?}` references. | Packages independently valid actions and their declared order. |
-| `review`, `acceptanceCriteria` | Required roles, optional approval expiry, and one or more criteria. | Holds the composite review gate. |
+| `schema` | string | Required; canonical YAML or JSON schema URL | Identifies the v0.2 change-control schema used to validate this document. |
+| `version` | string | Required; constant `0.2-draft` | Version of the ChangeTask contract. |
+| `kind` | string | Required; constant `ChangeTask` | Discriminator for a composite, dependency-ordered change. |
+| `metadata` | object | Required; closed structure | Contains `id`, `title`, `requestedBy`, and `createdAt`; optional parent identifiers use the identifier pattern. |
+| `graphContext` | object | Required; closed structure | Contains `source: maysano`, `baseGraphRevision`, and optional versioned `requiredObjects`. |
+| `intent` | object | Required; closed structure | Contains `businessOwner`, `reason`, `expectedOutcome`, and identifier-form `policyProfile`. |
+| `actions` | array of `ActionReference` | Required; at least 2 items | Each item contains action `id`, contained YAML `actionFile`, and optional unique `dependsOn` action IDs. Runtime validation rejects missing references and dependency cycles. |
+| `review` | object | Required; closed structure | Contains a non-empty, unique `requiredRoles` array and optional `approvalExpiresAt`. |
+| `acceptanceCriteria` | array of string | Required; at least 1 item | Non-empty criteria used to determine whether the complete change is acceptable. |
 
 ```yaml
 schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
@@ -373,20 +427,20 @@ Test cases 01–05 demonstrate direct actions. Test case 06 also provides the la
 
 ### Common fields
 
-The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-control.yaml). `additionalProperties: false` is intentional at every ODPH document object: unknown top-level or nested fields fail validation.
+The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-control.yaml). `ChangeAction` and `ChangeTask` use closed nested structures. The governed-work object definitions deliberately retain open structures where the model carries source-specific scope, conflict, or evidence payload content.
 
 Both document kinds require `schema`, `version`, `kind`, `metadata`, `graphContext`, `intent`, `review`, and `acceptanceCriteria`.
 
-| Field | Type and allowed values | Requirement |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| `schema` | String. `https://opendataproducts.org/odph-v0.2/schema/change-control.yaml` or `.json`. | Required. |
-| `version` | Exact string `0.2-draft`. | Required. |
-| `kind` | `ChangeAction` or `ChangeTask`. | Required; selects the document kind. |
-| `metadata` | Object. | Required. |
-| `graphContext` | Object. | Required. |
-| `intent` | Object. | Required. |
-| `review` | Object. | Required. |
-| `acceptanceCriteria` | Array of one or more non-empty strings. | Required. |
+| `schema` | string | Required; canonical YAML or JSON URL | Schema identifier for the change-control document. |
+| `version` | string | Required; constant `0.2-draft` | Version of the change-control contract. |
+| `kind` | string | Required; `ChangeAction` or `ChangeTask` | Selects the change-control object definition. |
+| `metadata` | object | Required; closed structure | Stable document identity and provenance. |
+| `graphContext` | object | Required; closed structure | Bounded Maysano source and graph revision. |
+| `intent` | object | Required; closed structure | Accountable business owner, reason, outcome, and policy profile. |
+| `review` | object | Required; closed structure | Required reviewer roles and optional approval expiry. |
+| `acceptanceCriteria` | array of string | Required; at least 1 item | Criteria used to judge the requested change. |
 
 #### `metadata`
 
@@ -404,13 +458,13 @@ Required: `source: maysano` and `baseGraphRevision`, which is a non-negative int
 
 `ChangeAction` additionally requires `specification`.
 
-| Field | Type and allowed values | Requirement |
+| Element name | Type | Options | Description |
 | --- | --- | --- |
-| `operation` | `create` or `update`. | Required. `update` requires `expectedVersion`. |
-| `family` | `ODPC`, `ODPS`, or `ODPG`. | Required. |
-| `file` | Relative YAML filename ending `.yaml` or `.yml`; it cannot start with `/` or contain `..` traversal. | Required. |
-| `sha256` | Exactly 64 hexadecimal characters. | Required. |
-| `expectedVersion` | Non-negative integer or non-empty string. | Required only for `update`. |
+| `operation` | string | Required; `create` or `update` | Requested direct Maysano resource operation. `update` requires `expectedVersion`. |
+| `family` | string | Required; `ODPC`, `ODPS`, or `ODPG` | Standard-family schema against which the referenced file is validated. |
+| `file` | string | Required; contained relative `.yaml` or `.yml` path | File location; it cannot start with `/` or contain `..` path traversal. |
+| `sha256` | string | Required; exactly 64 hexadecimal characters | SHA-256 checksum of the referenced file bytes. |
+| `expectedVersion` | integer or string | Required for `update`; integer is at least `0`, string has minimum length 1 | Version expected by Maysano before an update is accepted. |
 
 The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.
 
@@ -448,17 +502,6 @@ bundle exec middleman build
 Before a Maysano write, resolve every referenced specification file; verify the checksum; verify action references; reject duplicate action IDs and dependency cycles; verify required Maysano object versions and the current graph revision; and verify ODPC, ODPS, and ODPG files are mutually consistent. Verify approvals before every write.
 
 Record submitted file identifiers, resulting Maysano identities and versions, validation outcomes, and reconciliation state. Maysano is authoritative for returned state; these checks do not turn ODPH into a record store.
-
-## Roadmap
-
-### Delivery direction
-
-| Phase | Direction |
-| --- | --- |
-| v0.2 Phase 1 | Guided, object-level workflows using one `ChangeAction` and one validated specification file per Maysano resource write. |
-| v0.2 Phase 2 | Validated `ChangeTask` orchestration that still executes through individual Maysano API calls. |
-| v0.3 | Planned MCP interface to ODPH capabilities: `odph.create_change_task`, `odph.validate_change_task`, `odph.submit_change_task`, and `odph.get_change_task_status`. MCP does not replace Maysano APIs or become the record store. |
-| Future | Maysano-native composite execution may add server-side validation, locking, atomic execution, and grouped audit. This is not required for v0.2. |
 
 ## Published contract and examples
 
