@@ -1,15 +1,25 @@
 kind: ExecutionRequest
 metadata:
   id: request-service-change
+  name:
+    en: Submit reviewed service specification
+  description:
+    en: Explicit request to submit the reviewed service change.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
   actor: change-team
 provenance:
   sourceReferences: []
-  relationshipReferences: [{id: package-service-change, version: 1}]
+  relationshipReferences:
+    - id: package-service-change
+      version: 1
 execution:
-  executionPackageReference: {id: package-service-change, version: 1}
-  revocationPolicyReference: {id: policy-service-change, version: 1}
+  executionPackageReference:
+    id: package-service-change
+    version: 1
+  revocationPolicyReference:
+    id: policy-service-change
+    version: 1
 request:
   action: submit reviewed service specification
   tool: maysano.change-proposal
@@ -18,4 +28,5 @@ request:
   approval:
     required: true
     expiresAt: '2026-12-01T00:00:00Z'
-  redactedParameters: {contextReference: context-service-change}
+  redactedParameters:
+    contextReference: context-service-change

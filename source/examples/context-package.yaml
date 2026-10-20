@@ -1,14 +1,23 @@
 kind: ContextPackage
 metadata:
   id: context-service-change
+  name:
+    en: Current service-change context
+  description:
+    en: Bounded Maysano graph context used to prepare the service change.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
   actor: change-team
 provenance:
   sourceReferences:
-    - {id: 'maysano:graph', version: 4, retrievedAt: '2026-10-20T00:00:00Z'}
+    - id: maysano:graph
+      version: 4
+      retrievedAt: '2026-10-20T00:00:00Z'
   relationshipReferences: []
 context:
-  retrievalScope: {graphRevision: 4, objectiveIds: [service-objective]}
+  retrievalScope:
+    graphRevision: 4
+    objectiveIds:
+      - service-objective
   freshness: fresh
   conflicts: []

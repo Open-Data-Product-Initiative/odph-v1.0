@@ -1,17 +1,27 @@
 kind: Mandate
 metadata:
   id: mandate-service-change
+  name:
+    en: Service-change mandate
+  description:
+    en: Durable business boundary for service planning changes.
   version: 1
   createdAt: '2026-10-20T00:00:00Z'
   actor: service-owner
-provenance: {sourceReferences: [], relationshipReferences: []}
+provenance:
+  sourceReferences: []
+  relationshipReferences: []
 mandate:
   businessArea: Service planning
   owner: Head of Service
   expiresAt: '2027-01-01T00:00:00Z'
 boundary:
-  scope: [service-change]
-  tools: [maysano.change-proposal]
-  dataAccess: [service-planning-context]
-  approvalRights: [reviewed-change-proposal]
+  scope:
+    - service-change
+  tools:
+    - maysano.change-proposal
+  dataAccess:
+    - service-planning-context
+  approvalRights:
+    - reviewed-change-proposal
   authorityLevel: 1

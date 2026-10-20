@@ -1,4 +1,4 @@
-# ODPH v0.2 Draft: ODPH Change Control
+# Business Harness Model
 
 ODPH v0.2 packages eight peer top-level governed-work objects around versioned ODPC, ODPS, and ODPG YAML specifications: ContextPackage, Mandate, WorkEnvelope, ExecutionPackage, ExecutionRequest, EvidenceEvent, ChangeAction, and ChangeTask. It does not replace business-object, graph, or Maysano record authority.
 

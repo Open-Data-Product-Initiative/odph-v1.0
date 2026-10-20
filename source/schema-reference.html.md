@@ -21,7 +21,7 @@ The canonical v0.2 contract is [`change-control.yaml`](odph-v0.2/schema/change-c
 
 ## Common governed-work fields
 
-`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent` require `kind`, `metadata`, and `provenance`. `metadata` groups `id`, positive integer `version`, `createdAt`, and `actor`; `provenance` groups `sourceReferences` and `relationshipReferences`. A source reference has `id` and `version`, with `retrievedAt` when it is an observation; relationship references link other ODPH objects by ID and version.
+`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent` require `kind`, `metadata`, and `provenance`. `metadata` groups the stable `id`, language-keyed `name` and `description`, positive integer `version`, `createdAt`, and `actor`; `provenance` groups `sourceReferences` and `relationshipReferences`. A source reference has `id` and `version`, with `retrievedAt` when it is an observation; relationship references link other ODPH objects by ID and version.
 
 ## ChangeAction and ChangeTask fields
 

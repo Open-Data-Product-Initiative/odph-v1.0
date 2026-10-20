@@ -11,6 +11,136 @@ ODPH v0.2 governs bounded change work around versioned business specifications. 
 
 <aside class="warning">This is pre-release material. Direct v0.2 workflows perform ordered, resource-level Maysano writes. They are not multi-action atomic and do not roll back automatically.</aside>
 
+# Harness package skeleton
+
+## How the top-level objects are combined
+
+A Business Harness package is a reviewed delivery bundle of independently valid top-level ODPH objects. The skeleton below is intentionally incomplete: it shows the composition and reference chain before the specification defines each object in detail. `package` is an authoring and delivery view, not a ninth schema kind; each object remains a separately validated top-level YAML document. Examples use block-style YAML so every semantic group, reference, and list has a visible indentation level.
+
+```yaml
+package:
+  metadata:
+    id: service-change-harness
+    name:
+      en: Reviewed service change
+    description:
+      en: Business Harness package for the reviewed service change.
+
+  businessHarness:
+    contextPackage:
+      kind: ContextPackage
+      metadata:
+        id: context-service-change
+        name:
+          en: Current service-change context
+        description:
+          en: Bounded change context
+        version: 1
+      context:
+        retrievalScope: # bounded source-specific context
+        freshness: fresh
+        conflicts: []
+
+    mandate:
+      kind: Mandate
+      metadata:
+        id: mandate-service-change
+        name:
+          en: Service-change mandate
+        description:
+          en: Durable change boundary
+        version: 1
+      mandate:
+        businessArea: Service planning
+        owner: Head of Service
+      boundary: # local permissions and limits
+
+    workEnvelope:
+      kind: WorkEnvelope
+      metadata:
+        id: envelope-service-change
+        name:
+          en: Reviewed service-change assignment
+        description:
+          en: Bounded change assignment
+        version: 1
+      assignment:
+        mandateReference:
+          id: mandate-service-change
+          version: 1
+        requestedResult: # reviewed deliverable
+      boundary: # narrowed local permissions and limits
+
+  execution:
+    executionPackage:
+      kind: ExecutionPackage
+      metadata:
+        id: package-service-change
+        name:
+          en: Service-change execution plan
+        description:
+          en: Planned service-change work
+        version: 1
+      execution:
+        workEnvelopeReference:
+          id: envelope-service-change
+          version: 1
+      plan:
+        plannedSteps: # ordered steps
+        expectedOutputs: # expected results
+        acceptanceCriteria: # review conditions
+
+    executionRequest:
+      kind: ExecutionRequest
+      metadata:
+        id: request-service-change
+        name:
+          en: Submit reviewed service specification
+        description:
+          en: Proposed external submission
+        version: 1
+      execution:
+        executionPackageReference:
+          id: package-service-change
+          version: 1
+        revocationPolicyReference: # policy ID and version
+      request:
+        action: # explicit proposed action
+        approval:
+          required: true
+          expiresAt: # approval expiry
+
+  evidence:
+    - kind: EvidenceEvent
+      metadata:
+        id: evidence-context-retrieved
+        name:
+          en: Service-change context retrieved
+        description:
+          en: Recorded context retrieval
+        version: 1
+      evidence:
+        workEnvelopeReference:
+          id: envelope-service-change
+          version: 1
+        eventType: context_retrieved
+        payload: # event-specific evidence
+
+  changeControl:
+    actions:
+      - kind: ChangeAction
+        specification:
+          operation: create
+          family: ODPC
+          file: specifications/odpc/service-objective-v1.yaml
+          sha256: # source file checksum
+    task:
+      kind: ChangeTask
+      actions:
+        - id: create-service-objective
+          actionFile: actions/create-service-objective.yaml
+```
+
 # Model map
 
 ## How the top-level objects connect
@@ -40,13 +170,15 @@ The six aspects have a strict direction: context informs the boundary; the manda
 
 ### Common object contract
 
-The six governed-work objects—`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent`—are composed with the `CommonObject` definition. Identity and provenance are grouped rather than flattened into every object.
+The six governed-work objects—`ContextPackage`, `Mandate`, `WorkEnvelope`, `ExecutionPackage`, `ExecutionRequest`, and `EvidenceEvent`—are composed with the `CommonObject` definition. Identity, human-readable purpose, and provenance are grouped rather than flattened into every object.
 
 | Element name | Type | Options | Description |
 | --- | --- | --- | --- |
 | `kind` | string | Required; constrained by object definition | Discriminator for the top-level object kind. Each object table names its permitted constant value. |
-| `metadata` | object | Required; closed structure | Groups object identity and attribution: `id`, `version`, `createdAt`, and `actor`. |
+| `metadata` | object | Required; closed structure | Groups object identity, human-readable purpose, and attribution. |
 | `metadata.id` | string | Required; minimum length 1 | Stable identifier of this object version. The schema does not impose a global identifier pattern. |
+| `metadata.name` | object | Required; one or more language keys | Human-readable, language-keyed name of the object. Each value is a non-empty string. |
+| `metadata.description` | object | Required; one or more language keys | Human-readable, language-keyed description of the object’s purpose and bounded meaning. Each value is a non-empty string. |
 | `metadata.version` | integer | Required; minimum `1` | Positive version of this ODPH object, used by all object references. |
 | `metadata.createdAt` | string | Required; RFC 3339 `date-time` | Time at which this object version was created. |
 | `metadata.actor` | string | Required; minimum length 1 | Attributed creator or producing actor. It is attribution, not authentication proof. |
@@ -92,15 +224,24 @@ A `ContextPackage` is a bounded observation, not a copied catalog. It identifies
 kind: ContextPackage
 metadata:
   id: context-service-change
+  name:
+    en: Current service-change context
+  description:
+    en: Bounded Maysano graph context used to prepare the service change.
   version: 1
   createdAt: "2026-10-20T00:00:00Z"
   actor: change-team
 provenance:
   sourceReferences:
-    - {id: maysano:graph, version: 4, retrievedAt: "2026-10-20T00:00:00Z"}
+    - id: maysano:graph
+      version: 4
+      retrievedAt: "2026-10-20T00:00:00Z"
   relationshipReferences: []
 context:
-  retrievalScope: {graphRevision: 4, objectiveIds: [service-objective]}
+  retrievalScope:
+    graphRevision: 4
+    objectiveIds:
+      - service-objective
   freshness: fresh
   conflicts: []
 ```
@@ -120,17 +261,31 @@ A `Mandate` is the durable business boundary for an area of work. It names the a
 
 ```yaml
 kind: Mandate
-metadata: {id: mandate-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: service-owner}
-provenance: {sourceReferences: [], relationshipReferences: []}
+metadata:
+  id: mandate-service-change
+  name:
+    en: Service-change mandate
+  description:
+    en: Durable business boundary for service planning changes.
+  version: 1
+  createdAt: "2026-10-20T00:00:00Z"
+  actor: service-owner
+provenance:
+  sourceReferences: []
+  relationshipReferences: []
 mandate:
   businessArea: Service planning
   owner: Head of Service
   expiresAt: "2027-01-01T00:00:00Z"
 boundary:
-  scope: [service-change]
-  tools: [maysano.change-proposal]
-  dataAccess: [service-planning-context]
-  approvalRights: [reviewed-change-proposal]
+  scope:
+    - service-change
+  tools:
+    - maysano.change-proposal
+  dataAccess:
+    - service-planning-context
+  approvalRights:
+    - reviewed-change-proposal
   authorityLevel: 1
 ```
 
@@ -150,18 +305,36 @@ A `WorkEnvelope` narrows one mandate into one assignment. It states the requeste
 
 ```yaml
 kind: WorkEnvelope
-metadata: {id: envelope-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: service-owner}
-provenance: {sourceReferences: [], relationshipReferences: [{id: mandate-service-change, version: 1}]}
+metadata:
+  id: envelope-service-change
+  name:
+    en: Reviewed service-change assignment
+  description:
+    en: Bounded assignment to prepare and review the service change.
+  version: 1
+  createdAt: "2026-10-20T00:00:00Z"
+  actor: service-owner
+provenance:
+  sourceReferences: []
+  relationshipReferences:
+    - id: mandate-service-change
+      version: 1
 assignment:
-  mandateReference: {id: mandate-service-change, version: 1}
+  mandateReference:
+    id: mandate-service-change
+    version: 1
   requestedResult: Reviewed service change proposal
   owner: Head of Service
   expiresAt: "2026-12-01T00:00:00Z"
 boundary:
-  scope: [service-change]
-  tools: [maysano.change-proposal]
-  dataAccess: [service-planning-context]
-  approvalRights: [reviewed-change-proposal]
+  scope:
+    - service-change
+  tools:
+    - maysano.change-proposal
+  dataAccess:
+    - service-planning-context
+  approvalRights:
+    - reviewed-change-proposal
   authorityLevel: 1
 ```
 
@@ -186,21 +359,46 @@ An `ExecutionPackage` is the non-authoritative plan under one work envelope. It 
 
 ```yaml
 kind: ExecutionPackage
-metadata: {id: package-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: change-team}
-provenance: {sourceReferences: [], relationshipReferences: [{id: envelope-service-change, version: 1}]}
-execution: {workEnvelopeReference: {id: envelope-service-change, version: 1}}
+metadata:
+  id: package-service-change
+  name:
+    en: Service-change execution plan
+  description:
+    en: Planned work required to prepare the reviewed service change.
+  version: 1
+  createdAt: "2026-10-20T00:00:00Z"
+  actor: change-team
+provenance:
+  sourceReferences: []
+  relationshipReferences:
+    - id: envelope-service-change
+      version: 1
+execution:
+  workEnvelopeReference:
+    id: envelope-service-change
+    version: 1
 boundary:
-  scope: [service-change]
-  tools: [maysano.change-proposal]
-  dataAccess: [service-planning-context]
-  approvalRights: [reviewed-change-proposal]
+  scope:
+    - service-change
+  tools:
+    - maysano.change-proposal
+  dataAccess:
+    - service-planning-context
+  approvalRights:
+    - reviewed-change-proposal
   authorityLevel: 1
 plan:
-  plannedSteps: [Validate context, Prepare the proposed specification, Request review]
-  expectedOutputs: [Reviewed service change proposal]
-  dependencies: [Current Maysano graph]
+  plannedSteps:
+    - Validate context
+    - Prepare the proposed specification
+    - Request review
+  expectedOutputs:
+    - Reviewed service change proposal
+  dependencies:
+    - Current Maysano graph
   timing: Before the service review
-  acceptanceCriteria: [Names version expectations and unresolved conflicts]
+  acceptanceCriteria:
+    - Names version expectations and unresolved conflicts
 ```
 
 ## ExecutionRequest
@@ -225,18 +423,37 @@ An `ExecutionRequest` is one explicit proposed external action, never an implici
 
 ```yaml
 kind: ExecutionRequest
-metadata: {id: request-service-change, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: change-team}
-provenance: {sourceReferences: [], relationshipReferences: [{id: package-service-change, version: 1}]}
+metadata:
+  id: request-service-change
+  name:
+    en: Submit reviewed service specification
+  description:
+    en: Explicit request to submit the reviewed service change.
+  version: 1
+  createdAt: "2026-10-20T00:00:00Z"
+  actor: change-team
+provenance:
+  sourceReferences: []
+  relationshipReferences:
+    - id: package-service-change
+      version: 1
 execution:
-  executionPackageReference: {id: package-service-change, version: 1}
-  revocationPolicyReference: {id: policy-service-change, version: 1}
+  executionPackageReference:
+    id: package-service-change
+    version: 1
+  revocationPolicyReference:
+    id: policy-service-change
+    version: 1
 request:
   action: submit reviewed service specification
   tool: maysano.change-proposal
   target: service planning graph
   requestedAuthority: 1
-  approval: {required: true, expiresAt: "2026-12-01T00:00:00Z"}
-  redactedParameters: {contextReference: context-service-change}
+  approval:
+    required: true
+    expiresAt: "2026-12-01T00:00:00Z"
+  redactedParameters:
+    contextReference: context-service-change
 ```
 
 # Evidence and assurance
@@ -256,16 +473,33 @@ An `EvidenceEvent` is the durable atomic record; an `EvidenceBundle` is an expor
 
 ```yaml
 kind: EvidenceEvent
-metadata: {id: evidence-context-retrieved, version: 1, createdAt: "2026-10-20T00:00:00Z", actor: change-team}
+metadata:
+  id: evidence-context-retrieved
+  name:
+    en: Service-change context retrieved
+  description:
+    en: Evidence that the bounded Maysano context was retrieved.
+  version: 1
+  createdAt: "2026-10-20T00:00:00Z"
+  actor: change-team
 provenance:
   sourceReferences:
-    - {id: maysano:graph, version: 4, retrievedAt: "2026-10-20T00:00:00Z"}
-  relationshipReferences: [{id: envelope-service-change, version: 1}]
+    - id: maysano:graph
+      version: 4
+      retrievedAt: "2026-10-20T00:00:00Z"
+  relationshipReferences:
+    - id: envelope-service-change
+      version: 1
 evidence:
   occurredAt: "2026-10-20T00:00:00Z"
-  workEnvelopeReference: {id: envelope-service-change, version: 1}
+  workEnvelopeReference:
+    id: envelope-service-change
+    version: 1
   eventType: context_retrieved
-  payload: {contextPackageReference: {id: context-service-change, version: 1}}
+  payload:
+    contextPackageReference:
+      id: context-service-change
+      version: 1
 ```
 
 # System boundaries
@@ -312,12 +546,29 @@ A `ChangeAction` is a peer top-level object for one agreed direct Maysano API op
 schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
 version: 0.2-draft
 kind: ChangeAction
-metadata: {id: create-service-objective, title: Create service objective, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z'}
-graphContext: {source: maysano, baseGraphRevision: 4}
-intent: {businessOwner: Head of Service, reason: Establish a reviewed service objective, expectedOutcome: Accepted objective version, policyProfile: service-change}
-specification: {operation: create, family: ODPC, file: specifications/odpc/service-objective-v1.yaml, sha256: 9a8b0c06bb51226e0a30a2c7f79ef43f378c9bf913ac3489928ccfe341c593f2}
-review: {requiredRoles: [Head of Service]}
-acceptanceCriteria: [Objective is accepted by Maysano]
+metadata:
+  id: create-service-objective
+  title: Create service objective
+  requestedBy: Change Team
+  createdAt: "2026-10-20T00:00:00Z"
+graphContext:
+  source: maysano
+  baseGraphRevision: 4
+intent:
+  businessOwner: Head of Service
+  reason: Establish a reviewed service objective
+  expectedOutcome: Accepted objective version
+  policyProfile: service-change
+specification:
+  operation: create
+  family: ODPC
+  file: specifications/odpc/service-objective-v1.yaml
+  sha256: 9a8b0c06bb51226e0a30a2c7f79ef43f378c9bf913ac3489928ccfe341c593f2
+review:
+  requiredRoles:
+    - Head of Service
+acceptanceCriteria:
+  - Objective is accepted by Maysano
 ```
 
 The action cannot embed or duplicate the referenced specification’s object fields. See the complete [schema reference](#schema-reference) and the [first guided workflow](#guided-workflow-execution).
@@ -346,14 +597,31 @@ It records the bounded Maysano graph revision, action-file references, dependenc
 schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
 version: 0.2-draft
 kind: ChangeTask
-metadata: {id: service-change, title: Service change, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z'}
-graphContext: {source: maysano, baseGraphRevision: 4}
-intent: {businessOwner: Head of Service, reason: Deliver the reviewed service change, expectedOutcome: Accepted change chain, policyProfile: service-change}
+metadata:
+  id: service-change
+  title: Service change
+  requestedBy: Change Team
+  createdAt: "2026-10-20T00:00:00Z"
+graphContext:
+  source: maysano
+  baseGraphRevision: 4
+intent:
+  businessOwner: Head of Service
+  reason: Deliver the reviewed service change
+  expectedOutcome: Accepted change chain
+  policyProfile: service-change
 actions:
-  - {id: create-service-objective, actionFile: actions/create-service-objective.yaml}
-  - {id: update-service-graph, actionFile: actions/update-service-graph.yaml, dependsOn: [create-service-objective]}
-review: {requiredRoles: [Head of Service]}
-acceptanceCriteria: [All actions reconcile with returned Maysano versions]
+  - id: create-service-objective
+    actionFile: actions/create-service-objective.yaml
+  - id: update-service-graph
+    actionFile: actions/update-service-graph.yaml
+    dependsOn:
+      - create-service-objective
+review:
+  requiredRoles:
+    - Head of Service
+acceptanceCriteria:
+  - All actions reconcile with returned Maysano versions
 ```
 
 The [example Change Task](examples/change-chain/change-tasks/change-chain.yaml) is the composite example.
