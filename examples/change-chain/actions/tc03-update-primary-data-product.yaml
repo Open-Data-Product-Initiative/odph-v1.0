@@ -1,6 +1,6 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
 version: 0.2-draft
-kind: KentaroAction
+kind: ChangeAction
 metadata: {id: tc03-update-primary-data-product, title: Revise eligibility SLA and quality terms, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-03}
 graphContext: {source: maysano, baseGraphRevision: 2, requiredObjects: [{id: primary-data-product, expectedVersion: 1, specificationFamily: ODPS}]}
 intent: {businessOwner: Head of Change Team, reason: Record reviewed SLA and data-quality terms, expectedOutcome: An accepted product version 2, policyProfile: example-change-control}

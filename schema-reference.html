@@ -330,10 +330,10 @@
                     <a href="#common-fields" class="toc-h2 toc-link" data-title="Common fields">Common fields</a>
                   </li>
                   <li>
-                    <a href="#kentaroaction-specification" class="toc-h2 toc-link" data-title="KentaroAction.specification"><code>KentaroAction.specification</code></a>
+                    <a href="#changeaction-specification" class="toc-h2 toc-link" data-title="ChangeAction.specification"><code>ChangeAction.specification</code></a>
                   </li>
                   <li>
-                    <a href="#kentarochangetask-actions" class="toc-h2 toc-link" data-title="KentaroChangeTask.actions"><code>KentaroChangeTask.actions</code></a>
+                    <a href="#changetask-actions" class="toc-h2 toc-link" data-title="ChangeTask.actions"><code>ChangeTask.actions</code></a>
                   </li>
                   <li>
                     <a href="#deliberate-v0-2-limits" class="toc-h2 toc-link" data-title="Deliberate v0.2 limits">Deliberate v0.2 limits</a>
@@ -346,7 +346,7 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='schema-reference'>Schema reference</h1>
-<p>The canonical v0.2 contract is <a href="odph-v0.2/schema/kentaro-change.yaml"><code>kentaro-change.yaml</code></a>. <code>additionalProperties: false</code> is intentional at every Kentaro document object: unknown top-level or nested fields fail validation.</p>
+<p>The canonical v0.2 contract is <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>. <code>additionalProperties: false</code> is intentional at every ODPH document object: unknown top-level or nested fields fail validation.</p>
 <h2 id='common-fields'>Common fields</h2>
 <p>Both document kinds require <code>schema</code>, <code>version</code>, <code>kind</code>, <code>metadata</code>, <code>graphContext</code>, <code>intent</code>, <code>review</code>, and <code>acceptanceCriteria</code>.</p>
 
@@ -359,7 +359,7 @@
 </thead><tbody>
 <tr>
 <td><code>schema</code></td>
-<td>String. <code>https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml</code> or <code>.json</code>.</td>
+<td>String. <code>https://opendataproducts.org/odph-v0.2/schema/change-control.yaml</code> or <code>.json</code>.</td>
 <td>Required.</td>
 </tr>
 <tr>
@@ -369,7 +369,7 @@
 </tr>
 <tr>
 <td><code>kind</code></td>
-<td><code>KentaroAction</code> or <code>KentaroChangeTask</code>.</td>
+<td><code>ChangeAction</code> or <code>ChangeTask</code>.</td>
 <td>Required; selects the document kind.</td>
 </tr>
 <tr>
@@ -404,8 +404,8 @@
 <p>Required: <code>source: maysano</code> and <code>baseGraphRevision</code>, which is a non-negative integer or non-empty string. Optional <code>requiredObjects</code> is an array of object references. Each reference requires <code>id</code> (identifier) and <code>expectedVersion</code> (non-negative integer or non-empty string), and may declare <code>specificationFamily</code> as <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code>.</p>
 <h3 id='intent-and-review'><code>intent</code> and <code>review</code></h3>
 <p><code>intent</code> requires non-empty <code>businessOwner</code>, <code>reason</code>, and <code>expectedOutcome</code>, plus <code>policyProfile</code>, which uses the identifier rule. <code>review.requiredRoles</code> is a non-empty, unique array of non-empty strings. <code>review.approvalExpiresAt</code> is optional and uses the date-time format.</p>
-<h2 id='kentaroaction-specification'><code>KentaroAction.specification</code></h2>
-<p><code>KentaroAction</code> additionally requires <code>specification</code>.</p>
+<h2 id='changeaction-specification'><code>ChangeAction.specification</code></h2>
+<p><code>ChangeAction</code> additionally requires <code>specification</code>.</p>
 
 <table><thead>
 <tr>
@@ -442,8 +442,8 @@
 </tbody></table>
 
 <p>The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.</p>
-<h2 id='kentarochangetask-actions'><code>KentaroChangeTask.actions</code></h2>
-<p><code>KentaroChangeTask</code> additionally requires <code>actions</code>: an array with at least two references. Every reference requires <code>id</code> and <code>actionFile</code>; <code>actionFile</code> has the same contained relative-YAML rule as <code>specification.file</code>. Optional <code>dependsOn</code> is an array of unique action IDs in the same task. Runtime validation rejects missing references, duplicate action IDs, and dependency cycles.</p>
+<h2 id='changetask-actions'><code>ChangeTask.actions</code></h2>
+<p><code>ChangeTask</code> additionally requires <code>actions</code>: an array with at least two references. Every reference requires <code>id</code> and <code>actionFile</code>; <code>actionFile</code> has the same contained relative-YAML rule as <code>specification.file</code>. Optional <code>dependsOn</code> is an array of unique action IDs in the same task. Runtime validation rejects missing references, duplicate action IDs, and dependency cycles.</p>
 <h2 id='deliberate-v0-2-limits'>Deliberate v0.2 limits</h2>
 <p>The schema has no <code>ContextPackage</code>, <code>Mandate</code>, <code>WorkEnvelope</code>, <code>ExecutionPackage</code>, <code>ExecutionRequest</code>, <code>EvidenceEvent</code>, <code>Correction</code>, <code>RevocationPolicy</code>, <code>tools</code>, <code>dataAccess</code>, <code>approvalRights</code>, <code>authorityLevel</code>, runtime-cache details, API request bodies, generic object payloads, or generic relationship payloads. It does not embed ODPC, ODPS, or ODPG content, and it does not add generic <code>link</code>, <code>unlink</code>, or <code>deprecate</code> operations.</p>
 

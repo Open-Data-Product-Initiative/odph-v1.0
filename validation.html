@@ -341,7 +341,7 @@
       <div class="content">
         <h1 id='validation-and-runtime-checks'>Validation and runtime checks</h1><h2 id='level-1-static-schema-validation'>Level 1: static schema validation</h2>
 <ul>
-<li>Validate <code>KentaroAction</code> and <code>KentaroChangeTask</code> YAML against <a href="odph-v0.2/schema/kentaro-change.yaml"><code>kentaro-change-v0.2.schema.yaml</code></a>.</li>
+<li>Validate <code>ChangeAction</code> and <code>ChangeTask</code> YAML against <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>.</li>
 <li>Validate ODPC files against the ODPC schema.</li>
 <li>Validate ODPS files against the ODPS schema.</li>
 <li>Validate ODPG files against the ODPG graph schema.</li>
@@ -354,11 +354,11 @@ python scripts/validate_examples.py
 python <span class="nt">-m</span> unittest discover <span class="nt">-s</span> tests
 bundle <span class="nb">exec </span>middleman build
 </code></pre></div>
-<p><code>validate_examples.py</code> uses the Open Data Products SDK schemas for ODPC, ODPS 4.2, and ODPG, verifies every referenced file and checksum, and checks the published Kentaro schema locally. CI runs the same checks.</p>
+<p><code>validate_examples.py</code> uses the Open Data Products SDK schemas for ODPC, ODPS 4.2, and ODPG, verifies every referenced file and checksum, and checks the published ODPH schema locally. CI runs the same checks.</p>
 <h2 id='level-2-cross-file-and-runtime-validation'>Level 2: cross-file and runtime validation</h2>
 <p>Before a Maysano write, resolve every referenced specification file; verify the checksum; verify action references; reject duplicate action IDs and dependency cycles; verify required Maysano object versions and the current graph revision; and verify ODPC, ODPS, and ODPG files are mutually consistent. Verify approvals before every write.</p>
 
-<p>Record submitted file identifiers, resulting Maysano identities and versions, validation outcomes, and reconciliation state. Maysano is authoritative for returned state; these checks do not turn Kentaro into a record store.</p>
+<p>Record submitted file identifiers, resulting Maysano identities and versions, validation outcomes, and reconciliation state. Maysano is authoritative for returned state; these checks do not turn ODPH into a record store.</p>
 
       </div>
       <div class="dark-box">

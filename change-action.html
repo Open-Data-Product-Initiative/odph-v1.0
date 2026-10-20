@@ -18,7 +18,7 @@
     <link rel="apple-touch-icon" sizes="512x512" href="images/favicon-86a2677d.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <title>KentaroChangeTask reference | ODPH v0.2</title>
+    <title>ChangeAction reference | ODPH v0.2</title>
 
 
     <style media="screen">
@@ -313,7 +313,7 @@
 
   </head>
 
-  <body class="kentaro-change-task" data-languages="[]">
+  <body class="change-action" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -324,19 +324,19 @@
       <img src="images/odph-logo-1a3e8c65.png" class="logo" alt="ODPH — Open Data Product Harness" />
       <ul id="toc" class="toc-list-h1">
           <li>
-            <a href="#kentarochangetask-reference" class="toc-h1 toc-link" data-title="KentaroChangeTask reference">KentaroChangeTask reference</a>
+            <a href="#changeaction-reference" class="toc-h1 toc-link" data-title="ChangeAction reference">ChangeAction reference</a>
           </li>
       </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='kentarochangetask-reference'>KentaroChangeTask reference</h1>
-<p>A <code>KentaroChangeTask</code> is a later v0.2 composite business change. It groups multiple existing <code>KentaroAction</code> files and declares their dependencies. It does not embed, copy, or recreate ODPC, ODPS, or ODPG content.</p>
+        <h1 id='changeaction-reference'>ChangeAction reference</h1>
+<p>A <code>ChangeAction</code> is one agreed direct Maysano API operation. It references exactly one generated specification file and ODPH validates that file against the declared ODPC, ODPS, or ODPG schema before submitting it.</p>
 
-<p>It records the bounded Maysano graph revision, action-file references, dependencies, required reviewers, acceptance criteria, execution status, and resulting evidence. Static validation rejects a task with fewer than two actions or unknown fields. Runtime validation rejects missing action files, duplicate action IDs, missing dependencies, and dependency cycles.</p>
+<p><code>operation</code> is only <code>create</code> or <code>update</code>. An <code>update</code> requires <code>expectedVersion</code>. A connection change is an ODPG file update. A deprecation is a new ODPC or ODPS file version with its lifecycle state changed. A business-object update is a new ODPC or ODPS file version. <code>link</code>, <code>unlink</code>, and <code>deprecate</code> are not ChangeAction operations.</p>
 
-<p>The <a href="examples/change-chain/change-tasks/change-chain.yaml">example Change Task</a> is the composite example.</p>
+<p>The action cannot embed or duplicate the referenced specification’s object fields. See the complete <a href="schema-reference.html">schema reference</a> and the <a href="guided-workflow.html">first guided workflow</a>.</p>
 
       </div>
       <div class="dark-box">

@@ -1,6 +1,6 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/kentaro-change.yaml
+schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
 version: 0.2-draft
-kind: KentaroAction
+kind: ChangeAction
 metadata: {id: tc02-create-primary-data-product, title: Create Primary Data Product, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-02}
 graphContext: {source: maysano, baseGraphRevision: 1}
 intent: {businessOwner: Head of Change Team, reason: Provide eligibility information for change planning, expectedOutcome: An accepted data-product identity and version, policyProfile: example-change-control}
