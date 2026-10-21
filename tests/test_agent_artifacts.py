@@ -98,6 +98,21 @@ class ChangePackageTest(unittest.TestCase):
         path, _ = self.variant(lambda document, root: document["actions"][0].update(gap="Unrelated warehouse condition.", finding="Unrelated warehouse condition.", effect="Unrelated warehouse condition."))
         self.assertIn("action-1:unconnected-business-need", validate_package(path, at="2026-10-21T12:00:00Z"))
 
+    def test_each_change_package_section_has_a_field_reference_table(self):
+        documentation = (SOURCE / "index.html.md").read_text(encoding="utf-8")
+        for section, fields in {
+            "meta": ["meta.id", "meta.title", "meta.created"],
+            "need": ["need.actor.type", "need.job.type", "need.success[].test"],
+            "auth": ["auth.owner", "auth.until"],
+            "context": ["context.current.rev", "context.target.graph"],
+            "actions": ["actions[].file", "actions[].evidence.graphState"],
+            "evidence": ["evidence.outcomeState"],
+        }.items():
+            subsection = documentation.split(f"## `{section}`", 1)[1]
+            self.assertIn("<table>", subsection.split("```yaml", 1)[0])
+            for field in fields:
+                self.assertIn(f"<code>{field}</code>", subsection)
+
 
 if __name__ == "__main__":
     unittest.main()
