@@ -100,6 +100,9 @@ class ChangePackageTest(unittest.TestCase):
 
     def test_each_change_package_section_has_a_field_reference_table(self):
         documentation = (SOURCE / "index.html.md").read_text(encoding="utf-8")
+        document_header = documentation.split("# Graph-change model", 1)[1].split("## `meta`", 1)[0]
+        self.assertLess(document_header.index("```yaml"), document_header.index("<table>"))
+        self.assertIn("schema: https://opendataproducts.org/odph/v0.2/schema/change-package.yaml", document_header)
         for section, fields in {
             "meta": ["meta.id", "meta.title", "meta.created"],
             "need": ["need.actor.type", "need.job.type", "need.success[].test"],
@@ -109,8 +112,10 @@ class ChangePackageTest(unittest.TestCase):
             "evidence": ["evidence.outcomeState"],
         }.items():
             subsection = documentation.split(f"## `{section}`", 1)[1]
-            table = subsection.split("```yaml", 1)[0]
-            self.assertIn("<table>", table)
+            section_before_next_heading = subsection.split("\n## ", 1)[0].split("\n# ", 1)[0]
+            self.assertLess(section_before_next_heading.index("```yaml"), section_before_next_heading.index("<table>"))
+            self.assertIn("<table>", section_before_next_heading)
+            table = section_before_next_heading.split("<table>", 1)[1].split("</table>", 1)[0]
             self.assertIn("<th>Mandatory</th>", table)
             self.assertIn("<td>Yes</td>", table)
             for field in fields:

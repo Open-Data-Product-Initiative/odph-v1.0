@@ -31,6 +31,12 @@ BusinessNeed -> G0 -> G1 -> ordered actions -> action evidence -> verified outco
 
 # Graph-change model
 
+```yaml
+schema: https://opendataproducts.org/odph/v0.2/schema/change-package.yaml
+version: 0.2-draft
+kind: graph-change
+```
+
 Every complete graph-change package has a header and six required sections: `meta`, `need`, `auth`, `context`, `actions`, and `evidence`. All objects are closed: unknown fields are rejected.
 
 <table>
@@ -44,6 +50,13 @@ Every complete graph-change package has a header and six required sections: `met
 
 ## `meta`
 
+```yaml
+meta:
+  id: retention-intervention
+  title: Improve retention intervention decisions
+  created: '2026-10-21T10:00:00Z'
+```
+
 `meta` identifies this package only. It is not a company graph node or a cross-package reference scheme. It requires a lower-case hyphenated `id`, a title, and creation time.
 
 <table>
@@ -56,14 +69,28 @@ Every complete graph-change package has a header and six required sections: `met
 </tbody>
 </table>
 
-```yaml
-meta:
-  id: retention-intervention
-  title: Improve retention intervention decisions
-  created: '2026-10-21T10:00:00Z'
-```
-
 ## `need`
+
+```yaml
+need:
+  text: Retention teams need a governed basis for deciding customer interventions.
+  actor:
+    type: team
+    name: Retention teams
+  situation: Before customer renewal
+  job:
+    type: decision
+    text: Identify customers who need intervention.
+  gap:
+    type: missing
+    text: The company graph has no governed retention decision path.
+  outcome: Retention teams use an owned, governed decision basis.
+  success:
+    - type: graph
+      test: The realised graph contains the retention path.
+    - type: business
+      test: The retention lead accepts the decision basis for operational use.
+```
 
 `need` is the first-class business proposition established with the business user and relevant graph context. Its narrative is retained as `text`; the actor, situation, job, gap, outcome, and success tests make it machine-readable and testable. Graph-change requires both a graph success test and a business success test.
 
@@ -89,28 +116,19 @@ meta:
 </tbody>
 </table>
 
-```yaml
-need:
-  text: Retention teams need a governed basis for deciding customer interventions.
-  actor:
-    type: team
-    name: Retention teams
-  situation: Before customer renewal
-  job:
-    type: decision
-    text: Identify customers who need intervention.
-  gap:
-    type: missing
-    text: The company graph has no governed retention decision path.
-  outcome: Retention teams use an owned, governed decision basis.
-  success:
-    - type: graph
-      test: The realised graph contains the retention path.
-    - type: business
-      test: The retention lead accepts the decision basis for operational use.
-```
-
 ## `auth`
+
+```yaml
+auth:
+  owner:
+    type: team
+    name: Customer Insights
+  by:
+    type: role
+    name: Director of Customer Insights
+  at: '2026-10-21T10:00:00Z'
+  until: '2026-11-30T23:59:59Z'
+```
 
 `auth` identifies the owner, authoriser, authorization time, and expiry for this one package. It deliberately has no reusable permission wrapper, tool grant, data-access list, or separate lifecycle object. The validator requires `until` to be later than `at` and rejects application after expiry.
 
@@ -125,19 +143,18 @@ need:
 </tbody>
 </table>
 
-```yaml
-auth:
-  owner:
-    type: team
-    name: Customer Insights
-  by:
-    type: role
-    name: Director of Customer Insights
-  at: '2026-10-21T10:00:00Z'
-  until: '2026-11-30T23:59:59Z'
-```
-
 ## `context`
+
+```yaml
+context:
+  current:
+    source: maysano
+    rev: 184
+    at: '2026-10-21T09:50:00Z'
+    graph: graph/retention-context.odpg.yaml
+  target:
+    graph: graph/retention-target.odpg.yaml
+```
 
 `context` holds only the affected graph fragment, never the whole company graph. A graph-change requires both `current` and `target`. The current graph records its Maysano source, revision, retrieval time, and G0 graph file. The target graph file expresses G1. Both files must validate as ODPG and cannot be unchanged.
 
@@ -155,18 +172,20 @@ auth:
 </tbody>
 </table>
 
-```yaml
-context:
-  current:
-    source: maysano
-    rev: 184
-    at: '2026-10-21T09:50:00Z'
-    graph: graph/retention-context.odpg.yaml
-  target:
-    graph: graph/retention-target.odpg.yaml
-```
-
 ## `actions`
+
+```yaml
+actions:
+  - title: Create retention objective
+    op: create
+    file: artefacts/retention-objective.odpc.yaml
+    gap: Retention teams lack a stated retention objective.
+    finding: No current retention objective represents preventable customer churn.
+    effect: A retention objective exists and is owned by Customer Insights.
+    evidence:
+      runState: pending
+      graphState: pending
+```
 
 Actions are the ordered work required to realise G1. Each action changes one ODPC, ODPS, or ODPG YAML file. The referenced file declares and validates against its own standard-family schema; ODPH does not repeat a family label, checksum, dependency ID, or generic reference wrapper. `gap`, `finding`, and `effect` are mandatory and connect the action to the business need, G0, and G1.
 
@@ -186,22 +205,14 @@ Actions are the ordered work required to realise G1. Each action changes one ODP
 </tbody>
 </table>
 
-```yaml
-actions:
-  - title: Create retention objective
-    op: create
-    file: artefacts/retention-objective.odpc.yaml
-    gap: Retention teams lack a stated retention objective.
-    finding: No current retention objective represents preventable customer churn.
-    effect: A retention objective exists and is owned by Customer Insights.
-    evidence:
-      runState: pending
-      graphState: pending
-```
-
 `op` is a closed enum: `create`, `update`, or `retire`. List position defines order; there are no action IDs or dependency references. `runState` proves the requested artefact change completed; `graphState` proves the realised graph satisfies that action's effect.
 
 ## `evidence`
+
+```yaml
+evidence:
+  outcomeState: pending
+```
 
 Package evidence records the outcome state. It is not an unstructured event list. A package is complete only when every action has `runState: pass`, every action has `graphState: pass`, and `outcomeState: pass`. A passing outcome also requires both graph and business success tests to pass; business proof may require an authorised human decision.
 
@@ -212,11 +223,6 @@ Package evidence records the outcome state. It is not an unstructured event list
 <tr><td><code>evidence.outcomeState</code></td><td>string</td><td>Yes</td><td><code>pending</code>, <code>pass</code>, <code>fail</code></td><td>Outcome verdict. <code>pass</code> is valid only when all action run and graph states pass and both success dimensions are proven.</td></tr>
 </tbody>
 </table>
-
-```yaml
-evidence:
-  outcomeState: pending
-```
 
 # Schema reference
 
