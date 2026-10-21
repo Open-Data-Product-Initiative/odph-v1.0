@@ -389,14 +389,55 @@
 <p><code>G0</code> is the selected current graph fragment at a Maysano revision. <code>G1</code> is the target graph fragment. Each action states the relevant need gap, the observed G0 finding, and the required G1 effect. A package cannot claim completion merely because files were generated.</p>
 <h1 id='graph-change-model'>Graph-change model</h1>
 <p>Every complete graph-change package has a header and six required sections: <code>meta</code>, <code>need</code>, <code>auth</code>, <code>context</code>, <code>actions</code>, and <code>evidence</code>. All objects are closed: unknown fields are rejected.</p>
+
+<table>
+<thead><tr><th>Element name</th><th>Type</th><th>Options</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>schema</code></td><td>string</td><td>Required; canonical Change Package URL</td><td>Declares the schema used to validate this document.</td></tr>
+<tr><td><code>version</code></td><td>string</td><td>Required; <code>0.2-draft</code></td><td>Declares the draft contract version.</td></tr>
+<tr><td><code>kind</code></td><td>string</td><td>Required; <code>graph-change</code></td><td>Selects the only conformant v0.2 package archetype.</td></tr>
+</tbody>
+</table>
 <h2 id='meta'><code>meta</code></h2>
 <p><code>meta</code> identifies this package only. It is not a company graph node or a cross-package reference scheme. It requires a lower-case hyphenated <code>id</code>, a title, and creation time.</p>
+
+<table>
+<thead><tr><th>Element name</th><th>Type</th><th>Options</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>meta</code></td><td>object</td><td>Required; closed</td><td>Package metadata. It identifies this package and is not a graph node or reference mechanism.</td></tr>
+<tr><td><code>meta.id</code></td><td>string</td><td>Required; 3–128 characters, <code>^[a-z0-9][a-z0-9-]*$</code></td><td>Stable, lower-case hyphenated identifier for this package.</td></tr>
+<tr><td><code>meta.title</code></td><td>string</td><td>Required; non-empty</td><td>Human-readable title for the controlled business change.</td></tr>
+<tr><td><code>meta.created</code></td><td>string</td><td>Required; RFC 3339 date-time</td><td>Time at which this package version was created.</td></tr>
+</tbody>
+</table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">meta</span><span class="pi">:</span>
   <span class="na">id</span><span class="pi">:</span> <span class="s">retention-intervention</span>
   <span class="na">title</span><span class="pi">:</span> <span class="s">Improve retention intervention decisions</span>
   <span class="na">created</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-10-21T10:00:00Z'</span>
 </code></pre></div><h2 id='need'><code>need</code></h2>
 <p><code>need</code> is the first-class business proposition established with the business user and relevant graph context. Its narrative is retained as <code>text</code>; the actor, situation, job, gap, outcome, and success tests make it machine-readable and testable. Graph-change requires both a graph success test and a business success test.</p>
+
+<table>
+<thead><tr><th>Element name</th><th>Type</th><th>Options</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>need</code></td><td>object</td><td>Required; closed</td><td>The complete, testable business proposition for this package.</td></tr>
+<tr><td><code>need.text</code></td><td>string</td><td>Required; non-empty</td><td>Preserves the business user’s narrative in their own terms.</td></tr>
+<tr><td><code>need.actor</code></td><td>object (<code>Party</code>)</td><td>Required; <code>type</code> and <code>name</code></td><td>Named business actor whose need is being addressed.</td></tr>
+<tr><td><code>need.actor.type</code></td><td>string</td><td><code>person</code>, <code>role</code>, <code>team</code>, <code>organisation</code>, <code>customer</code>, <code>partner</code>, <code>system</code></td><td>Classifies the actor without inventing an ODPH reference identity.</td></tr>
+<tr><td><code>need.actor.name</code></td><td>string</td><td>Required; non-empty</td><td>Business-readable name of the actor. The company graph remains authoritative where an identity exists.</td></tr>
+<tr><td><code>need.situation</code></td><td>string</td><td>Required; non-empty</td><td>Business situation in which the need matters.</td></tr>
+<tr><td><code>need.job</code></td><td>object</td><td>Required; <code>type</code> and <code>text</code></td><td>Classifies and describes the work the actor needs to accomplish.</td></tr>
+<tr><td><code>need.job.type</code></td><td>string</td><td><code>decision</code>, <code>service</code>, <code>process</code>, <code>capability</code>, <code>obligation</code></td><td>Closed job category.</td></tr>
+<tr><td><code>need.job.text</code></td><td>string</td><td>Required; non-empty</td><td>Specific job statement in business language.</td></tr>
+<tr><td><code>need.gap</code></td><td>object</td><td>Required; <code>type</code> and <code>text</code></td><td>Known deficiency between the current state and the needed decision basis.</td></tr>
+<tr><td><code>need.gap.type</code></td><td>string</td><td><code>missing</code>, <code>incomplete</code>, <code>unlinked</code>, <code>unowned</code>, <code>conflicting</code>, <code>outdated</code></td><td>Closed classification of the business or graph gap.</td></tr>
+<tr><td><code>need.gap.text</code></td><td>string</td><td>Required; non-empty</td><td>Specific explanation of the deficiency.</td></tr>
+<tr><td><code>need.outcome</code></td><td>string</td><td>Required; non-empty</td><td>Business condition intended when the package is complete.</td></tr>
+<tr><td><code>need.success</code></td><td>array of objects</td><td>Required; one or more items</td><td>Tests used to judge the graph and business outcome.</td></tr>
+<tr><td><code>need.success[].type</code></td><td>string</td><td><code>graph</code> or <code>business</code>; at least one of each</td><td>Distinguishes realised graph proof from business acceptance.</td></tr>
+<tr><td><code>need.success[].test</code></td><td>string</td><td>Required; non-empty</td><td>Observable condition that must pass for that success dimension.</td></tr>
+</tbody>
+</table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">need</span><span class="pi">:</span>
   <span class="na">text</span><span class="pi">:</span> <span class="s">Retention teams need a governed basis for deciding customer interventions.</span>
   <span class="na">actor</span><span class="pi">:</span>
@@ -417,6 +458,17 @@
       <span class="na">test</span><span class="pi">:</span> <span class="s">The retention lead accepts the decision basis for operational use.</span>
 </code></pre></div><h2 id='auth'><code>auth</code></h2>
 <p><code>auth</code> identifies the owner, authoriser, authorization time, and expiry for this one package. It deliberately has no reusable permission wrapper, tool grant, data-access list, or separate lifecycle object. The validator requires <code>until</code> to be later than <code>at</code> and rejects application after expiry.</p>
+
+<table>
+<thead><tr><th>Element name</th><th>Type</th><th>Options</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>auth</code></td><td>object</td><td>Required; closed</td><td>Authorization facts that apply only to this Change Package.</td></tr>
+<tr><td><code>auth.owner</code></td><td>object (<code>Party</code>)</td><td>Required; <code>type</code> and <code>name</code></td><td>Business owner accountable for the need and its intended outcome.</td></tr>
+<tr><td><code>auth.by</code></td><td>object (<code>Party</code>)</td><td>Required; <code>type</code> and <code>name</code></td><td>Named person, role, team, or other actor authorising this package.</td></tr>
+<tr><td><code>auth.at</code></td><td>string</td><td>Required; RFC 3339 date-time</td><td>Time at which the package was authorised.</td></tr>
+<tr><td><code>auth.until</code></td><td>string</td><td>Required; RFC 3339 date-time; later than <code>auth.at</code></td><td>Exclusive authorization boundary. Application after this time is rejected.</td></tr>
+</tbody>
+</table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">auth</span><span class="pi">:</span>
   <span class="na">owner</span><span class="pi">:</span>
     <span class="na">type</span><span class="pi">:</span> <span class="s">team</span>
@@ -428,6 +480,20 @@
   <span class="na">until</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-11-30T23:59:59Z'</span>
 </code></pre></div><h2 id='context'><code>context</code></h2>
 <p><code>context</code> holds only the affected graph fragment, never the whole company graph. A graph-change requires both <code>current</code> and <code>target</code>. The current graph records its Maysano source, revision, retrieval time, and G0 graph file. The target graph file expresses G1. Both files must validate as ODPG and cannot be unchanged.</p>
+
+<table>
+<thead><tr><th>Element name</th><th>Type</th><th>Options</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>context</code></td><td>object</td><td>Required; closed</td><td>Bounded G0 and G1 graph fragments relevant to this package.</td></tr>
+<tr><td><code>context.current</code></td><td>object</td><td>Required; <code>source</code>, <code>rev</code>, <code>at</code>, <code>graph</code></td><td>Selected current graph state, G0.</td></tr>
+<tr><td><code>context.current.source</code></td><td>string</td><td>Required; <code>maysano</code></td><td>Identifies the authoritative source for the supplied current revision.</td></tr>
+<tr><td><code>context.current.rev</code></td><td>integer</td><td>Required; 0 or greater</td><td>Maysano revision expected when the package is applied. A mismatch is graph drift.</td></tr>
+<tr><td><code>context.current.at</code></td><td>string</td><td>Required; RFC 3339 date-time</td><td>Time at which the current graph fragment was selected.</td></tr>
+<tr><td><code>context.current.graph</code></td><td>filepath</td><td>Required; relative <code>.odpg.yaml</code> or <code>.odpg.yml</code></td><td>ODPG file that expresses G0. Absolute paths and <code>..</code> traversal are rejected.</td></tr>
+<tr><td><code>context.target</code></td><td>object</td><td>Required; <code>graph</code></td><td>Intended target graph state, G1.</td></tr>
+<tr><td><code>context.target.graph</code></td><td>filepath</td><td>Required; relative <code>.odpg.yaml</code> or <code>.odpg.yml</code></td><td>ODPG file that expresses G1. It must differ meaningfully from G0.</td></tr>
+</tbody>
+</table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">context</span><span class="pi">:</span>
   <span class="na">current</span><span class="pi">:</span>
     <span class="na">source</span><span class="pi">:</span> <span class="s">maysano</span>
@@ -438,6 +504,22 @@
     <span class="na">graph</span><span class="pi">:</span> <span class="s">graph/retention-target.odpg.yaml</span>
 </code></pre></div><h2 id='actions'><code>actions</code></h2>
 <p>Actions are the ordered work required to realise G1. Each action changes one ODPC, ODPS, or ODPG YAML file. The referenced file declares and validates against its own standard-family schema; ODPH does not repeat a family label, checksum, dependency ID, or generic reference wrapper. <code>gap</code>, <code>finding</code>, and <code>effect</code> are mandatory and connect the action to the business need, G0, and G1.</p>
+
+<table>
+<thead><tr><th>Element name</th><th>Type</th><th>Options</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>actions</code></td><td>array of objects</td><td>Required; one or more items</td><td>Ordered work required to realise G1. Array position is the action order.</td></tr>
+<tr><td><code>actions[].title</code></td><td>string</td><td>Required; non-empty</td><td>Human-readable statement of the change.</td></tr>
+<tr><td><code>actions[].op</code></td><td>string</td><td><code>create</code>, <code>update</code>, <code>retire</code></td><td>Closed operation applied to the referenced standard artifact.</td></tr>
+<tr><td><code>actions[].file</code></td><td>filepath</td><td>Required; relative <code>.odpc.yaml</code>, <code>.odps.yaml</code>, or <code>.odpg.yaml</code> (or <code>.yml</code>)</td><td>Standard-owned artifact to validate. The file declares its own ODPC, ODPS, or ODPG schema.</td></tr>
+<tr><td><code>actions[].gap</code></td><td>string</td><td>Required; non-empty</td><td>Relevant fact from <code>need.gap</code> that makes this action necessary.</td></tr>
+<tr><td><code>actions[].finding</code></td><td>string</td><td>Required; non-empty</td><td>Relevant observed fact in G0. The semantic validator checks that it is grounded in the supplied current graph.</td></tr>
+<tr><td><code>actions[].effect</code></td><td>string</td><td>Required; non-empty</td><td>Required condition in G1. The semantic validator checks that the target graph contains it.</td></tr>
+<tr><td><code>actions[].evidence</code></td><td>object</td><td>Required; <code>runState</code> and <code>graphState</code></td><td>Per-action evidence of execution and realised graph state.</td></tr>
+<tr><td><code>actions[].evidence.runState</code></td><td>string</td><td><code>pending</code>, <code>pass</code>, <code>fail</code></td><td>Whether the specified artifact change completed successfully.</td></tr>
+<tr><td><code>actions[].evidence.graphState</code></td><td>string</td><td><code>pending</code>, <code>pass</code>, <code>fail</code></td><td>Whether the realised graph satisfies this action’s declared effect.</td></tr>
+</tbody>
+</table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">actions</span><span class="pi">:</span>
   <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention objective</span>
     <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
@@ -452,6 +534,14 @@
 <p><code>op</code> is a closed enum: <code>create</code>, <code>update</code>, or <code>retire</code>. List position defines order; there are no action IDs or dependency references. <code>runState</code> proves the requested artefact change completed; <code>graphState</code> proves the realised graph satisfies that action&#39;s effect.</p>
 <h2 id='evidence'><code>evidence</code></h2>
 <p>Package evidence records the outcome state. It is not an unstructured event list. A package is complete only when every action has <code>runState: pass</code>, every action has <code>graphState: pass</code>, and <code>outcomeState: pass</code>. A passing outcome also requires both graph and business success tests to pass; business proof may require an authorised human decision.</p>
+
+<table>
+<thead><tr><th>Element name</th><th>Type</th><th>Options</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>evidence</code></td><td>object</td><td>Required; closed</td><td>Package-level evidence state.</td></tr>
+<tr><td><code>evidence.outcomeState</code></td><td>string</td><td><code>pending</code>, <code>pass</code>, <code>fail</code></td><td>Outcome verdict. <code>pass</code> is valid only when all action run and graph states pass and both success dimensions are proven.</td></tr>
+</tbody>
+</table>
 <div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">evidence</span><span class="pi">:</span>
   <span class="na">outcomeState</span><span class="pi">:</span> <span class="s">pending</span>
 </code></pre></div><h1 id='schema-reference'>Schema reference</h1>
