@@ -1,0 +1,95 @@
+schema: https://opendataproducts.org/odph/v0.2/schema/change-package.yaml
+version: 0.2-draft
+kind: graph-change
+
+meta:
+  id: retention-intervention
+  title: Improve retention intervention decisions
+  created: '2026-10-21T10:00:00Z'
+
+need:
+  text: >-
+    Retention teams need a governed basis for deciding which customers need
+    intervention before renewal.
+  actor:
+    type: team
+    name: Retention teams
+  situation: Before customer renewal
+  job:
+    type: decision
+    text: Identify customers who need intervention.
+  gap:
+    type: missing
+    text: >-
+      The company graph has no retention objective, intervention use case, or
+      governed product that provides the required customer signals.
+  outcome: >-
+    Retention teams use an owned, governed decision basis for customer
+    interventions.
+  success:
+    - type: graph
+      test: >-
+        The realised graph contains the retention objective, intervention use
+        case, governed product, ownership, and required relationships.
+    - type: business
+      test: The retention lead accepts the decision basis for operational use.
+
+auth:
+  owner:
+    type: team
+    name: Customer Insights
+  by:
+    type: role
+    name: Director of Customer Insights
+  at: '2026-10-21T10:00:00Z'
+  until: '2026-11-30T23:59:59Z'
+
+context:
+  current:
+    source: maysano
+    rev: 184
+    at: '2026-10-21T09:50:00Z'
+    graph: graph/retention-context.odpg.yaml
+  target:
+    graph: graph/retention-target.odpg.yaml
+
+actions:
+  - title: Create retention objective
+    op: create
+    file: artefacts/retention-objective.odpc.yaml
+    gap: Retention teams lack a stated retention objective.
+    finding: No current retention objective represents preventable customer churn.
+    effect: A retention objective exists and is owned by Customer Insights.
+    evidence:
+      runState: pending
+      graphState: pending
+  - title: Create retention-intervention use case
+    op: create
+    file: artefacts/retention-intervention.odpc.yaml
+    gap: Retention teams lack a defined intervention decision.
+    finding: No current retention use case connects customer signals to intervention work.
+    effect: A retention-intervention use case contributes to the retention objective.
+    evidence:
+      runState: pending
+      graphState: pending
+  - title: Update Customer Signals for retention use
+    op: update
+    file: artefacts/customer-signals.odps.yaml
+    gap: Retention teams need a governed source of customer signals.
+    finding: Customer Signals exists but does not support the retention intervention decision.
+    effect: Customer Signals supports the retention-intervention use case with a governed output.
+    evidence:
+      runState: pending
+      graphState: pending
+  - title: Connect the retention path in the company graph
+    op: update
+    file: graph/retention-target.odpg.yaml
+    gap: The intended retention decision path is not governed.
+    finding: No current retention graph path links an objective, use case, and product.
+    effect: Customer Signals supports the retention-intervention use case and retention objective.
+    evidence:
+      runState: pending
+      graphState: pending
+
+evidence:
+  outcomeState: pending

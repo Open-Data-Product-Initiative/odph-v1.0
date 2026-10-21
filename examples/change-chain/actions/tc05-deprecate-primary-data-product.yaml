@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
-version: 0.2-draft
-kind: ChangeAction
-metadata: {id: tc05-deprecate-primary-data-product, title: Deprecate Primary Data Product, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-05}
-graphContext: {source: maysano, baseGraphRevision: 3, requiredObjects: [{id: primary-data-product, expectedVersion: 2, specificationFamily: ODPS}]}
-intent: {businessOwner: Head of Change Team, reason: Record the lifecycle change in a new product specification version, expectedOutcome: An accepted retired product version, policyProfile: example-change-control}
-specification: {operation: update, family: ODPS, file: specifications/odps/tc05-primary-data-product-v3-deprecated.yaml, sha256: 169cfeb36c4c78645455c59114efae71a2423fe5efd8ada8459f6e11d7048004, expectedVersion: 2}
-review: {requiredRoles: [business-owner, data-product-owner]}
-acceptanceCriteria: [Maysano accepts Primary Data Product version 3 with its lifecycle state retired.]

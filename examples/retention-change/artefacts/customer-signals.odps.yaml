@@ -3,10 +3,10 @@ version: '4.2'
 product:
   details:
     en:
-      productID: primary-data-product
-      name: Primary Data Product
-      productVersion: v1
+      productID: customer-signals
+      name: Customer Signals
+      productVersion: v2
       visibility: organisation
       status: draft
       type: decision support
-      description: Identifies customers whose outcome change should enter planning.
+      description: Governed customer signals supporting the retention-intervention use case.

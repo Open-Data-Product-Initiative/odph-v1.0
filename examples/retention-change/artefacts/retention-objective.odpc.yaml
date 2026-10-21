@@ -1,0 +1,14 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: retention-objective-catalog
+    name: {en: Retention objective catalog}
+    description: {en: Governed retention objective for intervention decisions.}
+  businessObjectives:
+    - id: retention-objective
+      name: {en: Improve retention intervention decisions}
+      description: {en: Customer Insights owns a decision basis for preventable customer churn.}
+      expectedOutcomes:
+        - {en: Retention teams identify customers who need intervention before renewal.}

@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
-version: 0.2-draft
-kind: ChangeAction
-metadata: {id: tc06-create-additional-data-product, title: Create Additional Data Product, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-06, parentChangeTask: example-change-chain}
-graphContext: {source: maysano, baseGraphRevision: 4}
-intent: {businessOwner: Head of Change Team, reason: Provide reviewed generic decision-support information, expectedOutcome: An accepted data-product identity and version, policyProfile: example-change-control}
-specification: {operation: create, family: ODPS, file: specifications/odps/tc06-additional-data-product-v1.yaml, sha256: bfbf485794dfb254335770ae69e04492b977ec35bcfbc5342caaf06443dd0930}
-review: {requiredRoles: [business-owner, data-product-owner]}
-acceptanceCriteria: [Maysano accepts Additional Data Product version 1.]

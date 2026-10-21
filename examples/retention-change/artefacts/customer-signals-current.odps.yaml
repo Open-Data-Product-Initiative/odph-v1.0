@@ -3,10 +3,10 @@ version: '4.2'
 product:
   details:
     en:
-      productID: additional-data-product
-      name: Additional Data Product
+      productID: customer-signals
+      name: Customer Signals
       productVersion: v1
       visibility: organisation
       status: draft
       type: decision support
-      description: Identifies customers suitable for a reviewed outcome change offer.
+      description: Customer signals exist but do not support the retention intervention decision.

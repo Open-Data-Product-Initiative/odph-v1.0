@@ -3,22 +3,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta property="og:title" content="Open Data Product Harness - Version 0.1 Draft" />
+    <meta property="og:title" content="Open Data Product Harness Change Package - v0.2 Draft" />
     <meta property="og:url" content="https://opendataproducts.org/odph-v1.0" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://opendataproducts.org/odph-v1.0/images/specs.jpeg" />
     <meta property="og:description" 
-    content="Open Data Product Harness (ODPH) 0.1 Draft defines a bounded, evidence-oriented interchange model for governed human and agent work." />
+    content="Open Data Product Harness (ODPH) v0.2 Draft defines a machine-readable Change Package for controlled company-graph work." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Open Data Product Harness - Version 0.1 Draft" />
-    <meta name="twitter:description" content="Open Data Product Harness (ODPH) 0.1 Draft defines a bounded, evidence-oriented interchange model for governed human and agent work." />
+    <meta name="twitter:title" content="Open Data Product Harness Change Package - v0.2 Draft" />
+    <meta name="twitter:description" content="Open Data Product Harness (ODPH) v0.2 Draft defines a machine-readable Change Package for controlled company-graph work." />
     <meta name="twitter:image" content="https://opendataproducts.org/odph-v1.0/images/specs.jpeg" />
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-86a2677d.png">
     <link rel="apple-touch-icon" sizes="512x512" href="images/favicon-86a2677d.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <title>Validation and runtime checks | ODPH v0.2</title>
+    <title>Change Package validation | ODPH v0.2</title>
 
 
     <style media="screen">
@@ -324,41 +324,25 @@
       <img src="images/odph-logo-1a3e8c65.png" class="logo" alt="ODPH — Open Data Product Harness" />
       <ul id="toc" class="toc-list-h1">
           <li>
-            <a href="#validation-and-runtime-checks" class="toc-h1 toc-link" data-title="Validation and runtime checks">Validation and runtime checks</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#level-1-static-schema-validation" class="toc-h2 toc-link" data-title="Level 1: static schema validation">Level 1: static schema validation</a>
-                  </li>
-                  <li>
-                    <a href="#level-2-cross-file-and-runtime-validation" class="toc-h2 toc-link" data-title="Level 2: cross-file and runtime validation">Level 2: cross-file and runtime validation</a>
-                  </li>
-              </ul>
+            <a href="#change-package-validation" class="toc-h1 toc-link" data-title="Change Package validation">Change Package validation</a>
           </li>
       </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='validation-and-runtime-checks'>Validation and runtime checks</h1><h2 id='level-1-static-schema-validation'>Level 1: static schema validation</h2>
-<ul>
-<li>Validate <code>ChangeAction</code> and <code>ChangeTask</code> YAML against <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>.</li>
-<li>Validate ODPC files against the ODPC schema.</li>
-<li>Validate ODPS files against the ODPS schema.</li>
-<li>Validate ODPG files against the ODPG graph schema.</li>
-</ul>
-
-<p>Run the repository checks:</p>
-<div class="highlight"><pre class="highlight sh tab-shell"><code>python scripts/generate_artifacts.py <span class="nt">--check</span>
-python scripts/check_agent_artifacts.py
-python scripts/validate_examples.py
-python <span class="nt">-m</span> unittest discover <span class="nt">-s</span> tests
-bundle <span class="nb">exec </span>middleman build
+        <h1 id='change-package-validation'>Change Package validation</h1>
+<p>Shape validation uses JSON Schema Draft 2020-12. Deterministic validation handles relationships and lifecycle conditions that JSON Schema cannot infer: authorization range and expiry, local referenced-document validation, meaningful G0/G1 difference, action grounding in the business need and G0, target effects in G1, apply-time graph drift, and completion state.</p>
+<div class="highlight"><pre class="highlight sh tab-shell"><code>python3 scripts/generate_artifacts.py <span class="nt">--check</span>
+python3 scripts/check_agent_artifacts.py
+python3 scripts/validate_examples.py
+<span class="nv">PYTHONDONTWRITEBYTECODE</span><span class="o">=</span>1 python3 <span class="nt">-m</span> unittest discover <span class="nt">-s</span> tests
 </code></pre></div>
-<p><code>validate_examples.py</code> uses the Open Data Products SDK schemas for ODPC, ODPS 4.2, and ODPG, verifies every referenced file and checksum, and checks the published ODPH schema locally. CI runs the same checks.</p>
-<h2 id='level-2-cross-file-and-runtime-validation'>Level 2: cross-file and runtime validation</h2>
-<p>Before a Maysano write, resolve every referenced specification file; verify the checksum; verify action references; reject duplicate action IDs and dependency cycles; verify required Maysano object versions and the current graph revision; and verify ODPC, ODPS, and ODPG files are mutually consistent. Verify approvals before every write.</p>
-
-<p>Record submitted file identifiers, resulting Maysano identities and versions, validation outcomes, and reconciliation state. Maysano is authoritative for returned state; these checks do not turn ODPH into a record store.</p>
+<p>To validate a package at a supplied authoritative graph revision:</p>
+<div class="highlight"><pre class="highlight sh tab-shell"><code>python3 scripts/validate_package.py <span class="nb">source</span>/examples/retention-change/change-package.yaml <span class="se">\</span>
+  <span class="nt">--at</span> 2026-10-21T12:00:00Z <span class="nt">--current-rev</span> 184
+</code></pre></div>
+<p>The supplied revision is an input to the local validator, not a Maysano query. A different revision returns <code>graph-drift</code>. Maysano remains responsible for write-time revision, authority, graph-state, and authoritative-evidence validation.</p>
 
       </div>
       <div class="dark-box">

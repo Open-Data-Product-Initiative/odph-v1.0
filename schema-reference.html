@@ -3,22 +3,22 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta property="og:title" content="Open Data Product Harness - Version 0.1 Draft" />
+    <meta property="og:title" content="Open Data Product Harness Change Package - v0.2 Draft" />
     <meta property="og:url" content="https://opendataproducts.org/odph-v1.0" />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://opendataproducts.org/odph-v1.0/images/specs.jpeg" />
     <meta property="og:description" 
-    content="Open Data Product Harness (ODPH) 0.1 Draft defines a bounded, evidence-oriented interchange model for governed human and agent work." />
+    content="Open Data Product Harness (ODPH) v0.2 Draft defines a machine-readable Change Package for controlled company-graph work." />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Open Data Product Harness - Version 0.1 Draft" />
-    <meta name="twitter:description" content="Open Data Product Harness (ODPH) 0.1 Draft defines a bounded, evidence-oriented interchange model for governed human and agent work." />
+    <meta name="twitter:title" content="Open Data Product Harness Change Package - v0.2 Draft" />
+    <meta name="twitter:description" content="Open Data Product Harness (ODPH) v0.2 Draft defines a machine-readable Change Package for controlled company-graph work." />
     <meta name="twitter:image" content="https://opendataproducts.org/odph-v1.0/images/specs.jpeg" />
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <link rel="icon" type="image/png" sizes="512x512" href="images/favicon-86a2677d.png">
     <link rel="apple-touch-icon" sizes="512x512" href="images/favicon-86a2677d.png">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <title>Schema reference | ODPH v0.2</title>
+    <title>Change Package schema reference | ODPH v0.2</title>
 
 
     <style media="screen">
@@ -324,25 +324,16 @@
       <img src="images/odph-logo-1a3e8c65.png" class="logo" alt="ODPH — Open Data Product Harness" />
       <ul id="toc" class="toc-list-h1">
           <li>
-            <a href="#schema-reference" class="toc-h1 toc-link" data-title="Schema reference">Schema reference</a>
+            <a href="#change-package-schema-reference" class="toc-h1 toc-link" data-title="Change Package schema reference">Change Package schema reference</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#top-level-object-kinds" class="toc-h2 toc-link" data-title="Top-level object kinds">Top-level object kinds</a>
+                    <a href="#reusable-definitions" class="toc-h2 toc-link" data-title="Reusable definitions">Reusable definitions</a>
                   </li>
                   <li>
-                    <a href="#common-governed-work-fields" class="toc-h2 toc-link" data-title="Common governed-work fields">Common governed-work fields</a>
+                    <a href="#file-references" class="toc-h2 toc-link" data-title="File references">File references</a>
                   </li>
                   <li>
-                    <a href="#changeaction-and-changetask-fields" class="toc-h2 toc-link" data-title="ChangeAction and ChangeTask fields">ChangeAction and ChangeTask fields</a>
-                  </li>
-                  <li>
-                    <a href="#changeaction-specification" class="toc-h2 toc-link" data-title="ChangeAction.specification"><code>ChangeAction.specification</code></a>
-                  </li>
-                  <li>
-                    <a href="#changetask-actions" class="toc-h2 toc-link" data-title="ChangeTask.actions"><code>ChangeTask.actions</code></a>
-                  </li>
-                  <li>
-                    <a href="#deliberate-v0-2-limits" class="toc-h2 toc-link" data-title="Deliberate v0.2 limits">Deliberate v0.2 limits</a>
+                    <a href="#reserved-graph-operation" class="toc-h2 toc-link" data-title="Reserved graph-operation">Reserved graph-operation</a>
                   </li>
               </ul>
           </li>
@@ -351,191 +342,18 @@
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id='schema-reference'>Schema reference</h1>
-<p>The canonical v0.2 contract is <a href="odph-v0.2/schema/change-control.yaml"><code>change-control.yaml</code></a>. It validates eight peer top-level object kinds. The six governed-work objects use common identity, attribution, source, and relationship fields; <code>ChangeAction</code> and <code>ChangeTask</code> retain their constrained change-control structures.</p>
-<h2 id='top-level-object-kinds'>Top-level object kinds</h2>
-<table>
-<thead>
-<tr>
-<th>Group</th>
-<th>Object kind</th>
-<th>Required structure</th>
-<th>Detailed field table and example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Business Need</td>
-<td><code>ContextPackage</code></td>
-<td>Common fields, <code>retrievalScope</code>, <code>freshness</code>, <code>conflicts</code>.</td>
-<td><a href="index.html#contextpackage">ContextPackage</a></td>
-</tr>
-<tr>
-<td>Business Need</td>
-<td><code>Mandate</code></td>
-<td>Common fields, durable boundary fields, business area, owner, expiry.</td>
-<td><a href="index.html#mandate">Mandate</a></td>
-</tr>
-<tr>
-<td>Business Need</td>
-<td><code>WorkEnvelope</code></td>
-<td>Common fields, mandate reference, narrowed boundary, result, owner, expiry.</td>
-<td><a href="index.html#workenvelope">WorkEnvelope</a></td>
-</tr>
-<tr>
-<td>Actions</td>
-<td><code>ExecutionPackage</code> (optional)</td>
-<td>Common fields, envelope reference, boundary, plan, outputs, dependencies, timing, criteria. Use only when this plan needs separate review.</td>
-<td><a href="index.html#executionpackage">ExecutionPackage</a></td>
-</tr>
-<tr>
-<td>Actions</td>
-<td><code>ExecutionRequest</code></td>
-<td>Common fields, required work-envelope and revocation-policy references, optional execution-package reference, proposed action, and approval limit.</td>
-<td><a href="index.html#executionrequest">ExecutionRequest</a></td>
-</tr>
-<tr>
-<td>Evidence</td>
-<td><code>EvidenceEvent</code></td>
-<td>Common fields, event time, envelope reference, type, payload.</td>
-<td><a href="index.html#evidenceevent">EvidenceEvent</a></td>
-</tr>
-<tr>
-<td>Actions</td>
-<td><code>ChangeAction</code></td>
-<td>v0.2 change-control header, context, intent, one specification, review, criteria.</td>
-<td><a href="index.html#changeaction">ChangeAction</a></td>
-</tr>
-<tr>
-<td>Actions</td>
-<td><code>ChangeTask</code></td>
-<td>v0.2 change-control header, context, intent, action references, review, criteria.</td>
-<td><a href="index.html#changetask">ChangeTask</a></td>
-</tr>
-</tbody>
-</table>
-<h2 id='common-governed-work-fields'>Common governed-work fields</h2>
-<p><code>ContextPackage</code>, <code>Mandate</code>, <code>WorkEnvelope</code>, <code>ExecutionPackage</code>, <code>ExecutionRequest</code>, and <code>EvidenceEvent</code> require <code>kind</code>, <code>metadata</code>, and <code>provenance</code>. <code>metadata</code> groups the stable <code>id</code>, language-keyed <code>name</code> and <code>description</code>, positive integer <code>version</code>, <code>createdAt</code>, and <code>actor</code>; <code>provenance</code> groups <code>sourceReferences</code> and <code>relationshipReferences</code>. A source reference has <code>id</code> and <code>version</code>, with <code>retrievedAt</code> when it is an observation; relationship references link other ODPH objects by ID and version.</p>
-<h2 id='changeaction-and-changetask-fields'>ChangeAction and ChangeTask fields</h2>
-<p>Both document kinds require <code>schema</code>, <code>version</code>, <code>kind</code>, <code>metadata</code>, <code>graphContext</code>, <code>intent</code>, <code>review</code>, and <code>acceptanceCriteria</code>.</p>
+        <h1 id='change-package-schema-reference'>Change Package schema reference</h1>
+<p>The canonical source is <a href="odph-v0.2/schema/change-package.yaml"><code>change-package.yaml</code></a>, a JSON Schema Draft 2020-12 document with a <code>oneOf</code> discriminator: <code>GraphChangePackage</code> or an invalid-by-design <code>GraphOperationStub</code>.</p>
 
-<table>
-<thead>
-<tr>
-<th>Element name</th>
-<th>Type</th>
-<th>Options</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>schema</code></td>
-<td>string</td>
-<td>Required; canonical YAML or JSON URL</td>
-<td>Schema identifier for the change-control document.</td>
-</tr>
-<tr>
-<td><code>version</code></td>
-<td>string</td>
-<td>Required; constant <code>0.2-draft</code></td>
-<td>Version of the change-control contract.</td>
-</tr>
-<tr>
-<td><code>kind</code></td>
-<td>string</td>
-<td>Required; <code>ChangeAction</code> or <code>ChangeTask</code></td>
-<td>Selects the change-control object definition.</td>
-</tr>
-<tr>
-<td><code>metadata</code></td>
-<td>object</td>
-<td>Required; closed structure</td>
-<td>Stable document identity and provenance.</td>
-</tr>
-<tr>
-<td><code>graphContext</code></td>
-<td>object</td>
-<td>Required; closed structure</td>
-<td>Bounded Maysano source and graph revision.</td>
-</tr>
-<tr>
-<td><code>intent</code></td>
-<td>object</td>
-<td>Required; closed structure</td>
-<td>Accountable business owner, reason, outcome, and policy profile.</td>
-</tr>
-<tr>
-<td><code>review</code></td>
-<td>object</td>
-<td>Required; closed structure</td>
-<td>Required reviewer roles and optional approval expiry.</td>
-</tr>
-<tr>
-<td><code>acceptanceCriteria</code></td>
-<td>array of string</td>
-<td>Required; at least 1 item</td>
-<td>Criteria used to judge the requested change.</td>
-</tr>
-</tbody>
-</table>
-<h3 id='metadata'><code>metadata</code></h3>
-<p>Required: <code>id</code>, <code>title</code>, <code>requestedBy</code>, <code>createdAt</code>. <code>id</code> is a string of 3–128 characters matching <code>^[a-z0-9][a-z0-9-]*$</code>. <code>title</code> and <code>requestedBy</code> are non-empty strings; <code>createdAt</code> is an RFC 3339 date-time string. Optional <code>parentTestCase</code> and <code>parentChangeTask</code> use the same identifier rule.</p>
-<h3 id='graphcontext'><code>graphContext</code></h3>
-<p>Required: <code>source: maysano</code> and <code>baseGraphRevision</code>, which is a non-negative integer or non-empty string. Optional <code>requiredObjects</code> is an array of object references. Each reference requires <code>id</code> (identifier) and <code>expectedVersion</code> (non-negative integer or non-empty string), and may declare <code>specificationFamily</code> as <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code>.</p>
-<h3 id='intent-and-review'><code>intent</code> and <code>review</code></h3>
-<p><code>intent</code> requires non-empty <code>businessOwner</code>, <code>reason</code>, and <code>expectedOutcome</code>, plus <code>policyProfile</code>, which uses the identifier rule. <code>review.requiredRoles</code> is a non-empty, unique array of non-empty strings. <code>review.approvalExpiresAt</code> is optional and uses the date-time format.</p>
-<h2 id='changeaction-specification'><code>ChangeAction.specification</code></h2>
-<p><code>ChangeAction</code> additionally requires <code>specification</code>.</p>
+<p><code>graph-change</code> requires the header (<code>schema</code>, <code>version</code>, <code>kind</code>) and exactly six sections: <code>meta</code>, <code>need</code>, <code>auth</code>, <code>context</code>, <code>actions</code>, and <code>evidence</code>. Every object sets <code>additionalProperties: false</code>.</p>
+<h2 id='reusable-definitions'>Reusable definitions</h2>
+<p>Definitions are reused only where their meaning is identical across archetypes: <code>NonEmptyString</code>, <code>Identifier</code>, <code>Timestamp</code>, <code>RelativeYamlFile</code>, <code>Party</code>, <code>BusinessNeed</code>, <code>Authority</code>, <code>CurrentContext</code>, <code>ActionEvidence</code>, <code>PackageEvidence</code>, and <code>PackageKind</code>.</p>
 
-<table>
-<thead>
-<tr>
-<th>Element name</th>
-<th>Type</th>
-<th>Options</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>operation</code></td>
-<td>string</td>
-<td>Required; <code>create</code> or <code>update</code></td>
-<td>Requested direct Maysano resource operation. <code>update</code> requires <code>expectedVersion</code>.</td>
-</tr>
-<tr>
-<td><code>family</code></td>
-<td>string</td>
-<td>Required; <code>ODPC</code>, <code>ODPS</code>, or <code>ODPG</code></td>
-<td>Standard-family schema against which the referenced file is validated.</td>
-</tr>
-<tr>
-<td><code>file</code></td>
-<td>string</td>
-<td>Required; contained relative <code>.yaml</code> or <code>.yml</code> path</td>
-<td>File location; it cannot start with <code>/</code> or contain <code>..</code> path traversal.</td>
-</tr>
-<tr>
-<td><code>sha256</code></td>
-<td>string</td>
-<td>Required; exactly 64 hexadecimal characters</td>
-<td>SHA-256 checksum of the referenced file bytes.</td>
-</tr>
-<tr>
-<td><code>expectedVersion</code></td>
-<td>integer or string</td>
-<td>Required for <code>update</code>; integer is at least <code>0</code>, string has minimum length 1</td>
-<td>Version expected by Maysano before an update is accepted.</td>
-</tr>
-</tbody>
-</table>
-
-<p>The referenced file carries the object identity, business fields, and domain semantics. The action does not duplicate them.</p>
-<h2 id='changetask-actions'><code>ChangeTask.actions</code></h2>
-<p><code>ChangeTask</code> additionally requires <code>actions</code>: an array with at least two references. Every reference requires <code>id</code> and <code>actionFile</code>; <code>actionFile</code> has the same contained relative-YAML rule as <code>specification.file</code>. Optional <code>dependsOn</code> is an array of unique action IDs in the same task. Runtime validation rejects missing references, duplicate action IDs, and dependency cycles.</p>
-<h2 id='deliberate-v0-2-limits'>Deliberate v0.2 limits</h2>
-<p>The eight object kinds form one packageable model. Boundary and evidence fields are declarative and do not become raw API request bodies or authority grants. The schema does not embed ODPC, ODPS, or ODPG content, and it does not add generic <code>link</code>, <code>unlink</code>, or <code>deprecate</code> operations.</p>
+<p><code>NonEmptyString</code> has minimum length one; trim-only content is rejected by semantic validation. <code>Identifier</code> is three to 128 lower-case hyphenated characters. <code>Timestamp</code> is a date-time. <code>PackageKind</code> contains only <code>graph-change</code> and <code>graph-operation</code>.</p>
+<h2 id='file-references'>File references</h2>
+<p><code>context.current.graph</code> and <code>context.target.graph</code> are ODPG files. <code>actions[].file</code> is an ODPC, ODPS, or ODPG file. Each referenced document validates against its own declared schema. ODPH intentionally has no <code>specificationFamily</code>, checksum, dependency, generic authority, generic boundary, policy-profile, or data-access model.</p>
+<h2 id='reserved-graph-operation'>Reserved graph-operation</h2>
+<p><code>graph-operation</code> establishes an extension point for future ODPR-governed operational work. v0.2 defines neither its fields nor a permissive body. Raw schema validation makes it invalid and the implementation validator returns <code>unsupported-kind</code> before normal schema reporting.</p>
 
       </div>
       <div class="dark-box">

@@ -1,0 +1,16 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: retention-use-case-catalog
+    name: {en: Retention intervention use case catalog}
+    description: {en: Governed use case for customer retention intervention decisions.}
+  useCases:
+    - id: retention-intervention
+      name: {en: Identify customers needing retention intervention}
+      description: {en: Use governed customer signals before renewal to identify intervention candidates.}
+      decision: {en: Decide which customers need a retention intervention.}
+      expectedOutcome: {en: Retention teams have a governed basis for intervention decisions.}
+      status: active
+      priority: high

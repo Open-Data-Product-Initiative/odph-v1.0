@@ -1,34 +1,16 @@
-# Business Harness Model
+# Open Data Product Harness v0.2
 
-ODPH v0.2 packages eight independently addressable top-level object kinds in three package groups: Business Need (`ContextPackage`, `Mandate`, `WorkEnvelope`), Actions (`ExecutionRequest`, `ChangeTask`, `ChangeAction`, and optional `ExecutionPackage`), and Evidence (`EvidenceEvent`). Maysano is authoritative for accepted versions, identities, graph state, approvals, applied changes, and audit evidence. ODPH creates, validates, presents, submits, and records evidence; it is not a record store.
+ODPH v0.2 defines one Change Package. `graph-change` is the sole conformant package kind. `graph-operation` is reserved for future ODPR-governed work and is deliberately unsupported.
 
 ## Canonical resources
 
-- Human-readable overview: /
-- Canonical schema: /odph-v0.2/schema/change-control.yaml
-- Derived JSON schema: /odph-v0.2/schema/change-control.json
-- Complete field reference: /schema-reference.html
+- Human-readable specification: /
+- Schema source: /odph-v0.2/schema/change-package.yaml
+- Derived JSON schema: /odph-v0.2/schema/change-package.json
+- Retention graph-change example: /examples/retention-change/change-package.yaml
+- Machine-readable document description: /objects.jsonl
 - Validation guidance: /validation.html
-- Change-chain examples: /examples/change-chain/
-- Machine-readable document kinds: /objects.jsonl
 
-## Document kinds
+## Validation boundary
 
-- `ContextPackage`: a bounded observation of versioned source context, its freshness, and observed conflicts.
-- `Mandate`: a durable business boundary with scope, owner, local boundary fields, and expiry.
-- `WorkEnvelope`: one assignment-specific subset of a Mandate.
-- `ExecutionPackage`: an optional, separately reviewable plan under a WorkEnvelope.
-- `ExecutionRequest`: one explicit proposed action under a WorkEnvelope and revocation policy; it may cite an ExecutionPackage when complex delivery needs a separately reviewed plan.
-- `EvidenceEvent`: one attributable record of context, validation, review, submission, outcome, or reconciliation evidence.
-- `ChangeAction`: one agreed direct Maysano resource operation, referencing exactly one ODPC, ODPS, or ODPG YAML specification file. Its operation is only `create` or `update`.
-- `ChangeTask`: composite change that references existing action files and declares dependencies. It does not copy or embed business specifications.
-
-## Authoring and validation
-
-1. Package the business need as bounded context, a mandate, and a work envelope.
-2. Package actions as an execution request plus one or more ChangeActions or a dependency-ordered ChangeTask; add an ExecutionPackage only when its plan needs separate review.
-3. Create one ODPC, ODPS, or ODPG specification file per ChangeAction; do not duplicate its fields in the action.
-4. Validate every ODPH object, its boundaries and references, and the referenced standard-family file.
-5. Record returned identity, version, outcome, and reconciliation state as EvidenceEvents.
-
-Run `python scripts/validate_examples.py` for the complete checked example chain. Direct workflows are ordered writes, never automatic rollback or all-or-nothing execution. They do not replace Maysano APIs.
+JSON Schema validates shape. The deterministic validator validates package expiry, referenced artifacts, G0/G1 difference, action connection, supplied graph drift, and completion. Maysano remains authoritative for application-time revision, graph state, applied changes, and evidence.

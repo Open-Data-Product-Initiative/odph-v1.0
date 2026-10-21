@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
-version: 0.2-draft
-kind: ChangeAction
-metadata: {id: tc06-update-graph, title: Update graph for secondary service planning, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-06, parentChangeTask: example-change-chain}
-graphContext: {source: maysano, baseGraphRevision: 4, requiredObjects: [{id: example-change-graph, expectedVersion: 4, specificationFamily: ODPG}, {id: context-data-product, expectedVersion: 1, specificationFamily: ODPS}]}
-intent: {businessOwner: Head of Change Team, reason: Express all accepted secondary service planning connections, expectedOutcome: An accepted graph revision, policyProfile: example-change-control}
-specification: {operation: update, family: ODPG, file: specifications/odpg/tc06-graph-v5.yaml, sha256: 1bf707184532a2850c7f0e57ff15eae7456509e3a443d068f1a62848ec90586a, expectedVersion: 4}
-review: {requiredRoles: [business-owner, graph-steward]}
-acceptanceCriteria: [Maysano accepts graph revision 5 with all secondary service planning connections.]
