@@ -387,7 +387,10 @@
 <div class="highlight"><pre class="highlight plaintext"><code>BusinessNeed -&gt; G0 -&gt; G1 -&gt; ordered actions -&gt; action evidence -&gt; verified outcome
 </code></pre></div>
 <p><code>G0</code> is the selected current graph fragment at a Maysano revision. <code>G1</code> is the target graph fragment. Each action states the relevant need gap, the observed G0 finding, and the required G1 effect. A package cannot claim completion merely because files were generated.</p>
-<h1 id='graph-change-model'>Graph-change model</h1>
+<h1 id='graph-change-model'>Graph-change model</h1><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">schema</span><span class="pi">:</span> <span class="s">https://opendataproducts.org/odph/v0.2/schema/change-package.yaml</span>
+<span class="na">version</span><span class="pi">:</span> <span class="s">0.2-draft</span>
+<span class="na">kind</span><span class="pi">:</span> <span class="s">graph-change</span>
+</code></pre></div>
 <p>Every complete graph-change package has a header and six required sections: <code>meta</code>, <code>need</code>, <code>auth</code>, <code>context</code>, <code>actions</code>, and <code>evidence</code>. All objects are closed: unknown fields are rejected.</p>
 
 <table>
@@ -398,7 +401,11 @@
 <tr><td><code>kind</code></td><td>string</td><td>Yes</td><td><code>graph-change</code></td><td>Selects the only conformant v0.2 package archetype.</td></tr>
 </tbody>
 </table>
-<h2 id='meta'><code>meta</code></h2>
+<h2 id='meta'><code>meta</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">meta</span><span class="pi">:</span>
+  <span class="na">id</span><span class="pi">:</span> <span class="s">retention-intervention</span>
+  <span class="na">title</span><span class="pi">:</span> <span class="s">Improve retention intervention decisions</span>
+  <span class="na">created</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-10-21T10:00:00Z'</span>
+</code></pre></div>
 <p><code>meta</code> identifies this package only. It is not a company graph node or a cross-package reference scheme. It requires a lower-case hyphenated <code>id</code>, a title, and creation time.</p>
 
 <table>
@@ -410,11 +417,25 @@
 <tr><td><code>meta.created</code></td><td>string</td><td>Yes</td><td>RFC 3339 date-time</td><td>Time at which this package version was created.</td></tr>
 </tbody>
 </table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">meta</span><span class="pi">:</span>
-  <span class="na">id</span><span class="pi">:</span> <span class="s">retention-intervention</span>
-  <span class="na">title</span><span class="pi">:</span> <span class="s">Improve retention intervention decisions</span>
-  <span class="na">created</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-10-21T10:00:00Z'</span>
-</code></pre></div><h2 id='need'><code>need</code></h2>
+<h2 id='need'><code>need</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">need</span><span class="pi">:</span>
+  <span class="na">text</span><span class="pi">:</span> <span class="s">Retention teams need a governed basis for deciding customer interventions.</span>
+  <span class="na">actor</span><span class="pi">:</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">team</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">Retention teams</span>
+  <span class="na">situation</span><span class="pi">:</span> <span class="s">Before customer renewal</span>
+  <span class="na">job</span><span class="pi">:</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">decision</span>
+    <span class="na">text</span><span class="pi">:</span> <span class="s">Identify customers who need intervention.</span>
+  <span class="na">gap</span><span class="pi">:</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">missing</span>
+    <span class="na">text</span><span class="pi">:</span> <span class="s">The company graph has no governed retention decision path.</span>
+  <span class="na">outcome</span><span class="pi">:</span> <span class="s">Retention teams use an owned, governed decision basis.</span>
+  <span class="na">success</span><span class="pi">:</span>
+    <span class="pi">-</span> <span class="na">type</span><span class="pi">:</span> <span class="s">graph</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="s">The realised graph contains the retention path.</span>
+    <span class="pi">-</span> <span class="na">type</span><span class="pi">:</span> <span class="s">business</span>
+      <span class="na">test</span><span class="pi">:</span> <span class="s">The retention lead accepts the decision basis for operational use.</span>
+</code></pre></div>
 <p><code>need</code> is the first-class business proposition established with the business user and relevant graph context. Its narrative is retained as <code>text</code>; the actor, situation, job, gap, outcome, and success tests make it machine-readable and testable. Graph-change requires both a graph success test and a business success test.</p>
 
 <table>
@@ -438,25 +459,16 @@
 <tr><td><code>need.success[].test</code></td><td>string</td><td>Yes</td><td>Non-empty</td><td>Observable condition that must pass for that success dimension.</td></tr>
 </tbody>
 </table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">need</span><span class="pi">:</span>
-  <span class="na">text</span><span class="pi">:</span> <span class="s">Retention teams need a governed basis for deciding customer interventions.</span>
-  <span class="na">actor</span><span class="pi">:</span>
+<h2 id='auth'><code>auth</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">auth</span><span class="pi">:</span>
+  <span class="na">owner</span><span class="pi">:</span>
     <span class="na">type</span><span class="pi">:</span> <span class="s">team</span>
-    <span class="na">name</span><span class="pi">:</span> <span class="s">Retention teams</span>
-  <span class="na">situation</span><span class="pi">:</span> <span class="s">Before customer renewal</span>
-  <span class="na">job</span><span class="pi">:</span>
-    <span class="na">type</span><span class="pi">:</span> <span class="s">decision</span>
-    <span class="na">text</span><span class="pi">:</span> <span class="s">Identify customers who need intervention.</span>
-  <span class="na">gap</span><span class="pi">:</span>
-    <span class="na">type</span><span class="pi">:</span> <span class="s">missing</span>
-    <span class="na">text</span><span class="pi">:</span> <span class="s">The company graph has no governed retention decision path.</span>
-  <span class="na">outcome</span><span class="pi">:</span> <span class="s">Retention teams use an owned, governed decision basis.</span>
-  <span class="na">success</span><span class="pi">:</span>
-    <span class="pi">-</span> <span class="na">type</span><span class="pi">:</span> <span class="s">graph</span>
-      <span class="na">test</span><span class="pi">:</span> <span class="s">The realised graph contains the retention path.</span>
-    <span class="pi">-</span> <span class="na">type</span><span class="pi">:</span> <span class="s">business</span>
-      <span class="na">test</span><span class="pi">:</span> <span class="s">The retention lead accepts the decision basis for operational use.</span>
-</code></pre></div><h2 id='auth'><code>auth</code></h2>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">Customer Insights</span>
+  <span class="na">by</span><span class="pi">:</span>
+    <span class="na">type</span><span class="pi">:</span> <span class="s">role</span>
+    <span class="na">name</span><span class="pi">:</span> <span class="s">Director of Customer Insights</span>
+  <span class="na">at</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-10-21T10:00:00Z'</span>
+  <span class="na">until</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-11-30T23:59:59Z'</span>
+</code></pre></div>
 <p><code>auth</code> identifies the owner, authoriser, authorization time, and expiry for this one package. It deliberately has no reusable permission wrapper, tool grant, data-access list, or separate lifecycle object. The validator requires <code>until</code> to be later than <code>at</code> and rejects application after expiry.</p>
 
 <table>
@@ -469,16 +481,15 @@
 <tr><td><code>auth.until</code></td><td>string</td><td>Yes</td><td>RFC 3339 date-time; later than <code>auth.at</code></td><td>Exclusive authorization boundary. Application after this time is rejected.</td></tr>
 </tbody>
 </table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">auth</span><span class="pi">:</span>
-  <span class="na">owner</span><span class="pi">:</span>
-    <span class="na">type</span><span class="pi">:</span> <span class="s">team</span>
-    <span class="na">name</span><span class="pi">:</span> <span class="s">Customer Insights</span>
-  <span class="na">by</span><span class="pi">:</span>
-    <span class="na">type</span><span class="pi">:</span> <span class="s">role</span>
-    <span class="na">name</span><span class="pi">:</span> <span class="s">Director of Customer Insights</span>
-  <span class="na">at</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-10-21T10:00:00Z'</span>
-  <span class="na">until</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-11-30T23:59:59Z'</span>
-</code></pre></div><h2 id='context'><code>context</code></h2>
+<h2 id='context'><code>context</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">context</span><span class="pi">:</span>
+  <span class="na">current</span><span class="pi">:</span>
+    <span class="na">source</span><span class="pi">:</span> <span class="s">maysano</span>
+    <span class="na">rev</span><span class="pi">:</span> <span class="m">184</span>
+    <span class="na">at</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-10-21T09:50:00Z'</span>
+    <span class="na">graph</span><span class="pi">:</span> <span class="s">graph/retention-context.odpg.yaml</span>
+  <span class="na">target</span><span class="pi">:</span>
+    <span class="na">graph</span><span class="pi">:</span> <span class="s">graph/retention-target.odpg.yaml</span>
+</code></pre></div>
 <p><code>context</code> holds only the affected graph fragment, never the whole company graph. A graph-change requires both <code>current</code> and <code>target</code>. The current graph records its Maysano source, revision, retrieval time, and G0 graph file. The target graph file expresses G1. Both files must validate as ODPG and cannot be unchanged.</p>
 
 <table>
@@ -494,15 +505,17 @@
 <tr><td><code>context.target.graph</code></td><td>filepath</td><td>Yes</td><td>Relative <code>.odpg.yaml</code> or <code>.odpg.yml</code></td><td>ODPG file that expresses G1. It must differ meaningfully from G0.</td></tr>
 </tbody>
 </table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">context</span><span class="pi">:</span>
-  <span class="na">current</span><span class="pi">:</span>
-    <span class="na">source</span><span class="pi">:</span> <span class="s">maysano</span>
-    <span class="na">rev</span><span class="pi">:</span> <span class="m">184</span>
-    <span class="na">at</span><span class="pi">:</span> <span class="s1">'</span><span class="s">2026-10-21T09:50:00Z'</span>
-    <span class="na">graph</span><span class="pi">:</span> <span class="s">graph/retention-context.odpg.yaml</span>
-  <span class="na">target</span><span class="pi">:</span>
-    <span class="na">graph</span><span class="pi">:</span> <span class="s">graph/retention-target.odpg.yaml</span>
-</code></pre></div><h2 id='actions'><code>actions</code></h2>
+<h2 id='actions'><code>actions</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">actions</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention objective</span>
+    <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/retention-objective.odpc.yaml</span>
+    <span class="na">gap</span><span class="pi">:</span> <span class="s">Retention teams lack a stated retention objective.</span>
+    <span class="na">finding</span><span class="pi">:</span> <span class="s">No current retention objective represents preventable customer churn.</span>
+    <span class="na">effect</span><span class="pi">:</span> <span class="s">A retention objective exists and is owned by Customer Insights.</span>
+    <span class="na">evidence</span><span class="pi">:</span>
+      <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
+      <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
+</code></pre></div>
 <p>Actions are the ordered work required to realise G1. Each action changes one ODPC, ODPS, or ODPG YAML file. The referenced file declares and validates against its own standard-family schema; ODPH does not repeat a family label, checksum, dependency ID, or generic reference wrapper. <code>gap</code>, <code>finding</code>, and <code>effect</code> are mandatory and connect the action to the business need, G0, and G1.</p>
 
 <table>
@@ -520,19 +533,11 @@
 <tr><td><code>actions[].evidence.graphState</code></td><td>string</td><td>Yes</td><td><code>pending</code>, <code>pass</code>, <code>fail</code></td><td>Whether the realised graph satisfies this action’s declared effect.</td></tr>
 </tbody>
 </table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">actions</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention objective</span>
-    <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
-    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/retention-objective.odpc.yaml</span>
-    <span class="na">gap</span><span class="pi">:</span> <span class="s">Retention teams lack a stated retention objective.</span>
-    <span class="na">finding</span><span class="pi">:</span> <span class="s">No current retention objective represents preventable customer churn.</span>
-    <span class="na">effect</span><span class="pi">:</span> <span class="s">A retention objective exists and is owned by Customer Insights.</span>
-    <span class="na">evidence</span><span class="pi">:</span>
-      <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
-      <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
-</code></pre></div>
+
 <p><code>op</code> is a closed enum: <code>create</code>, <code>update</code>, or <code>retire</code>. List position defines order; there are no action IDs or dependency references. <code>runState</code> proves the requested artefact change completed; <code>graphState</code> proves the realised graph satisfies that action&#39;s effect.</p>
-<h2 id='evidence'><code>evidence</code></h2>
+<h2 id='evidence'><code>evidence</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">evidence</span><span class="pi">:</span>
+  <span class="na">outcomeState</span><span class="pi">:</span> <span class="s">pending</span>
+</code></pre></div>
 <p>Package evidence records the outcome state. It is not an unstructured event list. A package is complete only when every action has <code>runState: pass</code>, every action has <code>graphState: pass</code>, and <code>outcomeState: pass</code>. A passing outcome also requires both graph and business success tests to pass; business proof may require an authorised human decision.</p>
 
 <table>
@@ -542,9 +547,7 @@
 <tr><td><code>evidence.outcomeState</code></td><td>string</td><td>Yes</td><td><code>pending</code>, <code>pass</code>, <code>fail</code></td><td>Outcome verdict. <code>pass</code> is valid only when all action run and graph states pass and both success dimensions are proven.</td></tr>
 </tbody>
 </table>
-<div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">evidence</span><span class="pi">:</span>
-  <span class="na">outcomeState</span><span class="pi">:</span> <span class="s">pending</span>
-</code></pre></div><h1 id='schema-reference'>Schema reference</h1>
+<h1 id='schema-reference'>Schema reference</h1>
 <p>The canonical JSON Schema Draft 2020-12 source is <a href="odph-v0.2/schema/change-package.yaml"><code>change-package.yaml</code></a>; <a href="odph-v0.2/schema/change-package.json"><code>change-package.json</code></a> is mechanically derived from it.</p>
 
 <table>
