@@ -1,0 +1,22 @@
+schema: https://opendataproducts.org/odpg-v1.0/schema/odpg.yaml
+version: '1.0'
+kind: Graph
+graph:
+  metadata:
+    id: retention-churn-relationships
+    name: {en: Retention and churn relationships}
+    description: {en: Links the retention objective, preventable-churn use case, and supporting data product.}
+  nodes:
+    - id: retention-objective
+      type: BusinessObjective
+      $ref: retention-objective.odpc.yaml#/catalog/businessObjectives/0
+    - id: preventable-churn-use-case
+      type: UseCase
+      $ref: preventable-churn-use-case.odpc.yaml#/catalog/useCases/0
+    - id: customer-retention-signals
+      type: DataProduct
+      $ref: customer-retention-signals.odps.yaml
+  edges:
+    - {from: preventable-churn-use-case, to: retention-objective, type: supports, confidence: high}
+    - {from: preventable-churn-use-case, to: customer-retention-signals, type: uses, confidence: high}
+    - {from: customer-retention-signals, to: retention-objective, type: contributesTo, confidence: high}

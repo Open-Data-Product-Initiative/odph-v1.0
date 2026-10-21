@@ -506,12 +506,48 @@
 </tbody>
 </table>
 <h2 id='actions'><code>actions</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">actions</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention objective</span>
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">create-retention-objective</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention objective</span>
     <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
     <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/retention-objective.odpc.yaml</span>
     <span class="na">gap</span><span class="pi">:</span> <span class="s">Retention teams lack a stated retention objective.</span>
     <span class="na">finding</span><span class="pi">:</span> <span class="s">No current retention objective represents preventable customer churn.</span>
     <span class="na">effect</span><span class="pi">:</span> <span class="s">A retention objective exists and is owned by Customer Insights.</span>
+    <span class="na">evidence</span><span class="pi">:</span>
+      <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
+      <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
+
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">create-churn-use-case</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Create preventable churn use case</span>
+    <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/preventable-churn-use-case.odpc.yaml</span>
+    <span class="na">gap</span><span class="pi">:</span> <span class="s">No agreed use case turns the retention objective into defined work.</span>
+    <span class="na">finding</span><span class="pi">:</span> <span class="s">Existing retention activity focuses on campaign delivery, not churn prevention.</span>
+    <span class="na">effect</span><span class="pi">:</span> <span class="s">A use case defines the target population, value hypothesis and success measures.</span>
+    <span class="na">evidence</span><span class="pi">:</span>
+      <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
+      <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
+
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">create-customer-retention-data-product</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Create customer retention signals data product</span>
+    <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/customer-retention-signals.odps.yaml</span>
+    <span class="na">gap</span><span class="pi">:</span> <span class="s">Teams lack a governed data product for retention decision-making.</span>
+    <span class="na">finding</span><span class="pi">:</span> <span class="s">Churn-related signals exist across CRM, billing and support systems.</span>
+    <span class="na">effect</span><span class="pi">:</span> <span class="s">A governed data product makes approved retention signals available for the use case.</span>
+    <span class="na">evidence</span><span class="pi">:</span>
+      <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
+      <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
+
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">link-retention-initiative-in-graph</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Link the objective, use case and data product</span>
+    <span class="na">op</span><span class="pi">:</span> <span class="s">apply</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/retention-churn-relationships.odpg.yaml</span>
+    <span class="na">gap</span><span class="pi">:</span> <span class="s">The new portfolio objects have no declared relationships.</span>
+    <span class="na">finding</span><span class="pi">:</span> <span class="s">The business graph does not yet connect the retention objective to its delivery assets.</span>
+    <span class="na">effect</span><span class="pi">:</span> <span class="pi">&gt;</span>
+      <span class="s">The objective is linked to the use case, and the use case is linked</span>
+      <span class="s">to the supporting data product.</span>
     <span class="na">evidence</span><span class="pi">:</span>
       <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
       <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
@@ -521,9 +557,10 @@
 <table>
 <thead><tr><th>Element name</th><th>Type</th><th>Mandatory</th><th>Options</th><th>Description</th></tr></thead>
 <tbody>
-<tr><td><code>actions</code></td><td>array of objects</td><td>Yes</td><td>One or more items</td><td>Ordered work required to realise G1. Array position is the action order.</td></tr>
+<tr><td><code>actions</code></td><td>array of objects</td><td>Yes</td><td>One or more uniquely identified items</td><td>Ordered work required to realise G1. Array position is the action order.</td></tr>
+<tr><td><code>actions[].id</code></td><td>string</td><td>Yes</td><td>3–128 lower-case hyphenated characters; unique within the package</td><td>Stable action identifier for evidence, review, and references to this specific controlled change.</td></tr>
 <tr><td><code>actions[].title</code></td><td>string</td><td>Yes</td><td>Non-empty</td><td>Human-readable statement of the change.</td></tr>
-<tr><td><code>actions[].op</code></td><td>string</td><td>Yes</td><td><code>create</code>, <code>update</code>, <code>retire</code></td><td>Closed operation applied to the referenced standard artifact.</td></tr>
+<tr><td><code>actions[].op</code></td><td>string</td><td>Yes</td><td><code>create</code>, <code>update</code>, <code>retire</code>, <code>apply</code></td><td>Closed operation applied to the referenced standard artifact. <code>apply</code> requires an ODPG file.</td></tr>
 <tr><td><code>actions[].file</code></td><td>filepath</td><td>Yes</td><td>Relative <code>.odpc.yaml</code>, <code>.odps.yaml</code>, or <code>.odpg.yaml</code> (or <code>.yml</code>)</td><td>Standard-owned artifact to validate. The file declares its own ODPC, ODPS, or ODPG schema.</td></tr>
 <tr><td><code>actions[].gap</code></td><td>string</td><td>Yes</td><td>Non-empty</td><td>Relevant fact from <code>need.gap</code> that makes this action necessary.</td></tr>
 <tr><td><code>actions[].finding</code></td><td>string</td><td>Yes</td><td>Non-empty</td><td>Relevant observed fact in G0. The semantic validator checks that it is grounded in the supplied current graph.</td></tr>
@@ -534,7 +571,7 @@
 </tbody>
 </table>
 
-<p><code>op</code> is a closed enum: <code>create</code>, <code>update</code>, or <code>retire</code>. List position defines order; there are no action IDs or dependency references. <code>runState</code> proves the requested artefact change completed; <code>graphState</code> proves the realised graph satisfies that action&#39;s effect.</p>
+<p><code>id</code> is required and unique within the package. <code>op</code> is a closed enum: <code>create</code>, <code>update</code>, <code>retire</code>, or <code>apply</code>; <code>apply</code> requires an ODPG file. List position defines order. <code>runState</code> proves the requested artefact change completed; <code>graphState</code> proves the realised graph satisfies that action&#39;s effect.</p>
 <h2 id='evidence'><code>evidence</code></h2><div class="highlight"><pre class="highlight yaml tab-yaml"><code><span class="na">evidence</span><span class="pi">:</span>
   <span class="na">outcomeState</span><span class="pi">:</span> <span class="s">pending</span>
 </code></pre></div>
@@ -558,7 +595,7 @@
 <tr><td><code>need</code></td><td><code>text</code>, <code>actor</code>, <code>situation</code>, <code>job</code>, <code>gap</code>, <code>outcome</code>, <code>success</code></td><td>None</td><td>Establishes the business proposition and tests.</td></tr>
 <tr><td><code>auth</code></td><td><code>owner</code>, <code>by</code>, <code>at</code>, <code>until</code></td><td>None</td><td>Bounds the authorization for this package.</td></tr>
 <tr><td><code>context</code></td><td><code>current</code>, <code>target</code></td><td>None</td><td>States the relevant G0 and intended G1.</td></tr>
-<tr><td><code>actions</code></td><td>At least one action</td><td>None</td><td>Orders controlled ODPC, ODPS, and ODPG changes.</td></tr>
+<tr><td><code>actions</code></td><td>At least one uniquely identified action</td><td>None</td><td>Orders controlled ODPC, ODPS, and ODPG changes.</td></tr>
 <tr><td>Package <code>evidence</code></td><td><code>outcomeState</code></td><td>None</td><td>Records whether the verified outcome passed.</td></tr>
 </tbody>
 </table>
@@ -592,7 +629,8 @@
     <span class="na">type</span><span class="pi">:</span> <span class="s">missing</span>
     <span class="na">text</span><span class="pi">:</span> <span class="pi">&gt;-</span>
       <span class="s">The company graph has no retention objective, intervention use case, or</span>
-      <span class="s">governed product that provides the required customer signals.</span>
+      <span class="s">governed product that provides the required customer signals; the</span>
+      <span class="s">portfolio objects and their relationships are absent.</span>
   <span class="na">outcome</span><span class="pi">:</span> <span class="pi">&gt;-</span>
     <span class="s">Retention teams use an owned, governed decision basis for customer</span>
     <span class="s">interventions.</span>
@@ -624,7 +662,8 @@
     <span class="na">graph</span><span class="pi">:</span> <span class="s">graph/retention-target.odpg.yaml</span>
 
 <span class="na">actions</span><span class="pi">:</span>
-  <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention objective</span>
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">create-retention-objective</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention objective</span>
     <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
     <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/retention-objective.odpc.yaml</span>
     <span class="na">gap</span><span class="pi">:</span> <span class="s">Retention teams lack a stated retention objective.</span>
@@ -633,30 +672,35 @@
     <span class="na">evidence</span><span class="pi">:</span>
       <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
       <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
-  <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Create retention-intervention use case</span>
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">create-churn-use-case</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Create preventable churn use case</span>
     <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
-    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/retention-intervention.odpc.yaml</span>
-    <span class="na">gap</span><span class="pi">:</span> <span class="s">Retention teams lack a defined intervention decision.</span>
-    <span class="na">finding</span><span class="pi">:</span> <span class="s">No current retention use case connects customer signals to intervention work.</span>
-    <span class="na">effect</span><span class="pi">:</span> <span class="s">A retention-intervention use case contributes to the retention objective.</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/preventable-churn-use-case.odpc.yaml</span>
+    <span class="na">gap</span><span class="pi">:</span> <span class="s">No agreed use case turns the retention objective into defined work.</span>
+    <span class="na">finding</span><span class="pi">:</span> <span class="s">Existing retention activity focuses on campaign delivery, not churn prevention.</span>
+    <span class="na">effect</span><span class="pi">:</span> <span class="s">A use case defines the target population, value hypothesis and success measures.</span>
     <span class="na">evidence</span><span class="pi">:</span>
       <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
       <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
-  <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Update Customer Signals for retention use</span>
-    <span class="na">op</span><span class="pi">:</span> <span class="s">update</span>
-    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/customer-signals.odps.yaml</span>
-    <span class="na">gap</span><span class="pi">:</span> <span class="s">Retention teams need a governed source of customer signals.</span>
-    <span class="na">finding</span><span class="pi">:</span> <span class="s">Customer Signals exists but does not support the retention intervention decision.</span>
-    <span class="na">effect</span><span class="pi">:</span> <span class="s">Customer Signals supports the retention-intervention use case with a governed output.</span>
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">create-customer-retention-data-product</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Create customer retention signals data product</span>
+    <span class="na">op</span><span class="pi">:</span> <span class="s">create</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/customer-retention-signals.odps.yaml</span>
+    <span class="na">gap</span><span class="pi">:</span> <span class="s">Teams lack a governed data product for retention decision-making.</span>
+    <span class="na">finding</span><span class="pi">:</span> <span class="s">Churn-related signals exist across CRM, billing and support systems.</span>
+    <span class="na">effect</span><span class="pi">:</span> <span class="s">A governed data product makes approved retention signals available for the use case.</span>
     <span class="na">evidence</span><span class="pi">:</span>
       <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
       <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>
-  <span class="pi">-</span> <span class="na">title</span><span class="pi">:</span> <span class="s">Connect the retention path in the company graph</span>
-    <span class="na">op</span><span class="pi">:</span> <span class="s">update</span>
-    <span class="na">file</span><span class="pi">:</span> <span class="s">graph/retention-target.odpg.yaml</span>
-    <span class="na">gap</span><span class="pi">:</span> <span class="s">The intended retention decision path is not governed.</span>
-    <span class="na">finding</span><span class="pi">:</span> <span class="s">No current retention graph path links an objective, use case, and product.</span>
-    <span class="na">effect</span><span class="pi">:</span> <span class="s">Customer Signals supports the retention-intervention use case and retention objective.</span>
+  <span class="pi">-</span> <span class="na">id</span><span class="pi">:</span> <span class="s">link-retention-initiative-in-graph</span>
+    <span class="na">title</span><span class="pi">:</span> <span class="s">Link the objective, use case and data product</span>
+    <span class="na">op</span><span class="pi">:</span> <span class="s">apply</span>
+    <span class="na">file</span><span class="pi">:</span> <span class="s">artefacts/retention-churn-relationships.odpg.yaml</span>
+    <span class="na">gap</span><span class="pi">:</span> <span class="s">The new portfolio objects have no declared relationships.</span>
+    <span class="na">finding</span><span class="pi">:</span> <span class="s">The business graph does not yet connect the retention objective to its delivery assets.</span>
+    <span class="na">effect</span><span class="pi">:</span> <span class="pi">&gt;-</span>
+      <span class="s">The objective is linked to the use case, and the use case is linked to</span>
+      <span class="s">the supporting data product.</span>
     <span class="na">evidence</span><span class="pi">:</span>
       <span class="na">runState</span><span class="pi">:</span> <span class="s">pending</span>
       <span class="na">graphState</span><span class="pi">:</span> <span class="s">pending</span>

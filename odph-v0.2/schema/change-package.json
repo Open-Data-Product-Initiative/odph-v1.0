@@ -345,6 +345,7 @@
           "items": {
             "type": "object",
             "required": [
+              "id",
               "title",
               "op",
               "file",
@@ -354,6 +355,9 @@
               "evidence"
             ],
             "properties": {
+              "id": {
+                "$ref": "#/$defs/Identifier"
+              },
               "title": {
                 "$ref": "#/$defs/NonEmptyString"
               },
@@ -361,7 +365,8 @@
                 "enum": [
                   "create",
                   "update",
-                  "retire"
+                  "retire",
+                  "apply"
                 ]
               },
               "file": {
@@ -380,6 +385,27 @@
                 "$ref": "#/$defs/ActionEvidence"
               }
             },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "op": {
+                      "const": "apply"
+                    }
+                  },
+                  "required": [
+                    "op"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "file": {
+                      "$ref": "#/$defs/OdpgFile"
+                    }
+                  }
+                }
+              }
+            ],
             "additionalProperties": false
           }
         },

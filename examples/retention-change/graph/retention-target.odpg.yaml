@@ -6,19 +6,19 @@ graph:
     id: retention-target
     name: {en: Retention intervention target graph}
     description: >-
-      Customer Insights owns a governed retention objective and a retention-
-      intervention use case. Customer Signals supports the decision path.
+      Customer Insights owns a governed retention objective and preventable-
+      churn use case. Customer Retention Signals supports the decision path.
   nodes:
     - id: retention-objective
       type: BusinessObjective
       $ref: ../artefacts/retention-objective.odpc.yaml#/catalog/businessObjectives/0
-    - id: retention-intervention
+    - id: preventable-churn-use-case
       type: UseCase
-      $ref: ../artefacts/retention-intervention.odpc.yaml#/catalog/useCases/0
-    - id: customer-signals
+      $ref: ../artefacts/preventable-churn-use-case.odpc.yaml#/catalog/useCases/0
+    - id: customer-retention-signals
       type: DataProduct
-      $ref: ../artefacts/customer-signals.odps.yaml
+      $ref: ../artefacts/customer-retention-signals.odps.yaml
   edges:
-    - {from: retention-intervention, to: retention-objective, type: supports, confidence: high}
-    - {from: retention-intervention, to: customer-signals, type: uses, confidence: high}
-    - {from: customer-signals, to: retention-objective, type: contributesTo, confidence: high}
+    - {from: preventable-churn-use-case, to: retention-objective, type: supports, confidence: high}
+    - {from: preventable-churn-use-case, to: customer-retention-signals, type: uses, confidence: high}
+    - {from: customer-retention-signals, to: retention-objective, type: contributesTo, confidence: high}
