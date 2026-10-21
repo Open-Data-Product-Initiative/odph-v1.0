@@ -109,9 +109,15 @@ class ChangePackageTest(unittest.TestCase):
             "evidence": ["evidence.outcomeState"],
         }.items():
             subsection = documentation.split(f"## `{section}`", 1)[1]
-            self.assertIn("<table>", subsection.split("```yaml", 1)[0])
+            table = subsection.split("```yaml", 1)[0]
+            self.assertIn("<table>", table)
+            self.assertIn("<th>Mandatory</th>", table)
+            self.assertIn("<td>Yes</td>", table)
             for field in fields:
                 self.assertIn(f"<code>{field}</code>", subsection)
+
+        self.assertIn("<th>Optional</th>", documentation)
+        self.assertIn("<td>None</td>", documentation)
 
 
 if __name__ == "__main__":
