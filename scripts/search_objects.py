@@ -52,14 +52,17 @@ def render_text(records):
 
     sections = []
     for record in records:
+        fields = record.get("requiredSections", record.get("requiredFields", []))
+        kinds = record.get("kinds", [])
         sections.append(
             "\n".join(
                 [
                     f"{record['id']}",
                     f"  Definition: {record['definition']}",
-                    f"  Required fields: {', '.join(record['requiredFields']) or '(none)'}",
-                    f"  Use for: {', '.join(record['doUseFor'])}",
-                    f"  Do not use for: {', '.join(record['doNotUseFor'])}",
+                    f"  Required sections: {', '.join(fields) or '(none)'}",
+                    f"  Kinds: {', '.join(kinds) or '(none)'}",
+                    f"  Conformant kind: {record.get('conformantKind', '(not declared)')}",
+                    f"  Reserved kind: {record.get('reservedKind', '(none)')}",
                     f"  Example: {record['exampleFile']}",
                 ]
             )
@@ -71,8 +74,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         description="Search ODPH agent-friendly object records.",
     )
-    parser.add_argument("query", nargs="?", help="Keyword query, for example: evidence")
-    parser.add_argument("--id", dest="object_id", help="Return one object by id, for example: ChangeAction")
+    parser.add_argument("query", nargs="?", help="Keyword query, for example: graph-change")
+    parser.add_argument("--id", dest="object_id", help="Return one object by id, for example: ChangePackage")
     parser.add_argument("--json", action="store_true", help="Emit JSON array output")
     args = parser.parse_args(argv)
 

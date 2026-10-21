@@ -1,9 +1,0 @@
-schema: https://opendataproducts.org/odph-v0.2/schema/change-control.yaml
-version: 0.2-draft
-kind: ChangeAction
-metadata: {id: tc03-update-primary-data-product, title: Revise eligibility SLA and quality terms, requestedBy: Change Team, createdAt: '2026-10-20T00:00:00Z', parentTestCase: test-case-03}
-graphContext: {source: maysano, baseGraphRevision: 2, requiredObjects: [{id: primary-data-product, expectedVersion: 1, specificationFamily: ODPS}]}
-intent: {businessOwner: Head of Change Team, reason: Record reviewed SLA and data-quality terms, expectedOutcome: An accepted product version 2, policyProfile: example-change-control}
-specification: {operation: update, family: ODPS, file: specifications/odps/tc03-primary-data-product-v2.yaml, sha256: ce19ae179fe7fda21b5ce5a0a9b9602eca08a1879d15b7bc4fff9957b01914d0, expectedVersion: 1}
-review: {requiredRoles: [business-owner, data-product-owner]}
-acceptanceCriteria: [Maysano accepts Primary Data Product version 2 with revised SLA and data-quality terms.]

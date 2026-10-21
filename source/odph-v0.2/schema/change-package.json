@@ -1,0 +1,449 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://opendataproducts.org/odph/v0.2/schema/change-package.yaml",
+  "title": "Open Data Product Harness Change Package",
+  "description": "A machine-readable package that carries one business need through controlled graph work and evidence. Shape validation is separate from deterministic checks of graph meaning, expiry, drift, and completion.",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/GraphChangePackage"
+    },
+    {
+      "$ref": "#/$defs/GraphOperationStub"
+    }
+  ],
+  "$defs": {
+    "NonEmptyString": {
+      "type": "string",
+      "minLength": 1
+    },
+    "Identifier": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 128,
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "Timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "RelativeYamlFile": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+\\.ya?ml$"
+    },
+    "SpecFile": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/RelativeYamlFile"
+        },
+        {
+          "pattern": "^.+\\.(odpc|odps|odpg)\\.ya?ml$"
+        }
+      ]
+    },
+    "OdpgFile": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/RelativeYamlFile"
+        },
+        {
+          "pattern": "^.+\\.odpg\\.ya?ml$"
+        }
+      ]
+    },
+    "PackageKind": {
+      "enum": [
+        "graph-change",
+        "graph-operation"
+      ]
+    },
+    "Party": {
+      "type": "object",
+      "required": [
+        "type",
+        "name"
+      ],
+      "properties": {
+        "type": {
+          "enum": [
+            "person",
+            "role",
+            "team",
+            "organisation",
+            "customer",
+            "partner",
+            "system"
+          ]
+        },
+        "name": {
+          "$ref": "#/$defs/NonEmptyString"
+        }
+      },
+      "additionalProperties": false
+    },
+    "BusinessNeed": {
+      "type": "object",
+      "required": [
+        "text",
+        "actor",
+        "situation",
+        "job",
+        "gap",
+        "outcome",
+        "success"
+      ],
+      "properties": {
+        "text": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "actor": {
+          "$ref": "#/$defs/Party"
+        },
+        "situation": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "job": {
+          "type": "object",
+          "required": [
+            "type",
+            "text"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "decision",
+                "service",
+                "process",
+                "capability",
+                "obligation"
+              ]
+            },
+            "text": {
+              "$ref": "#/$defs/NonEmptyString"
+            }
+          },
+          "additionalProperties": false
+        },
+        "gap": {
+          "type": "object",
+          "required": [
+            "type",
+            "text"
+          ],
+          "properties": {
+            "type": {
+              "enum": [
+                "missing",
+                "incomplete",
+                "unlinked",
+                "unowned",
+                "conflicting",
+                "outdated"
+              ]
+            },
+            "text": {
+              "$ref": "#/$defs/NonEmptyString"
+            }
+          },
+          "additionalProperties": false
+        },
+        "outcome": {
+          "$ref": "#/$defs/NonEmptyString"
+        },
+        "success": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "type",
+              "test"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "graph",
+                  "business"
+                ]
+              },
+              "test": {
+                "$ref": "#/$defs/NonEmptyString"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "Authority": {
+      "type": "object",
+      "required": [
+        "owner",
+        "by",
+        "at",
+        "until"
+      ],
+      "properties": {
+        "owner": {
+          "$ref": "#/$defs/Party"
+        },
+        "by": {
+          "$ref": "#/$defs/Party"
+        },
+        "at": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "until": {
+          "$ref": "#/$defs/Timestamp"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CurrentContext": {
+      "type": "object",
+      "required": [
+        "source",
+        "rev",
+        "at",
+        "graph"
+      ],
+      "properties": {
+        "source": {
+          "const": "maysano"
+        },
+        "rev": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "at": {
+          "$ref": "#/$defs/Timestamp"
+        },
+        "graph": {
+          "$ref": "#/$defs/OdpgFile"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ActionEvidence": {
+      "type": "object",
+      "required": [
+        "runState",
+        "graphState"
+      ],
+      "properties": {
+        "runState": {
+          "enum": [
+            "pending",
+            "pass",
+            "fail"
+          ]
+        },
+        "graphState": {
+          "enum": [
+            "pending",
+            "pass",
+            "fail"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "PackageEvidence": {
+      "type": "object",
+      "required": [
+        "outcomeState"
+      ],
+      "properties": {
+        "outcomeState": {
+          "enum": [
+            "pending",
+            "pass",
+            "fail"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "GraphChangePackage": {
+      "type": "object",
+      "required": [
+        "schema",
+        "version",
+        "kind",
+        "meta",
+        "need",
+        "auth",
+        "context",
+        "actions",
+        "evidence"
+      ],
+      "properties": {
+        "schema": {
+          "const": "https://opendataproducts.org/odph/v0.2/schema/change-package.yaml"
+        },
+        "version": {
+          "const": "0.2-draft"
+        },
+        "kind": {
+          "const": "graph-change"
+        },
+        "meta": {
+          "type": "object",
+          "required": [
+            "id",
+            "title",
+            "created"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/Identifier"
+            },
+            "title": {
+              "$ref": "#/$defs/NonEmptyString"
+            },
+            "created": {
+              "$ref": "#/$defs/Timestamp"
+            }
+          },
+          "additionalProperties": false
+        },
+        "need": {
+          "$ref": "#/$defs/BusinessNeed"
+        },
+        "auth": {
+          "$ref": "#/$defs/Authority"
+        },
+        "context": {
+          "type": "object",
+          "required": [
+            "current",
+            "target"
+          ],
+          "properties": {
+            "current": {
+              "$ref": "#/$defs/CurrentContext"
+            },
+            "target": {
+              "type": "object",
+              "required": [
+                "graph"
+              ],
+              "properties": {
+                "graph": {
+                  "$ref": "#/$defs/OdpgFile"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "actions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": [
+              "title",
+              "op",
+              "file",
+              "gap",
+              "finding",
+              "effect",
+              "evidence"
+            ],
+            "properties": {
+              "title": {
+                "$ref": "#/$defs/NonEmptyString"
+              },
+              "op": {
+                "enum": [
+                  "create",
+                  "update",
+                  "retire"
+                ]
+              },
+              "file": {
+                "$ref": "#/$defs/SpecFile"
+              },
+              "gap": {
+                "$ref": "#/$defs/NonEmptyString"
+              },
+              "finding": {
+                "$ref": "#/$defs/NonEmptyString"
+              },
+              "effect": {
+                "$ref": "#/$defs/NonEmptyString"
+              },
+              "evidence": {
+                "$ref": "#/$defs/ActionEvidence"
+              }
+            },
+            "additionalProperties": false
+          }
+        },
+        "evidence": {
+          "$ref": "#/$defs/PackageEvidence"
+        }
+      },
+      "allOf": [
+        {
+          "properties": {
+            "need": {
+              "properties": {
+                "success": {
+                  "contains": {
+                    "properties": {
+                      "type": {
+                        "const": "graph"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  "minContains": 1
+                }
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "need": {
+              "properties": {
+                "success": {
+                  "contains": {
+                    "properties": {
+                      "type": {
+                        "const": "business"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ]
+                  },
+                  "minContains": 1
+                }
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "GraphOperationStub": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "graph-operation"
+        }
+      },
+      "required": [
+        "kind"
+      ],
+      "not": {}
+    }
+  }
+}

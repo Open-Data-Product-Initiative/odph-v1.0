@@ -1,64 +1,49 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import json
 import sys
 
 import yaml
 
-from odph_paths import EXAMPLES_DIR, LLMS_TXT, OBJECTS_JSONL, SCHEMA_JSON, SCHEMA_YAML
-
-
-EXPECTED_OBJECT_IDS = {
-    "ContextPackage",
-    "Mandate",
-    "WorkEnvelope",
-    "ExecutionPackage",
-    "ExecutionRequest",
-    "EvidenceEvent",
-    "ChangeAction",
-    "ChangeTask",
-}
-
-
-def load_yaml(path):
-    with path.open(encoding="utf-8") as handle:
-        return yaml.safe_load(handle)
+from odph_paths import LLMS_TXT, OBJECTS_JSONL, PACKAGE_EXAMPLE, SCHEMA_JSON, SCHEMA_YAML
 
 
 def check_schema():
-    schema = load_yaml(SCHEMA_YAML)
-    json_schema = json.loads(SCHEMA_JSON.read_text(encoding="utf-8"))
-    assert schema["$id"] == "https://opendataproducts.org/odph-v0.2/schema/change-control.yaml"
-    assert json_schema == schema
-    assert schema["oneOf"] == [{"$ref": f"#/$defs/{object_id}"} for object_id in [
-        "ContextPackage", "Mandate", "WorkEnvelope", "ExecutionPackage",
-        "ExecutionRequest", "EvidenceEvent", "ChangeAction", "ChangeTask",
-    ]]
-    assert set(schema["$defs"]) >= EXPECTED_OBJECT_IDS | {"SpecificationChange", "ActionReference", "CommonObject"}
+    schema = yaml.safe_load(SCHEMA_YAML.read_text(encoding="utf-8"))
+    derived = json.loads(SCHEMA_JSON.read_text(encoding="utf-8"))
+    assert schema == derived
+    assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+    assert schema["$id"] == "https://opendataproducts.org/odph/v0.2/schema/change-package.yaml"
+    assert schema["oneOf"] == [
+        {"$ref": "#/$defs/GraphChangePackage"},
+        {"$ref": "#/$defs/GraphOperationStub"},
+    ]
+    assert schema["$defs"]["PackageKind"]["enum"] == ["graph-change", "graph-operation"]
 
 
-def check_examples():
-    root = EXAMPLES_DIR / "change-chain"
-    assert len(list((root / "actions").glob("*.yaml"))) == 16
-    assert len(list((root / "change-tasks").glob("*.yaml"))) == 1
-    assert len(list((root / "specifications").rglob("*.yaml"))) == 16
-    for filename in ["context-package.yaml", "mandate.yaml", "work-envelope.yaml", "execution-package.yaml", "execution-request.yaml", "evidence-event.yaml"]:
-        assert (EXAMPLES_DIR / filename).is_file()
+def check_example():
+    package = yaml.safe_load(PACKAGE_EXAMPLE.read_text(encoding="utf-8"))
+    assert package["kind"] == "graph-change"
+    assert set(package) == {"schema", "version", "kind", "meta", "need", "auth", "context", "actions", "evidence"}
+    assert len(package["actions"]) == 4
+    for relative in [
+        package["context"]["current"]["graph"], package["context"]["target"]["graph"],
+        *[action["file"] for action in package["actions"]],
+    ]:
+        assert (PACKAGE_EXAMPLE.parent / relative).is_file(), relative
 
 
 def check_records_and_guidance():
     records = [json.loads(line) for line in OBJECTS_JSONL.read_text(encoding="utf-8").splitlines() if line.strip()]
-    assert {record["id"] for record in records} == EXPECTED_OBJECT_IDS
-    for record in records:
-        assert all(record.get(field) for field in ["definition", "requiredFields", "doUseFor", "doNotUseFor", "exampleFile"])
-    llms = LLMS_TXT.read_text(encoding="utf-8")
-    for path in ["/odph-v0.2/schema/change-control.yaml", "/odph-v0.2/schema/change-control.json", "/objects.jsonl", "/examples/change-chain/"]:
-        assert path in llms
+    assert [record["id"] for record in records] == ["ChangePackage"]
+    assert records[0]["kinds"] == ["graph-change", "graph-operation"]
+    guidance = LLMS_TXT.read_text(encoding="utf-8")
+    for path in ["/odph-v0.2/schema/change-package.yaml", "/odph-v0.2/schema/change-package.json", "/examples/retention-change/change-package.yaml"]:
+        assert path in guidance
 
 
 def main():
-    checks = [check_schema, check_examples, check_records_and_guidance]
     failures = []
-    for check in checks:
+    for check in [check_schema, check_example, check_records_and_guidance]:
         try:
             check()
         except Exception as exc:
@@ -66,7 +51,7 @@ def main():
     if failures:
         print("\n".join(f"FAIL {failure}" for failure in failures), file=sys.stderr)
         return 1
-    print("OK: ODPH v0.2 agent artifacts are consistent.")
+    print("OK: ODPH v0.2 Change Package artifacts are consistent.")
     return 0
 
 

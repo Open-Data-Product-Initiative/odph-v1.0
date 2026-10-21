@@ -1,30 +1,23 @@
 ---
-title: Validation and runtime checks | ODPH v0.2
+title: Change Package validation | ODPH v0.2
 ---
 
-# Validation and runtime checks
+# Change Package validation
 
-## Level 1: static schema validation
-
-- Validate `ChangeAction` and `ChangeTask` YAML against [`change-control.yaml`](odph-v0.2/schema/change-control.yaml).
-- Validate ODPC files against the ODPC schema.
-- Validate ODPS files against the ODPS schema.
-- Validate ODPG files against the ODPG graph schema.
-
-Run the repository checks:
+Shape validation uses JSON Schema Draft 2020-12. Deterministic validation handles relationships and lifecycle conditions that JSON Schema cannot infer: authorization range and expiry, local referenced-document validation, meaningful G0/G1 difference, action grounding in the business need and G0, target effects in G1, apply-time graph drift, and completion state.
 
 ```sh
-python scripts/generate_artifacts.py --check
-python scripts/check_agent_artifacts.py
-python scripts/validate_examples.py
-python -m unittest discover -s tests
-bundle exec middleman build
+python3 scripts/generate_artifacts.py --check
+python3 scripts/check_agent_artifacts.py
+python3 scripts/validate_examples.py
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests
 ```
 
-`validate_examples.py` uses the Open Data Products SDK schemas for ODPC, ODPS 4.2, and ODPG, verifies every referenced file and checksum, and checks the published ODPH schema locally. CI runs the same checks.
+To validate a package at a supplied authoritative graph revision:
 
-## Level 2: cross-file and runtime validation
+```sh
+python3 scripts/validate_package.py source/examples/retention-change/change-package.yaml \
+  --at 2026-10-21T12:00:00Z --current-rev 184
+```
 
-Before a Maysano write, resolve every referenced specification file; verify the checksum; verify action references; reject duplicate action IDs and dependency cycles; verify required Maysano object versions and the current graph revision; and verify ODPC, ODPS, and ODPG files are mutually consistent. Verify approvals before every write.
-
-Record submitted file identifiers, resulting Maysano identities and versions, validation outcomes, and reconciliation state. Maysano is authoritative for returned state; these checks do not turn ODPH into a record store.
+The supplied revision is an input to the local validator, not a Maysano query. A different revision returns `graph-drift`. Maysano remains responsible for write-time revision, authority, graph-state, and authoritative-evidence validation.

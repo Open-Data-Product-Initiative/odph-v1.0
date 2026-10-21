@@ -1,0 +1,24 @@
+schema: https://opendataproducts.org/odpg-v1.0/schema/odpg.yaml
+version: '1.0'
+kind: Graph
+graph:
+  metadata:
+    id: retention-target
+    name: {en: Retention intervention target graph}
+    description: >-
+      Customer Insights owns a governed retention objective and a retention-
+      intervention use case. Customer Signals supports the decision path.
+  nodes:
+    - id: retention-objective
+      type: BusinessObjective
+      $ref: ../artefacts/retention-objective.odpc.yaml#/catalog/businessObjectives/0
+    - id: retention-intervention
+      type: UseCase
+      $ref: ../artefacts/retention-intervention.odpc.yaml#/catalog/useCases/0
+    - id: customer-signals
+      type: DataProduct
+      $ref: ../artefacts/customer-signals.odps.yaml
+  edges:
+    - {from: retention-intervention, to: retention-objective, type: supports, confidence: high}
+    - {from: retention-intervention, to: customer-signals, type: uses, confidence: high}
+    - {from: customer-signals, to: retention-objective, type: contributesTo, confidence: high}

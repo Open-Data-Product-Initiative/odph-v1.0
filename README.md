@@ -1,27 +1,16 @@
-# Business Harness Model
+# Open Data Product Harness
 
-ODPH v0.2 packages eight peer top-level object kinds around versioned ODPC, ODPS, and ODPG YAML specifications. The package view groups them by the question they answer: **Business Need** (`ContextPackage`, `Mandate`, `WorkEnvelope`), **Actions** (`ExecutionRequest`, `ChangeTask`, `ChangeAction`, and optional `ExecutionPackage`), and **Evidence** (`EvidenceEvent`). It does not replace business-object, graph, or Maysano record authority.
+ODPH v0.2 is a draft specification for one Change Package that carries a business need through controlled company-graph work and evidence.
 
-Maysano is authoritative for accepted specification versions, object identities, graph state, approvals, applied changes, and audit evidence. ODPH retrieves bounded context, creates and validates one specification file at a time, obtains business-owner agreement, submits that file to Maysano, and records evidence.
+The canonical schema is [`source/odph-v0.2/schema/change-package.yaml`](source/odph-v0.2/schema/change-package.yaml). The complete retention example is [`source/examples/retention-change/change-package.yaml`](source/examples/retention-change/change-package.yaml).
 
-## Repository structure
-
-- `source/index.html.md`: v0.2 overview and links to the published documentation set.
-- `source/odph-v0.2/schema/change-control.yaml`: canonical ChangeAction/ChangeTask schema published at `/odph-v0.2/schema/change-control.yaml`.
-- `source/odph-v0.2/schema/change-control.json`: generated JSON representation.
-- `source/examples/change-chain/`: six linked change-chain test cases, actions, a composite Change Task, and referenced ODPC, ODPS, and ODPG files.
-- `scripts/validate_examples.py`: complete static and cross-file example validation.
-- `source/objects.jsonl`: machine-readable definitions for the eight v0.2 top-level object kinds.
-
-## Local checks
+## Checks
 
 ```sh
-python -m pip install -r scripts/requirements-agent.txt
-python scripts/generate_artifacts.py --check
-python scripts/check_agent_artifacts.py
-python scripts/validate_examples.py
-python -m unittest discover -s tests
-bundle exec middleman build
+python3 scripts/generate_artifacts.py --check
+python3 scripts/check_agent_artifacts.py
+python3 scripts/validate_examples.py
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests
 ```
 
-Direct workflows are ordered Maysano resource writes. They do not claim multi-action atomicity or automatic rollback, and they do not replace Maysano’s system-of-record role.
+The local validator accepts a supplied graph revision; it does not query or write Maysano.
