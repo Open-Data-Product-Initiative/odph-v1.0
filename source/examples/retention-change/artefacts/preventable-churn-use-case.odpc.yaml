@@ -1,0 +1,16 @@
+schema: https://opendataproducts.org/odpc-v1.0/schema/odpc.yaml
+version: '1.0'
+kind: Catalog
+catalog:
+  metadata:
+    id: preventable-churn-use-case-catalog
+    name: {en: Preventable churn use case catalog}
+    description: {en: Governed use case for preventable customer churn decisions.}
+  useCases:
+    - id: preventable-churn-use-case
+      name: {en: Prevent preventable customer churn}
+      description: {en: "Defines the target population, value hypothesis, and success measures for retention work."}
+      decision: {en: Decide which customers need a retention intervention before renewal.}
+      expectedOutcome: {en: Retention teams act on approved customer signals to prevent avoidable churn.}
+      status: active
+      priority: high

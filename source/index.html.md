@@ -176,12 +176,48 @@ context:
 
 ```yaml
 actions:
-  - title: Create retention objective
+  - id: create-retention-objective
+    title: Create retention objective
     op: create
     file: artefacts/retention-objective.odpc.yaml
     gap: Retention teams lack a stated retention objective.
     finding: No current retention objective represents preventable customer churn.
     effect: A retention objective exists and is owned by Customer Insights.
+    evidence:
+      runState: pending
+      graphState: pending
+
+  - id: create-churn-use-case
+    title: Create preventable churn use case
+    op: create
+    file: artefacts/preventable-churn-use-case.odpc.yaml
+    gap: No agreed use case turns the retention objective into defined work.
+    finding: Existing retention activity focuses on campaign delivery, not churn prevention.
+    effect: A use case defines the target population, value hypothesis and success measures.
+    evidence:
+      runState: pending
+      graphState: pending
+
+  - id: create-customer-retention-data-product
+    title: Create customer retention signals data product
+    op: create
+    file: artefacts/customer-retention-signals.odps.yaml
+    gap: Teams lack a governed data product for retention decision-making.
+    finding: Churn-related signals exist across CRM, billing and support systems.
+    effect: A governed data product makes approved retention signals available for the use case.
+    evidence:
+      runState: pending
+      graphState: pending
+
+  - id: link-retention-initiative-in-graph
+    title: Link the objective, use case and data product
+    op: apply
+    file: artefacts/retention-churn-relationships.odpg.yaml
+    gap: The new portfolio objects have no declared relationships.
+    finding: The business graph does not yet connect the retention objective to its delivery assets.
+    effect: >
+      The objective is linked to the use case, and the use case is linked
+      to the supporting data product.
     evidence:
       runState: pending
       graphState: pending
@@ -192,9 +228,10 @@ Actions are the ordered work required to realise G1. Each action changes one ODP
 <table>
 <thead><tr><th>Element name</th><th>Type</th><th>Mandatory</th><th>Options</th><th>Description</th></tr></thead>
 <tbody>
-<tr><td><code>actions</code></td><td>array of objects</td><td>Yes</td><td>One or more items</td><td>Ordered work required to realise G1. Array position is the action order.</td></tr>
+<tr><td><code>actions</code></td><td>array of objects</td><td>Yes</td><td>One or more uniquely identified items</td><td>Ordered work required to realise G1. Array position is the action order.</td></tr>
+<tr><td><code>actions[].id</code></td><td>string</td><td>Yes</td><td>3–128 lower-case hyphenated characters; unique within the package</td><td>Stable action identifier for evidence, review, and references to this specific controlled change.</td></tr>
 <tr><td><code>actions[].title</code></td><td>string</td><td>Yes</td><td>Non-empty</td><td>Human-readable statement of the change.</td></tr>
-<tr><td><code>actions[].op</code></td><td>string</td><td>Yes</td><td><code>create</code>, <code>update</code>, <code>retire</code></td><td>Closed operation applied to the referenced standard artifact.</td></tr>
+<tr><td><code>actions[].op</code></td><td>string</td><td>Yes</td><td><code>create</code>, <code>update</code>, <code>retire</code>, <code>apply</code></td><td>Closed operation applied to the referenced standard artifact. <code>apply</code> requires an ODPG file.</td></tr>
 <tr><td><code>actions[].file</code></td><td>filepath</td><td>Yes</td><td>Relative <code>.odpc.yaml</code>, <code>.odps.yaml</code>, or <code>.odpg.yaml</code> (or <code>.yml</code>)</td><td>Standard-owned artifact to validate. The file declares its own ODPC, ODPS, or ODPG schema.</td></tr>
 <tr><td><code>actions[].gap</code></td><td>string</td><td>Yes</td><td>Non-empty</td><td>Relevant fact from <code>need.gap</code> that makes this action necessary.</td></tr>
 <tr><td><code>actions[].finding</code></td><td>string</td><td>Yes</td><td>Non-empty</td><td>Relevant observed fact in G0. The semantic validator checks that it is grounded in the supplied current graph.</td></tr>
@@ -205,7 +242,7 @@ Actions are the ordered work required to realise G1. Each action changes one ODP
 </tbody>
 </table>
 
-`op` is a closed enum: `create`, `update`, or `retire`. List position defines order; there are no action IDs or dependency references. `runState` proves the requested artefact change completed; `graphState` proves the realised graph satisfies that action's effect.
+`id` is required and unique within the package. `op` is a closed enum: `create`, `update`, `retire`, or `apply`; `apply` requires an ODPG file. List position defines order. `runState` proves the requested artefact change completed; `graphState` proves the realised graph satisfies that action's effect.
 
 ## `evidence`
 
@@ -236,7 +273,7 @@ The canonical JSON Schema Draft 2020-12 source is [`change-package.yaml`](odph-v
 <tr><td><code>need</code></td><td><code>text</code>, <code>actor</code>, <code>situation</code>, <code>job</code>, <code>gap</code>, <code>outcome</code>, <code>success</code></td><td>None</td><td>Establishes the business proposition and tests.</td></tr>
 <tr><td><code>auth</code></td><td><code>owner</code>, <code>by</code>, <code>at</code>, <code>until</code></td><td>None</td><td>Bounds the authorization for this package.</td></tr>
 <tr><td><code>context</code></td><td><code>current</code>, <code>target</code></td><td>None</td><td>States the relevant G0 and intended G1.</td></tr>
-<tr><td><code>actions</code></td><td>At least one action</td><td>None</td><td>Orders controlled ODPC, ODPS, and ODPG changes.</td></tr>
+<tr><td><code>actions</code></td><td>At least one uniquely identified action</td><td>None</td><td>Orders controlled ODPC, ODPS, and ODPG changes.</td></tr>
 <tr><td>Package <code>evidence</code></td><td><code>outcomeState</code></td><td>None</td><td>Records whether the verified outcome passed.</td></tr>
 </tbody>
 </table>
@@ -274,7 +311,8 @@ need:
     type: missing
     text: >-
       The company graph has no retention objective, intervention use case, or
-      governed product that provides the required customer signals.
+      governed product that provides the required customer signals; the
+      portfolio objects and their relationships are absent.
   outcome: >-
     Retention teams use an owned, governed decision basis for customer
     interventions.
@@ -306,7 +344,8 @@ context:
     graph: graph/retention-target.odpg.yaml
 
 actions:
-  - title: Create retention objective
+  - id: create-retention-objective
+    title: Create retention objective
     op: create
     file: artefacts/retention-objective.odpc.yaml
     gap: Retention teams lack a stated retention objective.
@@ -315,30 +354,35 @@ actions:
     evidence:
       runState: pending
       graphState: pending
-  - title: Create retention-intervention use case
+  - id: create-churn-use-case
+    title: Create preventable churn use case
     op: create
-    file: artefacts/retention-intervention.odpc.yaml
-    gap: Retention teams lack a defined intervention decision.
-    finding: No current retention use case connects customer signals to intervention work.
-    effect: A retention-intervention use case contributes to the retention objective.
+    file: artefacts/preventable-churn-use-case.odpc.yaml
+    gap: No agreed use case turns the retention objective into defined work.
+    finding: Existing retention activity focuses on campaign delivery, not churn prevention.
+    effect: A use case defines the target population, value hypothesis and success measures.
     evidence:
       runState: pending
       graphState: pending
-  - title: Update Customer Signals for retention use
-    op: update
-    file: artefacts/customer-signals.odps.yaml
-    gap: Retention teams need a governed source of customer signals.
-    finding: Customer Signals exists but does not support the retention intervention decision.
-    effect: Customer Signals supports the retention-intervention use case with a governed output.
+  - id: create-customer-retention-data-product
+    title: Create customer retention signals data product
+    op: create
+    file: artefacts/customer-retention-signals.odps.yaml
+    gap: Teams lack a governed data product for retention decision-making.
+    finding: Churn-related signals exist across CRM, billing and support systems.
+    effect: A governed data product makes approved retention signals available for the use case.
     evidence:
       runState: pending
       graphState: pending
-  - title: Connect the retention path in the company graph
-    op: update
-    file: graph/retention-target.odpg.yaml
-    gap: The intended retention decision path is not governed.
-    finding: No current retention graph path links an objective, use case, and product.
-    effect: Customer Signals supports the retention-intervention use case and retention objective.
+  - id: link-retention-initiative-in-graph
+    title: Link the objective, use case and data product
+    op: apply
+    file: artefacts/retention-churn-relationships.odpg.yaml
+    gap: The new portfolio objects have no declared relationships.
+    finding: The business graph does not yet connect the retention objective to its delivery assets.
+    effect: >-
+      The objective is linked to the use case, and the use case is linked to
+      the supporting data product.
     evidence:
       runState: pending
       graphState: pending

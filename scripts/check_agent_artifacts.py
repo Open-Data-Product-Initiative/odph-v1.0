@@ -25,6 +25,8 @@ def check_example():
     assert package["kind"] == "graph-change"
     assert set(package) == {"schema", "version", "kind", "meta", "need", "auth", "context", "actions", "evidence"}
     assert len(package["actions"]) == 4
+    assert len({action["id"] for action in package["actions"]}) == len(package["actions"])
+    assert package["actions"][-1]["op"] == "apply"
     for relative in [
         package["context"]["current"]["graph"], package["context"]["target"]["graph"],
         *[action["file"] for action in package["actions"]],

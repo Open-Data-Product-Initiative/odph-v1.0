@@ -62,6 +62,7 @@ class ChangePackageTest(unittest.TestCase):
             lambda d: d["need"]["gap"].update(type="unclear"),
             lambda d: d["need"]["success"][0].update(type="technical"),
             lambda d: d["actions"][0].update(op="delete"),
+            lambda d: d["actions"][0].update(id="Not a valid identifier"),
             lambda d: d["actions"][0]["evidence"].update(runState="done"),
         ]
         for mutation in mutations:
@@ -73,9 +74,18 @@ class ChangePackageTest(unittest.TestCase):
         for value in ["/absolute.odpc.yaml", "../parent.odpc.yaml", "artefacts/not-allowed.txt"]:
             path, _ = self.variant(lambda document, root, value=value: document["actions"][0].update(file=value))
             self.assertTrue(validate_package(path, at="2026-10-21T12:00:00Z")[0].startswith("schema:"))
-        for field in ["gap", "finding", "effect"]:
+        for field in ["id", "gap", "finding", "effect"]:
             path, _ = self.variant(lambda document, root, field=field: document["actions"][0].pop(field))
             self.assertTrue(validate_package(path, at="2026-10-21T12:00:00Z")[0].startswith("schema:"))
+
+    def test_action_ids_are_unique_and_apply_requires_an_odpg_file(self):
+        package = yaml.safe_load((self.source_example / "change-package.yaml").read_text(encoding="utf-8"))
+        self.assertEqual(package["actions"][-1]["op"], "apply")
+        self.assertFalse(self.schema_errors(package))
+        path, _ = self.variant(lambda document, root: document["actions"][1].update(id=document["actions"][0]["id"]))
+        self.assertIn("duplicate-action-id:create-retention-objective", validate_package(path, at="2026-10-21T12:00:00Z"))
+        path, _ = self.variant(lambda document, root: document["actions"][-1].update(file="artefacts/retention-objective.odpc.yaml"))
+        self.assertTrue(validate_package(path, at="2026-10-21T12:00:00Z")[0].startswith("schema:"))
 
     def test_context_authority_graph_and_evidence_semantics(self):
         for field in ["current", "target"]:
@@ -108,7 +118,7 @@ class ChangePackageTest(unittest.TestCase):
             "need": ["need.actor.type", "need.job.type", "need.success[].test"],
             "auth": ["auth.owner", "auth.until"],
             "context": ["context.current.rev", "context.target.graph"],
-            "actions": ["actions[].file", "actions[].evidence.graphState"],
+            "actions": ["actions[].id", "actions[].file", "actions[].evidence.graphState"],
             "evidence": ["evidence.outcomeState"],
         }.items():
             subsection = documentation.split(f"## `{section}`", 1)[1]

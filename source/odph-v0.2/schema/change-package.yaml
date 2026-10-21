@@ -141,15 +141,23 @@ $defs:
         minItems: 1
         items:
           type: object
-          required: [title, op, file, gap, finding, effect, evidence]
+          required: [id, title, op, file, gap, finding, effect, evidence]
           properties:
+            id: { $ref: '#/$defs/Identifier' }
             title: { $ref: '#/$defs/NonEmptyString' }
-            op: { enum: [create, update, retire] }
+            op: { enum: [create, update, retire, apply] }
             file: { $ref: '#/$defs/SpecFile' }
             gap: { $ref: '#/$defs/NonEmptyString' }
             finding: { $ref: '#/$defs/NonEmptyString' }
             effect: { $ref: '#/$defs/NonEmptyString' }
             evidence: { $ref: '#/$defs/ActionEvidence' }
+          allOf:
+            - if:
+                properties: { op: { const: apply } }
+                required: [op]
+              then:
+                properties:
+                  file: { $ref: '#/$defs/OdpgFile' }
           additionalProperties: false
       evidence: { $ref: '#/$defs/PackageEvidence' }
     allOf:

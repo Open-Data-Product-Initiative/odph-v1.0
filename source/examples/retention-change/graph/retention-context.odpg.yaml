@@ -6,8 +6,10 @@ graph:
     id: retention-context
     name: {en: Current retention context}
     description: >-
-      Current graph revision 184 has Customer Signals but no retention objective,
-      retention use case, or governed retention path for intervention work.
+      Current graph revision 184 has churn-related CRM, billing, and support
+      signals. Existing retention activity focuses on campaign delivery, with
+      no retention objective, preventable-churn use case, governed data product,
+      or declared relationship path for intervention work.
   nodes:
     - id: customer-signals
       type: DataProduct

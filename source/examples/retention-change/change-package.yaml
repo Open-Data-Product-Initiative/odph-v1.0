@@ -22,7 +22,8 @@ need:
     type: missing
     text: >-
       The company graph has no retention objective, intervention use case, or
-      governed product that provides the required customer signals.
+      governed product that provides the required customer signals; the
+      portfolio objects and their relationships are absent.
   outcome: >-
     Retention teams use an owned, governed decision basis for customer
     interventions.
@@ -54,7 +55,8 @@ context:
     graph: graph/retention-target.odpg.yaml
 
 actions:
-  - title: Create retention objective
+  - id: create-retention-objective
+    title: Create retention objective
     op: create
     file: artefacts/retention-objective.odpc.yaml
     gap: Retention teams lack a stated retention objective.
@@ -63,30 +65,35 @@ actions:
     evidence:
       runState: pending
       graphState: pending
-  - title: Create retention-intervention use case
+  - id: create-churn-use-case
+    title: Create preventable churn use case
     op: create
-    file: artefacts/retention-intervention.odpc.yaml
-    gap: Retention teams lack a defined intervention decision.
-    finding: No current retention use case connects customer signals to intervention work.
-    effect: A retention-intervention use case contributes to the retention objective.
+    file: artefacts/preventable-churn-use-case.odpc.yaml
+    gap: No agreed use case turns the retention objective into defined work.
+    finding: Existing retention activity focuses on campaign delivery, not churn prevention.
+    effect: A use case defines the target population, value hypothesis and success measures.
     evidence:
       runState: pending
       graphState: pending
-  - title: Update Customer Signals for retention use
-    op: update
-    file: artefacts/customer-signals.odps.yaml
-    gap: Retention teams need a governed source of customer signals.
-    finding: Customer Signals exists but does not support the retention intervention decision.
-    effect: Customer Signals supports the retention-intervention use case with a governed output.
+  - id: create-customer-retention-data-product
+    title: Create customer retention signals data product
+    op: create
+    file: artefacts/customer-retention-signals.odps.yaml
+    gap: Teams lack a governed data product for retention decision-making.
+    finding: Churn-related signals exist across CRM, billing and support systems.
+    effect: A governed data product makes approved retention signals available for the use case.
     evidence:
       runState: pending
       graphState: pending
-  - title: Connect the retention path in the company graph
-    op: update
-    file: graph/retention-target.odpg.yaml
-    gap: The intended retention decision path is not governed.
-    finding: No current retention graph path links an objective, use case, and product.
-    effect: Customer Signals supports the retention-intervention use case and retention objective.
+  - id: link-retention-initiative-in-graph
+    title: Link the objective, use case and data product
+    op: apply
+    file: artefacts/retention-churn-relationships.odpg.yaml
+    gap: The new portfolio objects have no declared relationships.
+    finding: The business graph does not yet connect the retention objective to its delivery assets.
+    effect: >-
+      The objective is linked to the use case, and the use case is linked to
+      the supporting data product.
     evidence:
       runState: pending
       graphState: pending

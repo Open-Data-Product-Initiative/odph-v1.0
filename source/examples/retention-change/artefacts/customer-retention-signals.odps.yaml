@@ -1,0 +1,12 @@
+schema: https://opendataproducts.org/v4.2/schema/odps.yaml
+version: '4.2'
+product:
+  details:
+    en:
+      productID: customer-retention-signals
+      name: Customer Retention Signals
+      productVersion: v1
+      visibility: organisation
+      status: draft
+      type: decision support
+      description: Governed CRM, billing, and support signals for preventable-churn decisions.

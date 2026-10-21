@@ -92,7 +92,11 @@ def semantic_errors(package, package_path, *, at=None, current_revision=None, ch
     need_terms = text_terms(package["need"])
     current_terms = text_terms(current_graph) if current_graph is not None else set()
     target_terms = text_terms(target_graph) if target_graph is not None else set()
+    action_ids = set()
     for index, action in enumerate(package["actions"], start=1):
+        if action["id"] in action_ids:
+            errors.append(f"duplicate-action-id:{action['id']}")
+        action_ids.add(action["id"])
         try:
             action_path = resolve_file(package_path, action["file"])
             if check_references:
